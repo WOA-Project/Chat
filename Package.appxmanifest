@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  IgnorableNamespaces="uap rescap mp">
+
+  <Identity
+    Name="LumiaWOA.Chat"
+    Publisher="CN=LumiaWOA"
+    Version="0.0.10.0" />
+
+  <mp:PhoneIdentity PhoneProductId="d8719107-e9ed-450f-be3e-88003464d950" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+
+  <Properties>
+    <DisplayName>Chat</DisplayName>
+    <PublisherDisplayName>LumiaWOA</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="x-generate"/>
+  </Resources>
+
+  <Applications>
+    <Application Id="App"
+      Executable="$targetnametoken$.exe"
+      EntryPoint="Chat.App">
+      <uap:VisualElements
+        DisplayName="Chat"
+        Square150x150Logo="Assets\Square150x150Logo.png"
+        Square44x44Logo="Assets\Square44x44Logo.png"
+        Description="Send text messages using your device."
+        BackgroundColor="transparent">
+        <uap:LockScreen Notification="badgeAndTileText" BadgeLogo="Assets\BadgeLogo.png"/>
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" Square71x71Logo="Assets\SmallTile.png" Square310x310Logo="Assets\LargeTile.png" ShortName="Chat">
+          <uap:ShowNameOnTiles>
+            <uap:ShowOn Tile="square150x150Logo"/>
+            <uap:ShowOn Tile="wide310x150Logo"/>
+            <uap:ShowOn Tile="square310x310Logo"/>
+          </uap:ShowNameOnTiles>
+        </uap:DefaultTile>
+        <uap:SplashScreen Image="Assets\SplashScreen.png" />
+      </uap:VisualElements>
+
+      <Extensions>
+        <uap:Extension Category="windows.protocol">
+          <uap:Protocol Name="ms-chat"/>
+        </uap:Extension>
+        <uap:Extension Category="windows.protocol">
+          <uap:Protocol Name="sms"/>
+        </uap:Extension>
+        <uap:Extension Category="windows.protocol">
+          <uap:Protocol Name="ms-ipmessaging">
+            <uap:DisplayName>Send a text message</uap:DisplayName>
+          </uap:Protocol>
+        </uap:Extension>
+        <!--<Extension Category="windows.backgroundTasks" EntryPoint="Microsoft.Apps.Messaging.Internal.BackgroundTasks.ChatMessageNotificationBackgroundTask">
+            <BackgroundTasks>
+              <uap:Task Type="chatMessageNotification"/>
+            </BackgroundTasks>
+          </Extension>
+          <Extension Category="windows.backgroundTasks" EntryPoint="Microsoft.Apps.Messaging.Internal.BackgroundTasks.ToastNotificationHistoryChangedBackgroundTask">
+            <BackgroundTasks>
+              <uap:Task Type="chatMessageNotification"/>
+            </BackgroundTasks>
+          </Extension>
+          <Extension Category="windows.backgroundTasks" EntryPoint="Microsoft.Apps.Messaging.Internal.BackgroundTasks.ToastNotificationActionBackgroundTask">
+            <BackgroundTasks>
+              <uap:Task Type="chatMessageNotification"/>
+            </BackgroundTasks>
+          </Extension>
+          <Extension Category="windows.backgroundTasks" EntryPoint="Microsoft.Apps.Messaging.Internal.BackgroundTasks.EndUserMessageNotificationBackgroundTask">
+            <BackgroundTasks>
+              <uap:Task Type="chatMessageNotification"/>
+            </BackgroundTasks>
+          </Extension>
+          <Extension Category="windows.backgroundTasks" EntryPoint="Microsoft.Apps.Messaging.Internal.BackgroundTasks.PhoneLinePropertyChangedBackgroundTask">
+            <BackgroundTasks>
+              <uap:Task Type="phoneCall"/>
+            </BackgroundTasks>
+          </Extension>
+          <Extension Category="windows.backgroundTasks" EntryPoint="Microsoft.Apps.Messaging.Internal.BackgroundTasks.ServicingCompleteBackgroundTask">
+            <BackgroundTasks>
+              <Task Type="systemEvent"/>
+            </BackgroundTasks>
+          </Extension>
+          <Extension Category="windows.preInstalledConfigTask" EntryPoint="Microsoft.Apps.Messaging.Internal.BackgroundTasks.PreInstalledConfigBackgroundTask"/>
+          <Extension Category="windows.updateTask" EntryPoint="Microsoft.Apps.Messaging.External.RemovePrivateDataBackgroundTask"/>
+          <Extension Category="windows.backgroundTasks" EntryPoint="Microsoft.Apps.Messaging.Internal.BackgroundTasks.TimerBackgroundTask">
+            <BackgroundTasks>
+              <Task Type="timer"/>
+            </BackgroundTasks>
+          </Extension>
+          <Extension Category="windows.backgroundTasks" EntryPoint="Microsoft.Apps.Messaging.Internal.BackgroundTasks.TimeZoneChangedBackgroundTask">
+            <BackgroundTasks>
+              <Task Type="systemEvent"/>
+            </BackgroundTasks>
+          </Extension>-->
+        </Extensions>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <Capability Name="internetClientServer"/>
+    <uap:Capability Name="chat"/>
+    <uap:Capability Name="phoneCall"/>
+    <uap:Capability Name="blockedChatMessages"/>
+    <uap:Capability Name="contacts"/>
+    <rescap:Capability Name="dualSimTiles"/>
+    <rescap:Capability Name="enterpriseDataPolicy"/>
+    <rescap:Capability Name="contactsSystem"/>
+    <rescap:Capability Name="smsSend"/>
+    <rescap:Capability Name="phoneCallHistory"/>
+    <rescap:Capability Name="cellularMessaging"/>
+    <rescap:Capability Name="chatSystem"/>
+    <DeviceCapability Name="location"/>
+    <DeviceCapability Name="microphone"/>
+  </Capabilities>
+</Package>

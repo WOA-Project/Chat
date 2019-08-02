@@ -1,0 +1,59 @@
+﻿<Page
+    x:Class="Chat.Pages.ComposePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Chat.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Chat.Controls"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Padding="8" Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <ComboBox x:Name="CellularLineComboBox" HorizontalAlignment="Right" BorderBrush="Transparent" SelectedIndex="0" BorderThickness="0" SelectionChanged="CellularLineComboBox_SelectionChanged" Background="Transparent"/>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="To:"  VerticalAlignment="Center" Margin="8,0,8,0"/>
+                <AutoSuggestBox x:Name="ContactPickerBox" Grid.Column="1" QueryIcon="Add" TextChanged="ContactPickerBox_TextChanged" QuerySubmitted="ContactPickerBox_QuerySubmitted" SuggestionChosen="ContactPickerBox_SuggestionChosen"/>
+            </Grid>
+        </Grid>
+
+        <Rectangle Height="1" Fill="Gray" Opacity="0.5" Grid.Row="0" VerticalAlignment="Bottom"/>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="AttachmentButton" Height="60" Width="60" VerticalAlignment="Bottom" Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
+                <TextBlock Text="&#xE723;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+            </Button>
+
+            <TextBox x:Name="ComposeTextBox" MaxHeight="200" MinHeight="60" Grid.Column="1" PlaceholderText="Type a message" AcceptsReturn="True" BorderThickness="0" Padding="18" BorderBrush="Transparent" TextChanged="ComposeTextBox_TextChanged"/>
+
+            <Button x:Name="SendButton" Grid.Column="2" Height="60" Width="60" VerticalAlignment="Bottom" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Click="SendButton_Click" IsEnabled="False">
+                <TextBlock Text="&#xE724;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24"/>
+            </Button>
+
+            <Rectangle Height="1" Fill="Gray" Opacity="0.5" Grid.ColumnSpan="3" VerticalAlignment="Top"/>
+        </Grid>
+    </Grid>
+</Page>
