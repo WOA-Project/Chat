@@ -178,11 +178,11 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Chat.Common\Chat.Common.csproj">
+    <ProjectReference Include="Chat.Common\Chat.Common.csproj">
       <Project>{d7b4a4f2-501e-4498-a857-00a0e73d078b}</Project>
       <Name>Chat.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SmsBackgroundTask\Chat.BackgroundTasks.csproj">
+    <ProjectReference Include="Chat.BackgroundTasks\Chat.BackgroundTasks.csproj">
       <Project>{e12054eb-c218-4a9c-b7c5-9c8eb11287f3}</Project>
       <Name>Chat.BackgroundTasks</Name>
     </ProjectReference>
