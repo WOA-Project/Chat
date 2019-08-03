@@ -10,7 +10,7 @@
   <Identity
     Name="LumiaWOA.Chat"
     Publisher="CN=LumiaWOA"
-    Version="0.0.10.0" />
+    Version="0.0.28.0" />
 
   <mp:PhoneIdentity PhoneProductId="d8719107-e9ed-450f-be3e-88003464d950" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
@@ -61,6 +61,19 @@
             <uap:DisplayName>Send a text message</uap:DisplayName>
           </uap:Protocol>
         </uap:Extension>
+
+        <Extension Category="windows.backgroundTasks" EntryPoint="Chat.BackgroundTasks.SmsBackgroundTask">
+          <BackgroundTasks>
+            <Task Type="general"/>
+          </BackgroundTasks>
+        </Extension>
+
+        <Extension Category="windows.backgroundTasks" EntryPoint="Chat.BackgroundTasks.SmsReplyBackgroundTask">
+          <BackgroundTasks>
+            <Task Type="systemEvent"/>
+          </BackgroundTasks>
+        </Extension>
+
         <!--<Extension Category="windows.backgroundTasks" EntryPoint="Microsoft.Apps.Messaging.Internal.BackgroundTasks.ChatMessageNotificationBackgroundTask">
             <BackgroundTasks>
               <uap:Task Type="chatMessageNotification"/>

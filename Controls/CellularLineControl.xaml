@@ -14,7 +14,7 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <TextBlock x:Name="StatusIcon" Text="&#xE876;" FontFamily="Segoe MDL2 Assets" Margin="4,4,0,4" VerticalAlignment="Center" Padding="0,2,0,0" Height="18.5" FontSize="16"/>
+        <TextBlock x:Name="StatusIcon" Text="&#xE876;" FontFamily="Segoe MDL2 Assets" Margin="4,0,4,0" VerticalAlignment="Center" Padding="0,2,0,0" Height="18.5" FontSize="16"/>
         <TextBlock x:Name="LineName" Grid.Column="1" Text="SIM 1" VerticalAlignment="Center" Margin="4"/>
     </Grid>
 </UserControl>

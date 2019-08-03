@@ -22,11 +22,17 @@ namespace Chat.Controls
                     case SmsDeviceStatus.DeviceBlocked:
                         {
                             StatusIcon.Text = "";
+                            var pad = StatusIcon.Padding;
+                            pad.Top = 0;
+                            StatusIcon.Padding = pad;
                             break;
                         }
                     case SmsDeviceStatus.DeviceFailure:
                         {
                             StatusIcon.Text = "";
+                            var pad = StatusIcon.Padding;
+                            pad.Top = 0;
+                            StatusIcon.Padding = pad;
                             break;
                         }
                     case SmsDeviceStatus.DeviceLocked:
@@ -37,11 +43,17 @@ namespace Chat.Controls
                     case SmsDeviceStatus.Off:
                         {
                             StatusIcon.Text = "";
+                            var pad = StatusIcon.Padding;
+                            pad.Top = 0;
+                            StatusIcon.Padding = pad;
                             break;
                         }
                     case SmsDeviceStatus.Ready:
                         {
                             StatusIcon.Text = "";
+                            var pad = StatusIcon.Padding;
+                            pad.Top = 0;
+                            StatusIcon.Padding = pad;
                             break;
                         }
                     case SmsDeviceStatus.SimNotInserted:

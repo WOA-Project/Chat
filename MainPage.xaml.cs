@@ -1,7 +1,7 @@
 ﻿using Chat.Pages;
+using Chat.Common;
+using Chat.BackgroundTasks;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Contacts;
 using Windows.UI.ViewManagement;
@@ -72,46 +72,10 @@ namespace Chat
             }
         }
 
-        private async void Load()
+        private void Load()
         {
-            var store = await ContactManager.RequestStoreAsync();
-
-            try
-            {
-                var contacts = await store.FindContactsAsync();
-
-                if (contacts != null)
-                {
-                    var phonecontacts = contacts.Where(x => x.Phones.Count != 0);
-                    if (phonecontacts != null)
-                    {
-                        foreach (var phonecontact in phonecontacts)
-                        {
-                            ContactAnnotationStore annotationStore = await ContactManager.RequestAnnotationStoreAsync(ContactAnnotationStoreAccessType.AppAnnotationsReadWrite);
-
-                            ContactAnnotationList annotationList;
-
-                            IReadOnlyList<ContactAnnotationList> annotationLists = await annotationStore.FindAnnotationListsAsync();
-                            if (0 == annotationLists.Count)
-                                annotationList = await annotationStore.CreateAnnotationListAsync();
-                            else
-                                annotationList = annotationLists[0];
-
-                            ContactAnnotation annotation = new ContactAnnotation();
-                            annotation.ContactId = phonecontact.Id;
-                            annotation.RemoteId = phonecontact.Id;
-
-                            annotation.SupportedOperations = ContactAnnotationOperations.Message;
-
-                            await annotationList.TrySaveAnnotationAsync(annotation);
-                        }
-                    }
-                }
-            }
-            catch
-            {
-
-            }
+            ContactUtils.AssignAppToPhoneContacts();
+            BackgroundTaskUtils.RegisterToastNotificationBackgroundTasks();
         }
     }
 }

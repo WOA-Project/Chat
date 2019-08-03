@@ -7,11 +7,11 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Chat.Controls"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource SystemControlAcrylicWindowBrush}">
 
     <Grid>
         <Frame Padding="0,32,0,0" x:Name="MainFrame"/>
-        
+
         <Grid x:Name="TitlebarNarrowBackground" VerticalAlignment="Top" Height="{x:Bind Titlebar.Height, Mode=OneWay}" Visibility="Visible">
             <Rectangle VerticalAlignment="Top" Height="{x:Bind Titlebar.Height, Mode=OneWay}" Fill="{ThemeResource SystemControlAcrylicWindowBrush}"/>
         </Grid>

@@ -5,4 +5,12 @@
     xmlns:local="using:Chat"
     xmlns:flui="using:FluiFramework.UWP.Core">
 
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <flui:FluiFrameworkThemeResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+
 </Application>

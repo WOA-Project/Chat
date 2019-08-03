@@ -1,4 +1,5 @@
 ﻿using Chat.Controls;
+using Chat.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ using Windows.Devices.Sms;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Navigation;
 
 namespace Chat.Pages
@@ -16,7 +18,7 @@ namespace Chat.Pages
     {
         public ComposePage()
         {
-            this.InitializeComponent();;
+            this.InitializeComponent();
             Load();
             Loaded += ComposePage_Loaded;
         }
@@ -65,19 +67,22 @@ namespace Chat.Pages
 
             try
             {
-                var contacts = await store.FindContactsAsync(sender.Text);
-
-                if (contacts != null)
+                if (!sender.Text.Contains(";"))
                 {
-                    var phonecontacts = contacts.Where(x => x.Phones.Count != 0);
-                    if (phonecontacts != null)
+                    var contacts = await store.FindContactsAsync(sender.Text);
+
+                    if (contacts != null)
                     {
-                        foreach (var phonecontact in phonecontacts)
+                        var phonecontacts = contacts.Where(x => x.Phones.Count != 0);
+                        if (phonecontacts != null)
                         {
-                            foreach (var phone in phonecontact.Phones)
+                            foreach (var phonecontact in phonecontacts)
                             {
-                                var control = new ContactPhoneViewControl(phone, phonecontact);
-                                contactControls.Add(control);
+                                foreach (var phone in phonecontact.Phones)
+                                {
+                                    var control = new ContactPhoneViewControl(phone, phonecontact);
+                                    contactControls.Add(control);
+                                }
                             }
                         }
                     }
@@ -101,8 +106,14 @@ namespace Chat.Pages
                 picker.DesiredFieldsWithContactFieldType.Add(ContactFieldType.PhoneNumber);
 
                 var result = await picker.PickContactAsync();
-                ContactPickerBox.Text = result.DisplayName;
-                ContactPickerBox.Focus(FocusState.Pointer);
+                if (result != null)
+                {
+                    if (string.IsNullOrEmpty(ContactPickerBox.Text))
+                        ContactPickerBox.Text = result.Phones.First().Number;
+                    else
+                        ContactPickerBox.Text += "; " + result.Phones.First().Number;
+                    ContactPickerBox.Focus(FocusState.Pointer);
+                }
             }
         }
 
@@ -131,29 +142,26 @@ namespace Chat.Pages
         {
             try
             {
+                SendButton.IsEnabled = false;
                 var smsDevice = cellularlineControls[CellularLineComboBox.SelectedIndex].device;
 
-                SmsTextMessage2 message = new SmsTextMessage2();
-                message.Body = ComposeTextBox.Text;
+                var result = await SmsUtils.SendTextMessageAsync(smsDevice, ContactPickerBox.Text.Split(';'), ComposeTextBox.Text);
+                /*if (result)
+                    await new MessageDialog("We could not send one or some messages.", "Something went wrong").ShowAsync();*/
 
-                foreach (var number in ContactPickerBox.Text.Split(';'))
-                {
-                    message.To = number.TrimStart().TrimEnd();
-
-                    try
-                    {
-                        SmsSendMessageResult result = await smsDevice.SendMessageAndGetResultAsync(message);
-                    }
-                    catch
-                    {
-
-                    }
-                }
+                SendButton.IsEnabled = true;
+                ComposeTextBox.Text = "";
             }
             catch (Exception ex)
             {
+                SendButton.IsEnabled = true;
                 await new MessageDialog(ex.Message + " - " + ex.StackTrace).ShowAsync();
             }
+        }
+
+        private void AttachmentButton_Click(object sender, RoutedEventArgs e)
+        {
+            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
         }
     }
 }
