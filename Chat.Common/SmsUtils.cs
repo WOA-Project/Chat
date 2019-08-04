@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Chat;
 using Windows.Devices.Sms;
 
 namespace Chat.Common
@@ -9,6 +10,8 @@ namespace Chat.Common
         public async static Task<bool> SendTextMessageAsync(SmsDevice2 device, string[] numbers, string textmessage)
         {
             bool returnresult = true;
+            ChatMessageStore store = await ChatMessageManager.RequestStoreAsync();
+            var transportId = await ChatMessageManager.RegisterTransportAsync();
 
             try
             {
@@ -22,9 +25,40 @@ namespace Chat.Common
                     try
                     {
                         SmsSendMessageResult result = await device.SendMessageAndGetResultAsync(message);
+                        var offset = new DateTimeOffset(DateTime.Now);
 
                         if (!result.IsSuccessful)
                             returnresult = false;
+
+                        try
+                        {
+                            ChatMessage msg = new ChatMessage();
+
+                            msg.Body = textmessage;
+                            msg.From = number;
+                            msg.IsRead = true;
+                            msg.IsSeen = true;
+
+                            msg.LocalTimestamp = offset;
+                            msg.NetworkTimestamp = offset;
+
+                            msg.IsIncoming = false;
+                            msg.TransportId = transportId;
+
+                            msg.MessageOperatorKind = ChatMessageOperatorKind.Sms;
+                            msg.Status = ChatMessageStatus.Sent;
+
+                            if (!result.IsSuccessful)
+                            {
+                                msg.Status = ChatMessageStatus.SendFailed;
+                            }
+
+                            await store.SaveMessageAsync(msg);
+                        }
+                        catch
+                        {
+
+                        }
                     }
                     catch
                     {

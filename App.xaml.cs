@@ -17,28 +17,25 @@ namespace Chat
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            Frame rootFrame = Window.Current.Content as Frame;
+            Shell rootShell = Window.Current.Content as Shell;
 
-            if (rootFrame == null)
+            if (rootShell == null)
             {
-                rootFrame = new Frame();
-
-                rootFrame.NavigationFailed += OnNavigationFailed;
+                rootShell = new Shell();
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
                     //TODO: Load state from previously suspended application
                 }
 
-                Window.Current.Content = rootFrame;
+                rootShell.HandleArguments(e);
+
+                Window.Current.Content = rootShell;
             }
 
             if (e.PrelaunchActivated == false)
             {
-                if (rootFrame.Content == null)
-                {
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
-                }
+                rootShell.HandleArguments(e);
                 Window.Current.Activate();
             }
         }
@@ -47,30 +44,23 @@ namespace Chat
         {
             if (e.Kind == ActivationKind.Protocol)
             {
-                Frame rootFrame = Window.Current.Content as Frame;
-                if (rootFrame == null)
+                Shell rootShell = Window.Current.Content as Shell;
+                if (rootShell == null)
                 {
-                    rootFrame = new Frame();
-
-                    rootFrame.NavigationFailed += OnNavigationFailed;
+                    rootShell = new Shell();
 
                     if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                     {
                         //TODO: Load state from previously suspended application
                     }
 
-                    Window.Current.Content = rootFrame;
+                    Window.Current.Content = rootShell;
                 }
 
-                rootFrame.Navigate(typeof(MainPage), e);
+                rootShell.HandleArguments(e);
 
                 Window.Current.Activate();
             }
-        }
-
-        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
-        {
-            throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }
 
         private void OnSuspending(object sender, SuspendingEventArgs e)

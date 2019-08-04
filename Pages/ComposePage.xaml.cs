@@ -146,8 +146,8 @@ namespace Chat.Pages
                 var smsDevice = cellularlineControls[CellularLineComboBox.SelectedIndex].device;
 
                 var result = await SmsUtils.SendTextMessageAsync(smsDevice, ContactPickerBox.Text.Split(';'), ComposeTextBox.Text);
-                /*if (result)
-                    await new MessageDialog("We could not send one or some messages.", "Something went wrong").ShowAsync();*/
+                if (!result)
+                    await new MessageDialog("We could not send one or some messages.", "Something went wrong").ShowAsync();
 
                 SendButton.IsEnabled = true;
                 ComposeTextBox.Text = "";

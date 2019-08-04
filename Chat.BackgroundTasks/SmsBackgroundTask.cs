@@ -73,7 +73,7 @@ namespace Chat.BackgroundTasks
                                 new ToastButton("Send", "action=reply" + "&from=" + smsTextMessage.From + "&deviceid=" + deviceid)
                                 {
                                     ActivationType = ToastActivationType.Background,
-                                    ImageUri = "Assets/Icons/send.png",
+                                    ImageUri = "Assets/ToastIcons/Send.png",
                                     TextBoxId = "textBox"
                                 }
                             }

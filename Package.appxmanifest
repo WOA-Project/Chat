@@ -10,14 +10,14 @@
   <Identity
     Name="LumiaWOA.Chat"
     Publisher="CN=LumiaWOA"
-    Version="0.0.28.0" />
+    Version="0.0.33.0" />
 
   <mp:PhoneIdentity PhoneProductId="d8719107-e9ed-450f-be3e-88003464d950" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>Chat</DisplayName>
     <PublisherDisplayName>LumiaWOA</PublisherDisplayName>
-    <Logo>Assets\StoreLogo.png</Logo>
+    <Logo>Assets\ApplicationLogos\StoreLogo.png</Logo>
   </Properties>
 
   <Dependencies>
@@ -34,21 +34,20 @@
       EntryPoint="Chat.App">
       <uap:VisualElements
         DisplayName="Chat"
-        Square150x150Logo="Assets\Square150x150Logo.png"
-        Square44x44Logo="Assets\Square44x44Logo.png"
+        Square150x150Logo="Assets\ApplicationLogos\Square150x150Logo.png"
+        Square44x44Logo="Assets\ApplicationLogos\Square44x44Logo.png"
         Description="Send text messages using your device."
         BackgroundColor="transparent">
-        <uap:LockScreen Notification="badgeAndTileText" BadgeLogo="Assets\BadgeLogo.png"/>
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" Square71x71Logo="Assets\SmallTile.png" Square310x310Logo="Assets\LargeTile.png" ShortName="Chat">
+        <uap:LockScreen Notification="badgeAndTileText" BadgeLogo="Assets\ApplicationLogos\BadgeLogo.png"/>
+        <uap:DefaultTile Wide310x150Logo="Assets\ApplicationLogos\Wide310x150Logo.png" Square71x71Logo="Assets\ApplicationLogos\SmallTile.png" Square310x310Logo="Assets\ApplicationLogos\LargeTile.png" ShortName="Chat">
           <uap:ShowNameOnTiles>
             <uap:ShowOn Tile="square150x150Logo"/>
             <uap:ShowOn Tile="wide310x150Logo"/>
             <uap:ShowOn Tile="square310x310Logo"/>
           </uap:ShowNameOnTiles>
         </uap:DefaultTile>
-        <uap:SplashScreen Image="Assets\SplashScreen.png" />
+        <uap:SplashScreen Image="Assets\ApplicationLogos\SplashScreen.png" />
       </uap:VisualElements>
-
       <Extensions>
         <uap:Extension Category="windows.protocol">
           <uap:Protocol Name="ms-chat"/>
@@ -61,61 +60,16 @@
             <uap:DisplayName>Send a text message</uap:DisplayName>
           </uap:Protocol>
         </uap:Extension>
-
         <Extension Category="windows.backgroundTasks" EntryPoint="Chat.BackgroundTasks.SmsBackgroundTask">
           <BackgroundTasks>
             <Task Type="general"/>
           </BackgroundTasks>
         </Extension>
-
         <Extension Category="windows.backgroundTasks" EntryPoint="Chat.BackgroundTasks.SmsReplyBackgroundTask">
           <BackgroundTasks>
             <Task Type="systemEvent"/>
           </BackgroundTasks>
         </Extension>
-
-        <!--<Extension Category="windows.backgroundTasks" EntryPoint="Microsoft.Apps.Messaging.Internal.BackgroundTasks.ChatMessageNotificationBackgroundTask">
-            <BackgroundTasks>
-              <uap:Task Type="chatMessageNotification"/>
-            </BackgroundTasks>
-          </Extension>
-          <Extension Category="windows.backgroundTasks" EntryPoint="Microsoft.Apps.Messaging.Internal.BackgroundTasks.ToastNotificationHistoryChangedBackgroundTask">
-            <BackgroundTasks>
-              <uap:Task Type="chatMessageNotification"/>
-            </BackgroundTasks>
-          </Extension>
-          <Extension Category="windows.backgroundTasks" EntryPoint="Microsoft.Apps.Messaging.Internal.BackgroundTasks.ToastNotificationActionBackgroundTask">
-            <BackgroundTasks>
-              <uap:Task Type="chatMessageNotification"/>
-            </BackgroundTasks>
-          </Extension>
-          <Extension Category="windows.backgroundTasks" EntryPoint="Microsoft.Apps.Messaging.Internal.BackgroundTasks.EndUserMessageNotificationBackgroundTask">
-            <BackgroundTasks>
-              <uap:Task Type="chatMessageNotification"/>
-            </BackgroundTasks>
-          </Extension>
-          <Extension Category="windows.backgroundTasks" EntryPoint="Microsoft.Apps.Messaging.Internal.BackgroundTasks.PhoneLinePropertyChangedBackgroundTask">
-            <BackgroundTasks>
-              <uap:Task Type="phoneCall"/>
-            </BackgroundTasks>
-          </Extension>
-          <Extension Category="windows.backgroundTasks" EntryPoint="Microsoft.Apps.Messaging.Internal.BackgroundTasks.ServicingCompleteBackgroundTask">
-            <BackgroundTasks>
-              <Task Type="systemEvent"/>
-            </BackgroundTasks>
-          </Extension>
-          <Extension Category="windows.preInstalledConfigTask" EntryPoint="Microsoft.Apps.Messaging.Internal.BackgroundTasks.PreInstalledConfigBackgroundTask"/>
-          <Extension Category="windows.updateTask" EntryPoint="Microsoft.Apps.Messaging.External.RemovePrivateDataBackgroundTask"/>
-          <Extension Category="windows.backgroundTasks" EntryPoint="Microsoft.Apps.Messaging.Internal.BackgroundTasks.TimerBackgroundTask">
-            <BackgroundTasks>
-              <Task Type="timer"/>
-            </BackgroundTasks>
-          </Extension>
-          <Extension Category="windows.backgroundTasks" EntryPoint="Microsoft.Apps.Messaging.Internal.BackgroundTasks.TimeZoneChangedBackgroundTask">
-            <BackgroundTasks>
-              <Task Type="systemEvent"/>
-            </BackgroundTasks>
-          </Extension>-->
         </Extensions>
     </Application>
   </Applications>

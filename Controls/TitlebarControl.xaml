@@ -15,7 +15,7 @@
             VerticalAlignment="Stretch"
             Background="Transparent" />
 
-        <Grid
+        <Grid Visibility="Collapsed"
             Width="48"
             HorizontalAlignment="Left">
             <Rectangle
@@ -36,7 +36,7 @@
         </Grid>
         <TextBlock
             x:Name="WindowTitle"
-            Margin="60,0,0,0"
+            Margin="12,0,0,0"
             VerticalAlignment="Center"
             FontSize="12"
             TextTrimming="CharacterEllipsis"/>

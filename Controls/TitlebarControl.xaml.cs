@@ -4,6 +4,7 @@ using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
+using Windows.UI.Xaml.Media;
 
 namespace Chat.Controls
 {
@@ -23,6 +24,36 @@ namespace Chat.Controls
             CustomTitleBar.Margin = margin;
             CoreApplication.GetCurrentView().TitleBar.IsVisibleChanged += TitleBar_IsVisibleChanged;
             CoreApplication.GetCurrentView().TitleBar.LayoutMetricsChanged += TitleBar_LayoutMetricsChanged;
+
+
+            var titlebar = ApplicationView.GetForCurrentView().TitleBar;
+            var transparentColorBrush = new SolidColorBrush { Opacity = 0 };
+            var transparentColor = transparentColorBrush.Color;
+            titlebar.BackgroundColor = transparentColor;
+            titlebar.ButtonBackgroundColor = transparentColor;
+            titlebar.ButtonInactiveBackgroundColor = transparentColor;
+            var solidColorBrush = Application.Current.Resources["ApplicationForegroundThemeBrush"] as SolidColorBrush;
+
+            if (solidColorBrush != null)
+            {
+                titlebar.ButtonForegroundColor = solidColorBrush.Color;
+                titlebar.ButtonInactiveForegroundColor = solidColorBrush.Color;
+            }
+
+            var colorBrush = Application.Current.Resources["ApplicationForegroundThemeBrush"] as SolidColorBrush;
+
+            if (colorBrush != null)
+            {
+                titlebar.ForegroundColor = colorBrush.Color;
+            }
+
+            var hovercolor = (Application.Current.Resources["ApplicationForegroundThemeBrush"] as SolidColorBrush).Color;
+            hovercolor.A = 32;
+            titlebar.ButtonHoverBackgroundColor = hovercolor;
+            titlebar.ButtonHoverForegroundColor = (Application.Current.Resources["ApplicationForegroundThemeBrush"] as SolidColorBrush).Color;
+            hovercolor.A = 64;
+            titlebar.ButtonPressedBackgroundColor = hovercolor;
+            titlebar.ButtonPressedForegroundColor = (Application.Current.Resources["ApplicationForegroundThemeBrush"] as SolidColorBrush).Color;
         }
 
         private void TitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)

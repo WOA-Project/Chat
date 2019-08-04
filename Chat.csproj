@@ -12,7 +12,7 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.18362.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -61,19 +61,28 @@
     <Compile Include="Controls\CellularLineControl.xaml.cs">
       <DependentUpon>CellularLineControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ChatMenuItemControl.xaml.cs">
+      <DependentUpon>ChatMenuItemControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ChatMessageViewControl.xaml.cs">
+      <DependentUpon>ChatMessageViewControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ContactPhoneViewControl.xaml.cs">
       <DependentUpon>ContactPhoneViewControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\TitlebarControl.xaml.cs">
       <DependentUpon>TitlebarControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainPage.xaml.cs">
-      <DependentUpon>MainPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\ComposePage.xaml.cs">
       <DependentUpon>ComposePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\ConversationPage.xaml.cs">
+      <DependentUpon>ConversationPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Shell.xaml.cs">
+      <DependentUpon>Shell.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -81,64 +90,64 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\BadgeLogo.scale-100.png" />
-    <Content Include="Assets\BadgeLogo.scale-125.png" />
-    <Content Include="Assets\BadgeLogo.scale-150.png" />
-    <Content Include="Assets\BadgeLogo.scale-200.png" />
-    <Content Include="Assets\BadgeLogo.scale-400.png" />
-    <Content Include="Assets\Icons\send.png" />
-    <Content Include="Assets\LargeTile.scale-100.png" />
-    <Content Include="Assets\LargeTile.scale-125.png" />
-    <Content Include="Assets\LargeTile.scale-150.png" />
-    <Content Include="Assets\LargeTile.scale-200.png" />
-    <Content Include="Assets\LargeTile.scale-400.png" />
-    <Content Include="Assets\SmallTile.scale-100.png" />
-    <Content Include="Assets\SmallTile.scale-125.png" />
-    <Content Include="Assets\SmallTile.scale-150.png" />
-    <Content Include="Assets\SmallTile.scale-200.png" />
-    <Content Include="Assets\SmallTile.scale-400.png" />
-    <Content Include="Assets\SplashScreen.scale-100.png" />
-    <Content Include="Assets\SplashScreen.scale-125.png" />
-    <Content Include="Assets\SplashScreen.scale-150.png" />
-    <Content Include="Assets\SplashScreen.scale-400.png" />
-    <Content Include="Assets\Square150x150Logo.scale-100.png" />
-    <Content Include="Assets\Square150x150Logo.scale-125.png" />
-    <Content Include="Assets\Square150x150Logo.scale-150.png" />
-    <Content Include="Assets\Square150x150Logo.scale-400.png" />
-    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-16.png" />
-    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-24.png" />
-    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-256.png" />
-    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-32.png" />
-    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-48.png" />
-    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-16.png" />
-    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-256.png" />
-    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-32.png" />
-    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-48.png" />
-    <Content Include="Assets\Square44x44Logo.scale-100.png" />
-    <Content Include="Assets\Square44x44Logo.scale-125.png" />
-    <Content Include="Assets\Square44x44Logo.scale-150.png" />
-    <Content Include="Assets\Square44x44Logo.scale-400.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-16.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-24.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-256.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-32.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-48.png" />
-    <Content Include="Assets\StoreLogo.scale-100.png" />
-    <Content Include="Assets\StoreLogo.scale-125.png" />
-    <Content Include="Assets\StoreLogo.scale-150.png" />
-    <Content Include="Assets\StoreLogo.scale-200.png" />
-    <Content Include="Assets\StoreLogo.scale-400.png" />
-    <Content Include="Assets\Wide310x150Logo.scale-100.png" />
-    <Content Include="Assets\Wide310x150Logo.scale-125.png" />
-    <Content Include="Assets\Wide310x150Logo.scale-150.png" />
-    <Content Include="Assets\Wide310x150Logo.scale-400.png" />
+    <Content Include="Assets\ApplicationLogos\BadgeLogo.scale-100.png" />
+    <Content Include="Assets\ApplicationLogos\BadgeLogo.scale-125.png" />
+    <Content Include="Assets\ApplicationLogos\BadgeLogo.scale-150.png" />
+    <Content Include="Assets\ApplicationLogos\BadgeLogo.scale-200.png" />
+    <Content Include="Assets\ApplicationLogos\BadgeLogo.scale-400.png" />
+    <Content Include="Assets\ToastIcons\Send.png" />
+    <Content Include="Assets\ApplicationLogos\LargeTile.scale-100.png" />
+    <Content Include="Assets\ApplicationLogos\LargeTile.scale-125.png" />
+    <Content Include="Assets\ApplicationLogos\LargeTile.scale-150.png" />
+    <Content Include="Assets\ApplicationLogos\LargeTile.scale-200.png" />
+    <Content Include="Assets\ApplicationLogos\LargeTile.scale-400.png" />
+    <Content Include="Assets\ApplicationLogos\SmallTile.scale-100.png" />
+    <Content Include="Assets\ApplicationLogos\SmallTile.scale-125.png" />
+    <Content Include="Assets\ApplicationLogos\SmallTile.scale-150.png" />
+    <Content Include="Assets\ApplicationLogos\SmallTile.scale-200.png" />
+    <Content Include="Assets\ApplicationLogos\SmallTile.scale-400.png" />
+    <Content Include="Assets\ApplicationLogos\SplashScreen.scale-100.png" />
+    <Content Include="Assets\ApplicationLogos\SplashScreen.scale-125.png" />
+    <Content Include="Assets\ApplicationLogos\SplashScreen.scale-150.png" />
+    <Content Include="Assets\ApplicationLogos\SplashScreen.scale-400.png" />
+    <Content Include="Assets\ApplicationLogos\Square150x150Logo.scale-100.png" />
+    <Content Include="Assets\ApplicationLogos\Square150x150Logo.scale-125.png" />
+    <Content Include="Assets\ApplicationLogos\Square150x150Logo.scale-150.png" />
+    <Content Include="Assets\ApplicationLogos\Square150x150Logo.scale-400.png" />
+    <Content Include="Assets\ApplicationLogos\Square44x44Logo.altform-lightunplated_targetsize-16.png" />
+    <Content Include="Assets\ApplicationLogos\Square44x44Logo.altform-lightunplated_targetsize-24.png" />
+    <Content Include="Assets\ApplicationLogos\Square44x44Logo.altform-lightunplated_targetsize-256.png" />
+    <Content Include="Assets\ApplicationLogos\Square44x44Logo.altform-lightunplated_targetsize-32.png" />
+    <Content Include="Assets\ApplicationLogos\Square44x44Logo.altform-lightunplated_targetsize-48.png" />
+    <Content Include="Assets\ApplicationLogos\Square44x44Logo.altform-unplated_targetsize-16.png" />
+    <Content Include="Assets\ApplicationLogos\Square44x44Logo.altform-unplated_targetsize-256.png" />
+    <Content Include="Assets\ApplicationLogos\Square44x44Logo.altform-unplated_targetsize-32.png" />
+    <Content Include="Assets\ApplicationLogos\Square44x44Logo.altform-unplated_targetsize-48.png" />
+    <Content Include="Assets\ApplicationLogos\Square44x44Logo.scale-100.png" />
+    <Content Include="Assets\ApplicationLogos\Square44x44Logo.scale-125.png" />
+    <Content Include="Assets\ApplicationLogos\Square44x44Logo.scale-150.png" />
+    <Content Include="Assets\ApplicationLogos\Square44x44Logo.scale-400.png" />
+    <Content Include="Assets\ApplicationLogos\Square44x44Logo.targetsize-16.png" />
+    <Content Include="Assets\ApplicationLogos\Square44x44Logo.targetsize-24.png" />
+    <Content Include="Assets\ApplicationLogos\Square44x44Logo.targetsize-256.png" />
+    <Content Include="Assets\ApplicationLogos\Square44x44Logo.targetsize-32.png" />
+    <Content Include="Assets\ApplicationLogos\Square44x44Logo.targetsize-48.png" />
+    <Content Include="Assets\ApplicationLogos\StoreLogo.scale-100.png" />
+    <Content Include="Assets\ApplicationLogos\StoreLogo.scale-125.png" />
+    <Content Include="Assets\ApplicationLogos\StoreLogo.scale-150.png" />
+    <Content Include="Assets\ApplicationLogos\StoreLogo.scale-200.png" />
+    <Content Include="Assets\ApplicationLogos\StoreLogo.scale-400.png" />
+    <Content Include="Assets\ApplicationLogos\Wide310x150Logo.scale-100.png" />
+    <Content Include="Assets\ApplicationLogos\Wide310x150Logo.scale-125.png" />
+    <Content Include="Assets\ApplicationLogos\Wide310x150Logo.scale-150.png" />
+    <Content Include="Assets\ApplicationLogos\Wide310x150Logo.scale-400.png" />
     <Content Include="Properties\Default.rd.xml" />
-    <Content Include="Assets\LockScreenLogo.scale-200.png" />
-    <Content Include="Assets\SplashScreen.scale-200.png" />
-    <Content Include="Assets\Square150x150Logo.scale-200.png" />
-    <Content Include="Assets\Square44x44Logo.scale-200.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
-    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Content Include="Assets\ApplicationLogos\LockScreenLogo.scale-200.png" />
+    <Content Include="Assets\ApplicationLogos\SplashScreen.scale-200.png" />
+    <Content Include="Assets\ApplicationLogos\Square150x150Logo.scale-200.png" />
+    <Content Include="Assets\ApplicationLogos\Square44x44Logo.scale-200.png" />
+    <Content Include="Assets\ApplicationLogos\Square44x44Logo.targetsize-24_altform-unplated.png" />
+    <Content Include="Assets\ApplicationLogos\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -146,22 +155,34 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Controls\CellularLineControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\ChatMenuItemControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ContactPhoneViewControl.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Controls\ChatMessageViewControl.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\ContactPhoneViewControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\TitlebarControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MainPage.xaml">
+    <Page Include="Pages\ComposePage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\ComposePage.xaml">
+    <Page Include="Pages\ConversationPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
