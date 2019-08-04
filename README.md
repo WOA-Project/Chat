@@ -2,6 +2,5 @@
  Send text messages using your device builtin phone modem.
  
  ## Screenshot
-![image](https://i.imgur.com/LFOxzvL.png)
 
-![image](https://user-images.githubusercontent.com/3755345/62391545-686fea00-b565-11e9-8808-08adcee6dd94.png)
+![image](https://user-images.githubusercontent.com/3755345/62425033-d4259480-b6d6-11e9-8c8e-1d49998e9fc6.png)
