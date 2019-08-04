@@ -7,12 +7,24 @@ namespace Chat.Common
 {
     public class SmsUtils
     {
-        public async static Task<bool> SendTextMessageAsync(SmsDevice2 device, string[] numbers, string textmessage)
+        public async static Task<bool> SendTextMessageAsync(SmsDevice2 device, string[] numbers, string textmessage, string transportId = "")
         {
             bool returnresult = true;
             ChatMessageStore store = await ChatMessageManager.RequestStoreAsync();
-            var transportId = await ChatMessageManager.RegisterTransportAsync();
 
+            if (string.IsNullOrEmpty(transportId))
+            {
+                var transports = await ChatMessageManager.GetTransportsAsync();
+                if (transports.Count != 0)
+                {
+                    var transport = transports[0];
+                    transportId = transport.TransportId;
+                }
+                else
+                {
+                    transportId = await ChatMessageManager.RegisterTransportAsync();
+                }
+            }
             try
             {
                 SmsTextMessage2 message = new SmsTextMessage2();
@@ -74,9 +86,9 @@ namespace Chat.Common
             return returnresult;
         }
 
-        public async static Task<bool> SendTextMessageAsync(SmsDevice2 device, string number, string textmessage)
+        public async static Task<bool> SendTextMessageAsync(SmsDevice2 device, string number, string textmessage, string transportId = "")
         {
-            return await SendTextMessageAsync(device, new string[1] { number }, textmessage);
+            return await SendTextMessageAsync(device, new string[1] { number }, textmessage, transportId);
         }
     }
 }

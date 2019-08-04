@@ -7,6 +7,7 @@ using System.Linq;
 using Windows.ApplicationModel.Chat;
 using Windows.Devices.Enumeration;
 using Windows.Devices.Sms;
+using Windows.System;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -99,12 +100,22 @@ namespace Chat.Pages
                 convo = args;
             }
 
+            var contact = await ContactUtils.BindPhoneNumberToGlobalContact(convo.Participants.First());
+            ConvoTitle.Text = contact.DisplayName;
+            ConvoPic.Contact = contact;
+
             var reader = convo.GetMessageReader();
+
             var messages = await reader.ReadBatchAsync();
 
-            messages.ToList().ForEach(x => observableCollection.Add(new ChatMessageViewControl(x)));
+            messages.ToList().ForEach(x => observableCollection.Insert(0, new ChatMessageViewControl(x)));
 
             Load();
+        }
+
+        private async void CallButton_Click(object sender, RoutedEventArgs e)
+        {
+            await Launcher.LaunchUriAsync(new Uri("tel:" + convo.Participants.First()));
         }
     }
 }

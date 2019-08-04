@@ -16,7 +16,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Text="{x:Bind message.Body}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" Style="{ThemeResource FluentSubbodyTextStyle}" />
+            <TextBlock Text="{x:Bind message.Body}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" Style="{ThemeResource FluentBodyTextStyle}" />
             <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1" TextTrimming="CharacterEllipsis" MaxLines="1" Text="{x:Bind message.LocalTimestamp.LocalDateTime}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Style="{ThemeResource FluentCaptionTextStyle}" />
         </Grid>
     </StackPanel>

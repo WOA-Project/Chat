@@ -171,13 +171,40 @@
         <toolkit:DropShadowPanel Grid.Row="0"
                                  ShadowOpacity="0.7"
                                  HorizontalContentAlignment="Stretch">
-            <Grid Padding="8" Background="{ThemeResource SystemControlAcrylicWindowBrush}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+            <Grid Padding="8,40,8,8"  Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <PersonPicture Width="50" Margin="16,8"
+                                   x:Name="ConvoPic"/>
+
+                <TextBlock x:Name="ConvoTitle"
+                           Grid.Column="1"
+                           Style="{ThemeResource FluentTitleTextStyle}"
+                           VerticalAlignment="Center"
+                           />
+
+
+                <Button x:Name="CallButton"
+                        Grid.Column="2"
+                        Height="48" 
+                        Width="48" 
+                        Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
+                        Style="{ThemeResource FluentDialogButtonBackStyle}"
+                        VerticalAlignment="Center" 
+                        FontFamily="Segoe MDL2 Assets"
+                        Content="&#xE717;"
+                        BorderBrush="Transparent"
+                        BorderThickness="0" 
+                        Click="CallButton_Click"/>
 
                 <ComboBox x:Name="CellularLineComboBox" 
+                      Grid.Column="3"
+                      VerticalAlignment="Center"
                       HorizontalAlignment="Right"
                       Margin="0,4,0,8"
                       SelectionChanged="CellularLineComboBox_SelectionChanged" 
@@ -196,7 +223,14 @@
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                 </Style>
             </ListView.ItemContainerStyle>
-            
+
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsStackPanel VerticalAlignment="Bottom"
+                            ItemsUpdatingScrollMode="KeepLastItemInView"/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+
         </ListView>
 
         <!-- Compose panel -->
