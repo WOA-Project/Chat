@@ -1,4 +1,5 @@
 ﻿using Chat.BackgroundTasks;
+using Chat.Common;
 using Chat.Controls;
 using Chat.Pages;
 using System;
@@ -21,6 +22,7 @@ namespace Chat
         private async void Load()
         {
             BackgroundTaskUtils.RegisterToastNotificationBackgroundTasks();
+            ContactUtils.AssignAppToPhoneContacts();
             ChatMessageStore store = await ChatMessageManager.RequestStoreAsync();
 
             var reader = store.GetConversationReader();
