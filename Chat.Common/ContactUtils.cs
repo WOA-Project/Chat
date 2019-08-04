@@ -58,6 +58,12 @@ namespace Chat.Common
                 StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
 
                 var files = await storageFolder.GetFilesAsync();
+
+                if (files.Any(x => x.Name == contact.Id + ".png"))
+                {
+                    await files.First(x => x.Name == contact.Id + ".png").DeleteAsync();
+                }
+
                 StorageFile file = await storageFolder.CreateFileAsync(contact.Id + ".png");
 
                 using (var srcStream = await contact.SmallDisplayPicture.OpenReadAsync())
