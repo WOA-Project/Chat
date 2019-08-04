@@ -4,6 +4,7 @@ using Windows.Devices.Sms;
 using Windows.UI.Notifications;
 using System.Threading.Tasks;
 using Chat.Common;
+using System;
 
 namespace Chat.BackgroundTasks
 {
@@ -21,7 +22,7 @@ namespace Chat.BackgroundTasks
                 SmsMessageReceivedTriggerDetails smsDetails = taskInstance.TriggerDetails as SmsMessageReceivedTriggerDetails;
                 SmsTextMessage2 smsTextMessage;
 
-                string deviceid = ""; 
+                string deviceid = "";
 
                 if (smsDetails.MessageType == SmsMessageType.Text)
                 {
@@ -78,7 +79,11 @@ namespace Chat.BackgroundTasks
                                 }
                             }
                         },
-                        Launch = "action=openThread" + "&from=" + smsTextMessage.From + "&deviceid=" + deviceid
+                        Launch = "action=openThread" + "&from=" + smsTextMessage.From + "&deviceid=" + deviceid,
+                        Audio = new ToastAudio()
+                        {
+                            Src = new Uri("ms-winsoundevent:Notification.SMS")
+                        }
                     };
 
                     var toastNotif = new ToastNotification(toastContent.GetXml());

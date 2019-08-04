@@ -186,6 +186,7 @@
                            Grid.Column="1"
                            Style="{ThemeResource FluentTitleTextStyle}"
                            VerticalAlignment="Center"
+                           Text="Title"
                            />
 
 
@@ -205,13 +206,14 @@
                 <ComboBox x:Name="CellularLineComboBox" 
                       Grid.Column="3"
                       VerticalAlignment="Center"
-                      HorizontalAlignment="Right"
+                      HorizontalAlignment="Stretch"
                       Margin="0,4,0,8"
                       SelectionChanged="CellularLineComboBox_SelectionChanged" 
                       Style="{ThemeResource FluentComboBoxStyle}"
                       SelectedIndex="0"
                       BorderBrush="Transparent"
                       Background="Transparent"
+                      PlaceholderText="No cellular device"
                       BorderThickness="0"/>
             </Grid>
         </toolkit:DropShadowPanel>
@@ -321,16 +323,18 @@
 
                 <Button x:Name="SendButton" 
                         Grid.Column="2" 
-                        Height="48" 
-                        Width="48" 
+                        Height="38" 
+                        Width="38" 
                         Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
                         Style="{ThemeResource FluentDialogButtonBackStyle}"
-                        VerticalAlignment="Bottom" 
+                        VerticalAlignment="Center" 
+                        Margin="0,0,4,0"
                         Click="SendButton_Click" 
                         FontFamily="Segoe MDL2 Assets"
                         Content="&#xE724;"
                         BorderBrush="Transparent"
                         BorderThickness="0"
+                        CornerRadius="45"
                         IsEnabled="False" />
             </Grid>
         </toolkit:DropShadowPanel>

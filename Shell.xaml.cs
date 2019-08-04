@@ -28,9 +28,16 @@ namespace Chat
             var reader = store.GetConversationReader();
             var convos = await reader.ReadBatchAsync();
 
+            bool initializedonce = false;
+
             foreach (var convo in convos)
             {
                 NavigationView.MenuItems.Add(new ChatMenuItemControl(convo));
+
+                if (!initializedonce)
+                    NavigationView.SelectedItem = NavigationView.MenuItems[0];
+
+                initializedonce = true;
             }
         }
 
@@ -67,6 +74,16 @@ namespace Chat
         {
             if (args.SelectedItem != null)
                 MainFrame.Navigate(typeof(ConversationPage), (args.SelectedItem as ChatMenuItemControl).ChatConversation);
+        }
+
+        private void NavigationView_PaneClosing(NavigationView sender, NavigationViewPaneClosingEventArgs args)
+        {
+
+        }
+
+        private void NavigationView_PaneOpening(NavigationView sender, object args)
+        {
+
         }
     }
 }

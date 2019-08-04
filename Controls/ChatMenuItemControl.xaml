@@ -154,10 +154,10 @@
         <PersonPicture Grid.Row="0"        x:Name="PeoplePic"
                                            Grid.RowSpan="2"
                                            Grid.Column="0"
-                                           Height="48"
-                                           Width="48"
-                                           VerticalAlignment="Top"
-                                           Margin="0,0,12,0"/>
+                                           Height="24"
+                                           Width="24"
+                                           VerticalAlignment="Center"
+                                           Margin="-6,0,12,0"/>
 
         <!-- Name -->
         <TextBlock Grid.Row="0"        x:Name="ChatName"

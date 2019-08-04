@@ -48,8 +48,6 @@ namespace Chat.Common
 
                             msg.Body = textmessage;
                             msg.From = number;
-                            msg.IsRead = true;
-                            msg.IsSeen = true;
 
                             msg.LocalTimestamp = offset;
                             msg.NetworkTimestamp = offset;

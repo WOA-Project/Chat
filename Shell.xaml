@@ -20,19 +20,19 @@
                         <ResourceDictionary x:Key="Default">
                             <AcrylicBrush x:Key="NavigationViewDefaultPaneBackground"
                                             BackgroundSource="HostBackdrop" 
-                                            TintColor="{StaticResource SystemChromeAltHighColor}" 
+                                            TintColor="{StaticResource SystemChromeMediumLowColor}" 
                                             TintOpacity="0.7" 
-                                            FallbackColor="{StaticResource SystemChromeAltHighColor}" />
+                                            FallbackColor="{StaticResource SystemChromeMediumLowColor}" />
                             <AcrylicBrush x:Key="NavigationViewTopPaneBackground"
                                             BackgroundSource="HostBackdrop" 
-                                            TintColor="{StaticResource SystemChromeAltHighColor}" 
+                                            TintColor="{StaticResource SystemChromeMediumLowColor}" 
                                             TintOpacity="0.7" 
-                                            FallbackColor="{StaticResource SystemChromeAltHighColor}" />
+                                            FallbackColor="{StaticResource SystemChromeMediumLowColor}" />
                             <AcrylicBrush x:Key="NavigationViewExpandedPaneBackground"
                                             BackgroundSource="HostBackdrop" 
-                                            TintColor="{StaticResource SystemChromeAltHighColor}" 
+                                            TintColor="{StaticResource SystemChromeMediumLowColor}" 
                                             TintOpacity="0.7" 
-                                            FallbackColor="{StaticResource SystemChromeAltHighColor}" />
+                                            FallbackColor="{StaticResource SystemChromeMediumLowColor}" />
 
                             <x:Double x:Key="NavigationViewTopPaneHeight">80</x:Double>
                             <x:Double x:Key="NavigationViewPaneHeaderRowMinHeight">80</x:Double>
@@ -417,7 +417,7 @@
     </UserControl.Resources>
 
     <Grid>
-        <NavigationView x:Name="NavigationView" IsSettingsVisible="False" AlwaysShowHeader="True" OpenPaneLength="380" SelectionChanged="NavigationView_SelectionChanged">
+        <NavigationView IsBackButtonVisible="Collapsed" PaneClosing="NavigationView_PaneClosing" PaneOpening="NavigationView_PaneOpening"  x:Name="NavigationView" IsSettingsVisible="False" AlwaysShowHeader="True" OpenPaneLength="380" SelectionChanged="NavigationView_SelectionChanged">
             <NavigationView.AutoSuggestBox>
                 <AutoSuggestBox Margin="6,16,0,0" Height="48" VerticalAlignment="Center" QueryIcon="Find" PlaceholderText="Find a conversation" Style="{StaticResource AutoSuggestBoxStyle1}"/>
             </NavigationView.AutoSuggestBox>
@@ -443,8 +443,8 @@
             <toolkit:DropShadowPanel ShadowOpacity="0.7" HorizontalContentAlignment="Stretch">
                 <Grid Background="{ThemeResource SystemControlAcrylicWindowBrush}">
                     <Frame x:Name="MainFrame"/>
-                    <Grid Margin="0,-32,0,0" x:Name="TitlebarNarrowBackground" VerticalAlignment="Top" Height="{x:Bind Titlebar.Height, Mode=OneWay}" Visibility="Visible" Grid.ColumnSpan="2">
-                        <Rectangle VerticalAlignment="Top" Height="{x:Bind Titlebar.Height, Mode=OneWay}" Fill="{ThemeResource SystemControlAcrylicWindowBrush}"/>
+                    <Grid Margin="0,-32,0,0" x:Name="TitlebarNarrowBackground" VerticalAlignment="Top" Height="32" Visibility="Visible" Grid.ColumnSpan="2">
+                        <Rectangle VerticalAlignment="Stretch" Fill="{ThemeResource SystemControlAcrylicWindowBrush}"/>
                     </Grid>
                 </Grid>
             </toolkit:DropShadowPanel>

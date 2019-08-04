@@ -10,14 +10,18 @@
     d:DesignWidth="500">
 
     <StackPanel Margin="8">
-        <Grid Padding="8" x:Name="ChatBubble" CornerRadius="15" MinWidth="50" Background="{ThemeResource SystemAccentColor}" MaxWidth="400" HorizontalAlignment="Left">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+        <Grid x:Name="ChatBubble" CornerRadius="8" MinWidth="100" MaxWidth="400" HorizontalAlignment="Left">
+            <Grid x:Name="BgColor" Background="{ThemeResource SystemAccentColor}"/>
 
-            <TextBlock Text="{x:Bind message.Body}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" Style="{ThemeResource FluentBodyTextStyle}" />
-            <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1" TextTrimming="CharacterEllipsis" MaxLines="1" Text="{x:Bind message.LocalTimestamp.LocalDateTime}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Style="{ThemeResource FluentCaptionTextStyle}" />
+            <Grid Padding="8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="{x:Bind message.Body}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" Style="{ThemeResource FluentBodyTextStyle}" />
+                <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1" TextTrimming="CharacterEllipsis" MaxLines="1" Text="{x:Bind message.LocalTimestamp.LocalDateTime}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Style="{ThemeResource FluentCaptionTextStyle}" />
+            </Grid>
         </Grid>
     </StackPanel>
 </UserControl>

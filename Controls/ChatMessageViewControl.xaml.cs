@@ -26,7 +26,10 @@ namespace Chat.Controls
             this.InitializeComponent();
             this.message = message;
             if (!message.IsIncoming)
+            {
                 ChatBubble.HorizontalAlignment = HorizontalAlignment.Right;
+                BgColor.Opacity = 0.75;
+            }
         }
     }
 }
