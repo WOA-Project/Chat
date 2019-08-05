@@ -1,4 +1,7 @@
-# Chat
+ ![image](Assets/ApplicationLogos/StoreLogo.scale-200.png)
+ 
+ # Chat
+ 
  Send text messages using your device builtin phone modem.
  
  ## Screenshots
