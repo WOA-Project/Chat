@@ -103,6 +103,24 @@ namespace Chat.ViewModels
                         }
                         break;
                     }
+                case ChatStoreChangedEventKind.ConversationDeleted:
+                    {
+                        if (ChatConversations.Any(x => x.ChatConversation.Id == args.Id))
+                        {
+                            var existingConversation = ChatConversations.First(x => x.ChatConversation.Id == args.Id);
+                            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                            () =>
+                            {
+                                bool wasSelected = SelectedItem == existingConversation;
+
+                                ChatConversations.Remove(existingConversation);
+
+                                if (wasSelected && ChatConversations.Count != 0)
+                                    SelectedItem = ChatConversations[0];
+                            });
+                        }
+                        break;
+                    }
             }
         }
     }
