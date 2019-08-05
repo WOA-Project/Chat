@@ -274,11 +274,11 @@
                     <TextBlock Text="Conversations" VerticalAlignment="Center" Style="{ThemeResource FluentSubheaderTextStyle}"/>
                     <CommandBar Background="Transparent">
                         <CommandBar.PrimaryCommands>
-                            <AppBarButton Icon="Add" x:Name="NewConvoButton" Click="NewConvoButton_Click"/>
+                            <AppBarButton Icon="Add" x:Name="NewConvoButton" Command="{x:Bind NewConvoCommand}"/>
                         </CommandBar.PrimaryCommands>
                         <CommandBar.SecondaryCommands>
                             <AppBarButton Icon="Setting" Label="Settings"/>
-                            <AppBarButton x:Name="AboutButton" Label="About" Click="AboutButton_Click">
+                            <AppBarButton x:Name="AboutButton" Label="About" Command="{x:Bind OpenAboutCommand}">
                                 <AppBarButton.Icon>
                                     <FontIcon Glyph="&#xE946;"/>
                                 </AppBarButton.Icon>

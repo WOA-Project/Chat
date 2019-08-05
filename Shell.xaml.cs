@@ -2,7 +2,9 @@
 using Chat.Controls;
 using Chat.Pages;
 using Chat.ViewModels;
+using GalaSoft.MvvmLight.Command;
 using System;
+using System.Windows.Input;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Contacts;
 using Windows.UI.Xaml;
@@ -42,21 +44,45 @@ namespace Chat
             }
         }
 
-        private void NewConvoButton_Click(object sender, RoutedEventArgs e)
+        private ICommand _newConvoCommand;
+        public ICommand NewConvoCommand
         {
-            MainFrame.Navigate(typeof(ComposePage));
-            ViewModel.SelectedItem = null;
+            get
+            {
+                if (_newConvoCommand == null)
+                {
+                    _newConvoCommand = new RelayCommand(
+                        () =>
+                        {
+                            MainFrame.Navigate(typeof(ComposePage));
+                            ViewModel.SelectedItem = null;
+                        });
+                }
+                return _newConvoCommand;
+            }
+        }
+
+        private ICommand _openAboutCommand;
+        public ICommand OpenAboutCommand
+        {
+            get
+            {
+                if (_openAboutCommand == null)
+                {
+                    _openAboutCommand = new RelayCommand(
+                        async () =>
+                        {
+                            await new AboutContentDialog().ShowAsync();
+                        });
+                }
+                return _openAboutCommand;
+            }
         }
 
         private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
             if (args.SelectedItem != null)
                 MainFrame.Navigate(typeof(ConversationPage), (args.SelectedItem as ChatMenuItemControl).ChatConversation);
-        }
-
-        private async void AboutButton_Click(object sender, RoutedEventArgs e)
-        {
-            await new AboutContentDialog().ShowAsync();
         }
     }
 }
