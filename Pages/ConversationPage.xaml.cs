@@ -16,7 +16,7 @@ namespace Chat.Pages
 {
     public sealed partial class ConversationPage : Page
     {
-        public ConversationViewModel ViewModel = new ConversationViewModel("");
+        public ConversationViewModel ViewModel { get; } = new ConversationViewModel("");
         private string convoid;
 
         public ConversationPage()

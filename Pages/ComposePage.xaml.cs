@@ -1,11 +1,12 @@
 ﻿using Chat.Common;
 using Chat.Controls;
+using Chat.ViewModels;
+using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 using Windows.ApplicationModel.Contacts;
-using Windows.Devices.Enumeration;
-using Windows.Devices.Sms;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -16,10 +17,11 @@ namespace Chat.Pages
 {
     public sealed partial class ComposePage : Page
     {
+        public ComposeViewModel ViewModel { get; } = new ComposeViewModel();
+
         public ComposePage()
         {
             this.InitializeComponent();
-            Load();
             Loaded += ComposePage_Loaded;
         }
 
@@ -36,27 +38,6 @@ namespace Chat.Pages
             if (args != null)
             {
                 ContactPickerBox.Text = args.DisplayName;
-            }
-        }
-
-        private List<CellularLineControl> cellularlineControls = new List<CellularLineControl>();
-
-        private async void Load()
-        {
-            var smsDevices = await DeviceInformation.FindAllAsync(SmsDevice2.GetDeviceSelector(), null);
-            foreach (var smsDevice in smsDevices)
-            {
-                try
-                {
-                    SmsDevice2 dev = SmsDevice2.FromId(smsDevice.Id);
-                    CellularLineControl control = new CellularLineControl(dev);
-                    cellularlineControls.Add(control);
-                    CellularLineComboBox.Items.Add(new ComboBoxItem() { Content = control });
-                }
-                catch
-                {
-
-                }
             }
         }
 
@@ -138,30 +119,55 @@ namespace Chat.Pages
             }
         }
 
-        private async void SendButton_Click(object sender, RoutedEventArgs e)
+        private ICommand _showAttachments;
+        public ICommand ShowAttachments
         {
-            try
+            get
             {
-                SendButton.IsEnabled = false;
-                var smsDevice = cellularlineControls[CellularLineComboBox.SelectedIndex].device;
-
-                var result = await SmsUtils.SendTextMessageAsync(smsDevice, ContactPickerBox.Text.Split(';'), ComposeTextBox.Text);
-                if (!result)
-                    await new MessageDialog("We could not send one or some messages.", "Something went wrong").ShowAsync();
-
-                SendButton.IsEnabled = true;
-                ComposeTextBox.Text = "";
-            }
-            catch (Exception ex)
-            {
-                SendButton.IsEnabled = true;
-                await new MessageDialog(ex.Message + " - " + ex.StackTrace).ShowAsync();
+                if (_showAttachments == null)
+                {
+                    _showAttachments = new RelayCommand(
+                        () =>
+                        {
+                            FlyoutBase.ShowAttachedFlyout((FrameworkElement)AttachmentButton);
+                        });
+                }
+                return _showAttachments;
             }
         }
 
-        private void AttachmentButton_Click(object sender, RoutedEventArgs e)
+
+        private ICommand _sendReply;
+        public ICommand SendReply
         {
-            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
+            get
+            {
+                if (_sendReply == null)
+                {
+                    _sendReply = new RelayCommand(
+                        async () =>
+                        {
+                            try
+                            {
+                                SendButton.IsEnabled = false;
+                                var smsDevice = ViewModel.CellularLines[CellularLineComboBox.SelectedIndex].device;
+
+                                var result = await SmsUtils.SendTextMessageAsync(smsDevice, ContactPickerBox.Text.Split(';'), ComposeTextBox.Text);
+                                if (!result)
+                                    await new MessageDialog("We could not send one or some messages.", "Something went wrong").ShowAsync();
+
+                                SendButton.IsEnabled = true;
+                                ComposeTextBox.Text = "";
+                            }
+                            catch (Exception ex)
+                            {
+                                SendButton.IsEnabled = true;
+                                await new MessageDialog(ex.Message + " - " + ex.StackTrace).ShowAsync();
+                            }
+                        });
+                }
+                return _sendReply;
+            }
         }
     }
 }
