@@ -76,6 +76,7 @@
     <Compile Include="Controls\TitlebarControl.xaml.cs">
       <DependentUpon>TitlebarControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\DateTimeExtensions.cs" />
     <Compile Include="Helpers\Observable.cs" />
     <Compile Include="Pages\ComposePage.xaml.cs">
       <DependentUpon>ComposePage.xaml</DependentUpon>

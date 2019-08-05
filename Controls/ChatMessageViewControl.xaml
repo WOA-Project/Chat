@@ -19,8 +19,12 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Text="{x:Bind message.Body}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" Style="{ThemeResource FluentBodyTextStyle}" />
-                <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1" TextTrimming="CharacterEllipsis" MaxLines="1" Text="{x:Bind message.LocalTimestamp.LocalDateTime}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Style="{ThemeResource FluentCaptionTextStyle}" />
+                <TextBlock Text="{x:Bind message.Body}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" Style="{ThemeResource FluentBodyTextStyle}" Foreground="White"/>
+                <TextBlock x:Name="DateTimeLabel" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1" TextTrimming="CharacterEllipsis" MaxLines="1" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Style="{ThemeResource FluentCaptionTextStyle}" >
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="{x:Bind message.LocalTimestamp.LocalDateTime}"/>
+                    </ToolTipService.ToolTip>
+                </TextBlock>
             </Grid>
         </Grid>
     </StackPanel>
