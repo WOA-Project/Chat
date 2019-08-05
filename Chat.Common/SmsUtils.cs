@@ -7,7 +7,7 @@ namespace Chat.Common
 {
     public class SmsUtils
     {
-        public async static Task<bool> SendTextMessageAsync(SmsDevice2 device, string[] numbers, string textmessage, string transportId = "")
+        public async static Task<bool> SendTextMessageAsync(SmsDevice2 device, string[] numbers, string textmessage, string transportId = "0")
         {
             bool returnresult = true;
             ChatMessageStore store = await ChatMessageManager.RequestStoreAsync();
@@ -32,22 +32,22 @@ namespace Chat.Common
 
                 foreach (var number in numbers)
                 {
-                    message.To = number.TrimStart().TrimEnd();
+                    var num = number.Trim();
+                    message.To = num;
 
                     try
                     {
                         SmsSendMessageResult result = await device.SendMessageAndGetResultAsync(message);
                         var offset = new DateTimeOffset(DateTime.Now);
 
-                        if (!result.IsSuccessful)
-                            returnresult = false;
+                        returnresult &= result.IsSuccessful;
 
                         try
                         {
                             ChatMessage msg = new ChatMessage();
 
                             msg.Body = textmessage;
-                            msg.From = number;
+                            msg.Recipients.Add(num);
 
                             msg.LocalTimestamp = offset;
                             msg.NetworkTimestamp = offset;
@@ -56,12 +56,7 @@ namespace Chat.Common
                             msg.TransportId = transportId;
 
                             msg.MessageOperatorKind = ChatMessageOperatorKind.Sms;
-                            msg.Status = ChatMessageStatus.Sent;
-
-                            if (!result.IsSuccessful)
-                            {
-                                msg.Status = ChatMessageStatus.SendFailed;
-                            }
+                            msg.Status = result.IsSuccessful ? ChatMessageStatus.Sent : ChatMessageStatus.SendFailed;
 
                             await store.SaveMessageAsync(msg);
                         }
