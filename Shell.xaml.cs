@@ -1,11 +1,9 @@
-﻿using Chat.BackgroundTasks;
-using Chat.Common;
-using Chat.ContentDialogs;
+﻿using Chat.ContentDialogs;
 using Chat.Controls;
 using Chat.Pages;
+using Chat.ViewModels;
 using System;
 using Windows.ApplicationModel.Activation;
-using Windows.ApplicationModel.Chat;
 using Windows.ApplicationModel.Contacts;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -14,32 +12,11 @@ namespace Chat
 {
     public sealed partial class Shell : UserControl
     {
+        public ShellViewModel ViewModel { get; } = new ShellViewModel();
+
         public Shell()
         {
             this.InitializeComponent();
-            Load();
-        }
-
-        private async void Load()
-        {
-            BackgroundTaskUtils.RegisterToastNotificationBackgroundTasks();
-            ContactUtils.AssignAppToPhoneContacts();
-            ChatMessageStore store = await ChatMessageManager.RequestStoreAsync();
-
-            var reader = store.GetConversationReader();
-            var convos = await reader.ReadBatchAsync();
-
-            bool initializedonce = false;
-
-            foreach (var convo in convos)
-            {
-                NavigationView.MenuItems.Add(new ChatMenuItemControl(convo));
-
-                if (!initializedonce)
-                    NavigationView.SelectedItem = NavigationView.MenuItems[0];
-
-                initializedonce = true;
-            }
         }
 
         public void HandleArguments(object e)
@@ -68,7 +45,7 @@ namespace Chat
         private void NewConvoButton_Click(object sender, RoutedEventArgs e)
         {
             MainFrame.Navigate(typeof(ComposePage));
-            NavigationView.SelectedItem = null;
+            ViewModel.SelectedItem = null;
         }
 
         private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)

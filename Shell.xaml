@@ -264,7 +264,7 @@
     </UserControl.Resources>
     
     <Grid>
-        <NavigationView Windows10version1803:IsBackButtonVisible="Collapsed" x:Name="NavigationView" IsSettingsVisible="False" AlwaysShowHeader="True" OpenPaneLength="380" SelectionChanged="NavigationView_SelectionChanged">
+        <NavigationView Windows10version1803:IsBackButtonVisible="Collapsed" x:Name="NavigationView" IsSettingsVisible="False" AlwaysShowHeader="True" OpenPaneLength="380" SelectionChanged="NavigationView_SelectionChanged" SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}" MenuItemsSource="{x:Bind ViewModel.ChatConversations, Mode=OneWay}">
             <NavigationView.AutoSuggestBox>
                 <AutoSuggestBox Margin="6,16,0,0" Height="48" VerticalAlignment="Center" QueryIcon="Find" PlaceholderText="Find a conversation" Style="{StaticResource AutoSuggestBoxStyle1}"/>
             </NavigationView.AutoSuggestBox>
