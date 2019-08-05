@@ -1,9 +1,9 @@
 ﻿using Windows.ApplicationModel;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.ViewManagement;
-using Windows.UI.Xaml;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
+using Windows.UI.ViewManagement;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 
 namespace Chat.Controls
@@ -76,7 +76,8 @@ namespace Chat.Controls
             }
         }
 
-        public AppViewBackButtonVisibility BackButtonVisibility {
+        public AppViewBackButtonVisibility BackButtonVisibility
+        {
             get => SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility;
             set
             {

@@ -10,7 +10,7 @@
   <Identity
     Name="LumiaWOA.Chat"
     Publisher="CN=LumiaWOA"
-    Version="0.0.41.0" />
+    Version="0.0.42.0" />
 
   <mp:PhoneIdentity PhoneProductId="d8719107-e9ed-450f-be3e-88003464d950" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
@@ -76,17 +76,31 @@
 
   <Capabilities>
     <Capability Name="internetClientServer"/>
-    <uap:Capability Name="chat"/>
-    <uap:Capability Name="phoneCall"/>
+    
     <uap:Capability Name="blockedChatMessages"/>
-    <uap:Capability Name="contacts"/>
+    
     <rescap:Capability Name="dualSimTiles"/>
+    
     <rescap:Capability Name="enterpriseDataPolicy"/>
-    <rescap:Capability Name="contactsSystem"/>
+    
     <rescap:Capability Name="smsSend"/>
+    
+    <uap:Capability Name="phoneCall"/>
+    <rescap:Capability Name="phoneCallSystem" />
+    
     <rescap:Capability Name="phoneCallHistory"/>
-    <rescap:Capability Name="cellularMessaging"/>
+    <rescap:Capability Name="phoneCallHistorySystem" />
+    
+    <uap:Capability Name="chat"/>
     <rescap:Capability Name="chatSystem"/>
+    
+    <rescap:Capability Name="cellularMessaging"/>
+    <rescap:Capability Name="cellularDeviceIdentity"/>
+    <rescap:Capability Name="cellularDeviceControl"/>
+    
+    <uap:Capability Name="contacts"/>
+    <rescap:Capability Name="contactsSystem"/>
+    
     <DeviceCapability Name="location"/>
     <DeviceCapability Name="microphone"/>
   </Capabilities>

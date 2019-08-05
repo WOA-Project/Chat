@@ -1,5 +1,6 @@
 ﻿using Chat.BackgroundTasks;
 using Chat.Common;
+using Chat.ContentDialogs;
 using Chat.Controls;
 using Chat.Pages;
 using System;
@@ -76,14 +77,9 @@ namespace Chat
                 MainFrame.Navigate(typeof(ConversationPage), (args.SelectedItem as ChatMenuItemControl).ChatConversation);
         }
 
-        private void NavigationView_PaneClosing(NavigationView sender, NavigationViewPaneClosingEventArgs args)
+        private async void AboutButton_Click(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void NavigationView_PaneOpening(NavigationView sender, object args)
-        {
-
+            await new AboutContentDialog().ShowAsync();
         }
     }
 }

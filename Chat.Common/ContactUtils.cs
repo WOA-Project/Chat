@@ -21,19 +21,21 @@ namespace Chat.Common
         public static async Task<Contact> BindPhoneNumberToGlobalContact(string phonenumber)
         {
             var store = await ContactManager.RequestStoreAsync();
-            var contacts = await store.FindContactsAsync();
-
-            foreach (var contact in contacts)
+            if (store != null)
             {
-                if (contact.Phones.Any(x => x.Number.ToLower().Replace(" ", "") == phonenumber.ToLower().Replace(" ", "")))
+                var contacts = await store.FindContactsAsync();
+
+                foreach (var contact in contacts)
                 {
-                    return contact;
+                    if (contact.Phones.Any(x => x.Number.ToLower().Replace(" ", "") == phonenumber.ToLower().Replace(" ", "")))
+                    {
+                        return contact;
+                    }
                 }
             }
 
             Contact blankcontact = new Contact();
             blankcontact.Phones.Add(new ContactPhone() { Number = phonenumber, Kind = ContactPhoneKind.Other });
-
             return blankcontact;
         }
 

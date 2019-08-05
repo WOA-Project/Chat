@@ -1,5 +1,4 @@
-﻿using Chat.BackgroundTasks;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Windows.ApplicationModel.Background;
 using Windows.Devices.Sms;

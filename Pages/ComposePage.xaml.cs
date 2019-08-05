@@ -1,5 +1,5 @@
-﻿using Chat.Controls;
-using Chat.Common;
+﻿using Chat.Common;
+using Chat.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;

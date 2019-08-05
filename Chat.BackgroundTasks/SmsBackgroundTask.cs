@@ -1,10 +1,10 @@
-﻿using Microsoft.Toolkit.Uwp.Notifications;
+﻿using Chat.Common;
+using Microsoft.Toolkit.Uwp.Notifications;
+using System;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
 using Windows.Devices.Sms;
 using Windows.UI.Notifications;
-using System.Threading.Tasks;
-using Chat.Common;
-using System;
 
 namespace Chat.BackgroundTasks
 {
