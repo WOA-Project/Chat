@@ -1,10 +1,10 @@
 ﻿using Chat.Common;
+using Chat.Helpers;
 using System;
 using System.Linq;
 using Windows.ApplicationModel.Chat;
 using Windows.ApplicationModel.Contacts;
 using Windows.UI.Xaml.Controls;
-using Chat.Helpers;
 
 namespace Chat.Controls
 {
@@ -46,6 +46,11 @@ namespace Chat.Controls
             ChatDate.Text = DisplayDate;
             PeoplePic.Contact = Contact;
             ChatContent.Text = DisplayMessage;
+        }
+
+        private async void DeleteConvoButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            await ChatConversation.DeleteAsync();
         }
     }
 }

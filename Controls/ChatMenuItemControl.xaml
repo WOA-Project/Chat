@@ -10,6 +10,17 @@
     d:DesignHeight="300"
     d:DesignWidth="400">
 
+    <NavigationViewItem.ContextFlyout>
+        <MenuFlyout Placement="Top">
+            <!-- Delete -->
+            <MenuFlyoutItem Text="Delete" Icon="Delete" x:Name="DeleteConvoButton" Click="DeleteConvoButton_Click">
+                <MenuFlyoutItem.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="D" Modifiers="Control"/>
+                </MenuFlyoutItem.KeyboardAccelerators>
+            </MenuFlyoutItem>
+        </MenuFlyout>
+    </NavigationViewItem.ContextFlyout>
+
     <NavigationViewItem.Style>
         <Style TargetType="NavigationViewItem">
             <Setter Property="Foreground" Value="{ThemeResource NavigationViewItemForeground}" />
