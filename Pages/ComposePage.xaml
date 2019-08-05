@@ -160,7 +160,6 @@
             </Setter>
         </Style>
 
-        <AcrylicBrush x:Key="AutoSuggestBoxBackgroundBrush" BackgroundSource="HostBackdrop" TintColor="{StaticResource SystemChromeMediumColor}" TintOpacity="0.8" FallbackColor="{StaticResource SystemChromeMediumColor}"/>
         <!-- TextBox with no 'active' background -->
         <Style x:Key="AutoSuggestBoxTextBoxNoBackground" TargetType="TextBox">
             <Setter Property="MinWidth" Value="{ThemeResource TextControlThemeMinWidth}"/>
@@ -364,7 +363,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="AutoSuggestBox">
                         <Grid>
-                            <TextBox x:Name="TextBox" Width="{TemplateBinding Width}" Margin="0" Padding="14" Background="{ThemeResource AutoSuggestBoxBackgroundBrush}" BorderThickness="1" Canvas.ZIndex="0" DesiredCandidateWindowAlignment="BottomEdge" Header="{TemplateBinding Header}" PlaceholderText="{TemplateBinding PlaceholderText}" ScrollViewer.BringIntoViewOnFocusChange="False" Style="{TemplateBinding TextBoxStyle}"/>
+                            <TextBox x:Name="TextBox" Width="{TemplateBinding Width}" Margin="0" Padding="14" Background="{ThemeResource SystemControlAcrylicElementBrush}" BorderThickness="1" Canvas.ZIndex="0" DesiredCandidateWindowAlignment="BottomEdge" Header="{TemplateBinding Header}" PlaceholderText="{TemplateBinding PlaceholderText}" ScrollViewer.BringIntoViewOnFocusChange="False" Style="{TemplateBinding TextBoxStyle}"/>
                             <Popup x:Name="SuggestionsPopup">
                                 <Border x:Name="SuggestionsContainer">
                                     <Border.RenderTransform>

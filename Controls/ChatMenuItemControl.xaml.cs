@@ -4,6 +4,7 @@ using System.Linq;
 using Windows.ApplicationModel.Chat;
 using Windows.ApplicationModel.Contacts;
 using Windows.UI.Xaml.Controls;
+using Chat.Helpers;
 
 namespace Chat.Controls
 {
@@ -37,7 +38,7 @@ namespace Chat.Controls
             var lastMessage = messages.Where(x => x.Id == lastMessageId).First();
 
             DisplayMessage = lastMessage.Body;
-            DisplayDate = lastMessage.LocalTimestamp.LocalDateTime.ToString();
+            DisplayDate = lastMessage.LocalTimestamp.ToLocalTime().ToRelativeString();
             Contact = contact;
             DisplayName = contact.DisplayName;
 
