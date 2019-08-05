@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Chat.Controls
 {
-    public sealed partial class CellularLineControl : UserControl
+    public sealed partial class CellularLineControl : ComboBoxItem
     {
         public SmsDevice2 device;
 

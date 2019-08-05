@@ -396,26 +396,26 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <toolkit:DropShadowPanel Grid.Row="0" ShadowOpacity="0.7" HorizontalContentAlignment="Stretch">
-            <Grid Padding="8" Background="{ThemeResource SystemControlAcrylicWindowBrush}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <ComboBox x:Name="CellularLineComboBox" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,4,0,8" SelectionChanged="CellularLineComboBox_SelectionChanged" Style="{ThemeResource FluentComboBoxStyle}" SelectedIndex="0" BorderBrush="Transparent" Background="Transparent" PlaceholderText="No cellular device" BorderThickness="0"/>
-                <Grid Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="To:" VerticalAlignment="Center" Margin="8,0,8,0"/>
-                    <AutoSuggestBox x:Name="ContactPickerBox" Grid.Column="1" QueryIcon="Add" TextChanged="ContactPickerBox_TextChanged" QuerySubmitted="ContactPickerBox_QuerySubmitted" SuggestionChosen="ContactPickerBox_SuggestionChosen" Style="{StaticResource AutoSuggestBoxStyle1}"/>
-                </Grid>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="134" Padding="8,60,8,8" Background="{ThemeResource SystemControlAcrylicElementBrush}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <ComboBox x:Name="CellularLineComboBox" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0,4,0,8" SelectionChanged="CellularLineComboBox_SelectionChanged" Style="{ThemeResource FluentComboBoxStyle}" SelectedIndex="0" BorderBrush="Transparent" Background="Transparent" PlaceholderText="No cellular device" BorderThickness="0"/>
+            <Grid Grid.Row="1" VerticalAlignment="Center" Margin="0,0,16,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="To:" VerticalAlignment="Center" Margin="16,0,16,0"/>
+                <AutoSuggestBox x:Name="ContactPickerBox" Grid.Column="1" QueryIcon="Add" TextChanged="ContactPickerBox_TextChanged" QuerySubmitted="ContactPickerBox_QuerySubmitted" SuggestionChosen="ContactPickerBox_SuggestionChosen" Style="{StaticResource AutoSuggestBoxStyle1}"/>
             </Grid>
-        </toolkit:DropShadowPanel>
-        
+        </Grid>
+
         <!-- Compose panel -->
-        <toolkit:DropShadowPanel Grid.Row="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="12" ShadowOpacity="0.7">
+        <toolkit:DropShadowPanel  Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="12" ShadowOpacity="0.7" Height="48">
             <Grid Grid.Row="2" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" CornerRadius="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>

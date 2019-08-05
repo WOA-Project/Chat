@@ -1,12 +1,10 @@
 ﻿using Chat.Common;
-using Chat.Controls;
+using Chat.ViewModels;
+using GalaSoft.MvvmLight.Command;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Input;
 using Windows.ApplicationModel.Chat;
-using Windows.Devices.Enumeration;
-using Windows.Devices.Sms;
 using Windows.System;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -18,35 +16,13 @@ namespace Chat.Pages
 {
     public sealed partial class ConversationPage : Page
     {
-        private ChatConversation convo;
-        private ObservableCollection<ChatMessageViewControl> observableCollection = new ObservableCollection<ChatMessageViewControl>();
+        public ConversationViewModel ViewModel = new ConversationViewModel("");
+        private string convoid;
 
         public ConversationPage()
         {
             this.InitializeComponent();
         }
-
-        private List<CellularLineControl> cellularlineControls = new List<CellularLineControl>();
-
-        private async void Load()
-        {
-            var smsDevices = await DeviceInformation.FindAllAsync(SmsDevice2.GetDeviceSelector(), null);
-            foreach (var smsDevice in smsDevices)
-            {
-                try
-                {
-                    SmsDevice2 dev = SmsDevice2.FromId(smsDevice.Id);
-                    CellularLineControl control = new CellularLineControl(dev);
-                    cellularlineControls.Add(control);
-                    CellularLineComboBox.Items.Add(new ComboBoxItem() { Content = control });
-                }
-                catch
-                {
-
-                }
-            }
-        }
-
 
         private void CellularLineComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -64,58 +40,85 @@ namespace Chat.Pages
             }
         }
 
-        private async void SendButton_Click(object sender, RoutedEventArgs e)
+        private ICommand _showAttachments;
+        public ICommand ShowAttachments
         {
-            try
+            get
             {
-                SendButton.IsEnabled = false;
-                var smsDevice = cellularlineControls[CellularLineComboBox.SelectedIndex].device;
-
-                var result = await SmsUtils.SendTextMessageAsync(smsDevice, convo.Participants.First(), ComposeTextBox.Text);
-                if (!result)
-                    await new MessageDialog("We could not send one or some messages.", "Something went wrong").ShowAsync();
-
-                SendButton.IsEnabled = true;
-                ComposeTextBox.Text = "";
-            }
-            catch (Exception ex)
-            {
-                SendButton.IsEnabled = true;
-                await new MessageDialog(ex.Message + " - " + ex.StackTrace).ShowAsync();
+                if (_showAttachments == null)
+                {
+                    _showAttachments = new RelayCommand(
+                        () =>
+                        {
+                            FlyoutBase.ShowAttachedFlyout((FrameworkElement)AttachmentButton);
+                        });
+                }
+                return _showAttachments;
             }
         }
 
-        private void AttachmentButton_Click(object sender, RoutedEventArgs e)
+        private ICommand _startCall;
+        public ICommand StartCall
         {
-            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
+            get
+            {
+                if (_startCall == null)
+                {
+                    _startCall = new RelayCommand(
+                        async () =>
+                        {
+                            var store = await ChatMessageManager.RequestStoreAsync();
+                            await Launcher.LaunchUriAsync(new Uri("tel:" + (await store.GetConversationAsync(convoid)).Participants.First()));
+                        });
+                }
+                return _startCall;
+            }
         }
 
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        private ICommand _sendReply;
+        public ICommand SendReply
+        {
+            get
+            {
+                if (_sendReply == null)
+                {
+                    _sendReply = new RelayCommand(
+                        async () =>
+                        {
+                            try
+                            {
+                                SendButton.IsEnabled = false;
+                                var smsDevice = ViewModel.CellularLines[CellularLineComboBox.SelectedIndex].device;
+
+                                var store = await ChatMessageManager.RequestStoreAsync();
+                                var result = await SmsUtils.SendTextMessageAsync(smsDevice, (await store.GetConversationAsync(convoid)).Participants.First(), ComposeTextBox.Text);
+                                if (!result)
+                                    await new MessageDialog("We could not send one or some messages.", "Something went wrong").ShowAsync();
+
+                                SendButton.IsEnabled = true;
+                                ComposeTextBox.Text = "";
+                            }
+                            catch (Exception ex)
+                            {
+                                SendButton.IsEnabled = true;
+                                await new MessageDialog(ex.Message + " - " + ex.StackTrace).ShowAsync();
+                            }
+                        });
+                }
+                return _sendReply;
+            }
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
             var args = e.Parameter as ChatConversation;
             if (args != null)
             {
-                convo = args;
+                convoid = args.Id;
+                ViewModel.Initialize(convoid);
             }
-
-            var contact = await ContactUtils.BindPhoneNumberToGlobalContact(convo.Participants.First());
-            ConvoTitle.Text = contact.DisplayName;
-            ConvoPic.Contact = contact;
-
-            var reader = convo.GetMessageReader();
-
-            var messages = await reader.ReadBatchAsync();
-
-            messages.ToList().ForEach(x => observableCollection.Insert(0, new ChatMessageViewControl(x)));
-
-            Load();
-        }
-
-        private async void CallButton_Click(object sender, RoutedEventArgs e)
-        {
-            await Launcher.LaunchUriAsync(new Uri("tel:" + convo.Participants.First()));
         }
     }
 }

@@ -6,8 +6,7 @@
       xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
       xmlns:Windows10version1809="http://schemas.microsoft.com/winfx/2006/xaml/presentation?IsApiContractPresent(Windows.Foundation.UniversalApiContract, 7)"
       x:Class="Chat.Pages.ConversationPage"
-      mc:Ignorable="d"
-      Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+      mc:Ignorable="d">
     
     <Page.Resources>
         <!-- TextBox with no 'active' background -->
@@ -167,21 +166,9 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <toolkit:DropShadowPanel Grid.Row="0" ShadowOpacity="0.7" HorizontalContentAlignment="Stretch">
-            <Grid Padding="8,40,8,8" Background="{ThemeResource SystemControlAcrylicWindowBrush}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <PersonPicture Width="50" Margin="16,8" x:Name="ConvoPic"/>
-                <TextBlock x:Name="ConvoTitle" Grid.Column="1" Style="{ThemeResource FluentTitleTextStyle}" VerticalAlignment="Center" Text="Title"/>
-                <Button x:Name="CallButton" Grid.Column="2" Height="48" Width="48" Foreground="{ThemeResource SystemControlForegroundAccentBrush}" Style="{ThemeResource FluentDialogButtonBackStyle}" VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Content="&#xE717;" BorderBrush="Transparent" BorderThickness="0" Click="CallButton_Click"/>
-                <ComboBox x:Name="CellularLineComboBox" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0,4,0,8" SelectionChanged="CellularLineComboBox_SelectionChanged" Style="{ThemeResource FluentComboBoxStyle}" SelectedIndex="0" BorderBrush="Transparent" Background="Transparent" PlaceholderText="No cellular device" BorderThickness="0"/>
-            </Grid>
-        </toolkit:DropShadowPanel>
-        <ListView Margin="8" x:Name="MessageListView" Grid.Row="1" ItemsSource="{x:Bind observableCollection}" SelectionMode="None">
+        
+        <!-- Messages -->
+        <ListView Padding="8,142,8,68" x:Name="MessageListView" Grid.Row="0" Grid.RowSpan="3" ItemsSource="{x:Bind ViewModel.ChatMessages, Mode=OneWay}" SelectionMode="None">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -193,16 +180,30 @@
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
         </ListView>
-        
+
+        <!-- Header -->
+        <Grid Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="134" Padding="8,60,8,8" Background="{ThemeResource SystemControlAcrylicElementBrush}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <PersonPicture Width="50" Margin="16,8" x:Name="ConvoPic" Contact="{x:Bind ViewModel.Contact, Mode=OneWay}"/>
+            <TextBlock x:Name="ConvoTitle" Grid.Column="1" Style="{ThemeResource FluentTitleTextStyle}" VerticalAlignment="Center" Text="{x:Bind ViewModel.DisplayName, Mode=OneWay}"/>
+            <Button x:Name="CallButton" Grid.Column="2" Height="48" Width="48" Foreground="{ThemeResource SystemControlForegroundAccentBrush}" Style="{ThemeResource FluentDialogButtonBackStyle}" VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Content="&#xE717;" BorderBrush="Transparent" BorderThickness="0" Command="{x:Bind StartCall}"/>
+            <ComboBox x:Name="CellularLineComboBox" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0,4,0,8" SelectionChanged="CellularLineComboBox_SelectionChanged" ItemsSource="{x:Bind ViewModel.CellularLines, Mode=OneWay}" Style="{ThemeResource FluentComboBoxStyle}" SelectedIndex="0" BorderBrush="Transparent" Background="Transparent" PlaceholderText="No cellular device" BorderThickness="0"/>
+        </Grid>
+
         <!-- Compose panel -->
-        <toolkit:DropShadowPanel Grid.Row="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="12" ShadowOpacity="0.7">
+        <toolkit:DropShadowPanel Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="12" ShadowOpacity="0.7" Height="48">
             <Grid Grid.Row="2" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" CornerRadius="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="AttachmentButton" Grid.Column="1" Height="48" Width="48" VerticalAlignment="Bottom" FontFamily="Segoe MDL2 Assets" Content="&#xE723;" BorderBrush="Transparent" BorderThickness="0" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Style="{ThemeResource FluentDialogButtonBackStyle}" Click="AttachmentButton_Click">
+                <Button x:Name="AttachmentButton" Grid.Column="1" Height="48" Width="48" VerticalAlignment="Bottom" FontFamily="Segoe MDL2 Assets" Content="&#xE723;" BorderBrush="Transparent" BorderThickness="0" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Style="{ThemeResource FluentDialogButtonBackStyle}" Command="{x:Bind ShowAttachments}">
                     <FlyoutBase.AttachedFlyout>
                         <MenuFlyout Placement="Top">
                             <!-- Camera -->
@@ -250,7 +251,7 @@
                     </FlyoutBase.AttachedFlyout>
                 </Button>
                 <TextBox x:Name="ComposeTextBox" MaxHeight="200" Grid.Column="0" PlaceholderText="Type a message" AcceptsReturn="True" BorderThickness="0" Padding="14" BorderBrush="Transparent" Style="{ThemeResource TextBoxNoBackground}" TextChanged="ComposeTextBox_TextChanged"/>
-                <Button x:Name="SendButton" Grid.Column="2" Height="38" Width="38" Foreground="{ThemeResource SystemControlForegroundAccentBrush}" Style="{ThemeResource FluentDialogButtonBackStyle}" VerticalAlignment="Center" Margin="0,0,4,0" Click="SendButton_Click" FontFamily="Segoe MDL2 Assets" Content="&#xE724;" BorderBrush="Transparent" BorderThickness="0" Windows10version1809:CornerRadius="45" IsEnabled="False"/>
+                <Button x:Name="SendButton" Grid.Column="2" Height="38" Width="38" Foreground="{ThemeResource SystemControlForegroundAccentBrush}" Style="{ThemeResource FluentDialogButtonBackStyle}" VerticalAlignment="Center" Margin="0,0,4,0" Command="{x:Bind SendReply}" FontFamily="Segoe MDL2 Assets" Content="&#xE724;" BorderBrush="Transparent" BorderThickness="0" Windows10version1809:CornerRadius="45" IsEnabled="False"/>
             </Grid>
         </toolkit:DropShadowPanel>
     </Grid>

@@ -262,7 +262,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    
+
     <Grid>
         <NavigationView Windows10version1803:IsBackButtonVisible="Collapsed" x:Name="NavigationView" IsSettingsVisible="False" AlwaysShowHeader="True" OpenPaneLength="380" SelectionChanged="NavigationView_SelectionChanged" SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}" MenuItemsSource="{x:Bind ViewModel.ChatConversations, Mode=OneWay}">
             <NavigationView.AutoSuggestBox>
@@ -288,15 +288,18 @@
                 </Grid>
             </Windows10version1809:NavigationView.PaneHeader>
             
-            <toolkit:DropShadowPanel ShadowOpacity="0.7" HorizontalContentAlignment="Stretch">
+            <toolkit:DropShadowPanel Margin="0,-32,0,0" ShadowOpacity="0.7" HorizontalContentAlignment="Stretch">
                 <Grid Background="{ThemeResource SystemControlAcrylicWindowBrush}">
-                    <Frame x:Name="MainFrame"/>
-                    <Grid Margin="0,-32,0,0" x:Name="TitlebarNarrowBackground" VerticalAlignment="Top" Height="32" Visibility="Visible" Grid.ColumnSpan="2">
-                        <Rectangle VerticalAlignment="Stretch" Fill="{ThemeResource SystemControlAcrylicWindowBrush}"/>
-                    </Grid>
+                    <Frame x:Name="MainFrame">
+                        <Frame.ContentTransitions>
+                            <TransitionCollection>
+                                <EdgeUIThemeTransition Edge="Left"/>
+                            </TransitionCollection>
+                        </Frame.ContentTransitions>
+                    </Frame>
                 </Grid>
             </toolkit:DropShadowPanel>
         </NavigationView>
-        <controls:TitlebarControl x:Name="Titlebar" VerticalAlignment="Top"/>
+        <controls:TitlebarControl VerticalAlignment="Top" x:Name="Titlebar"/>
     </Grid>
 </UserControl>
