@@ -34,7 +34,7 @@
             <PersonPicture Contact="{x:Bind ViewModel.Contact, Mode=OneWay}" Margin="0,0,16,0" Height="40" Width="40" VerticalAlignment="Top"/>
 
             <Grid Grid.Column="1" x:Name="ChatBubble" CornerRadius="8" MinWidth="100" MaxWidth="400">
-                <Grid x:Name="BgColor" Background="{ThemeResource SystemAccentColor}" Opacity="0.5"/>
+                <Grid Background="{ThemeResource SystemChromeMediumHighColor}"/>
 
                 <Canvas Width="{x:Bind ChatBubble.Width, Mode=OneWay}" Height="{x:Bind ChatBubble.Height, Mode=OneWay}" Visibility="{x:Bind ViewModel.IncomingVisibility, Mode=OneWay}">
                     <Rectangle x:Name="BgColor">
