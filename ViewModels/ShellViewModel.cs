@@ -1,5 +1,6 @@
 ﻿using Chat.BackgroundTasks;
 using Chat.Common;
+using Chat.ContentDialogs;
 using Chat.Controls;
 using Chat.Helpers;
 using System;
@@ -8,6 +9,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Chat;
 using Windows.ApplicationModel.Core;
+using Windows.Devices.Enumeration;
+using Windows.Networking.NetworkOperators;
 using Windows.UI.Core;
 
 namespace Chat.ViewModels
@@ -49,8 +52,41 @@ namespace Chat.ViewModels
             if (ChatConversations.Count != 0)
                 SelectedItem = ChatConversations[0];
 
+            if (!(await PerformMandatoryChecks()))
+            {
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                async () =>
+                {
+                    await new CellularUnavailableContentDialog().ShowAsync();
+                });
+            }
+
             _store.ChangeTracker.Enable();
             _store.StoreChanged += Store_StoreChanged;
+        }
+
+        private async Task<bool> PerformMandatoryChecks()
+        {
+            bool available = false;
+            try
+            {
+                string selectorStr = MobileBroadbandModem.GetDeviceSelector();
+                DeviceInformationCollection devices = await DeviceInformation.FindAllAsync(selectorStr);
+
+                foreach (var mdevice in devices)
+                {
+                    MobileBroadbandModem modem = MobileBroadbandModem.FromId(mdevice.Id);
+                    if (modem.DeviceInformation.TelephoneNumbers.Count > 0 && modem.DeviceInformation.TelephoneNumbers.Any(x => !string.IsNullOrEmpty(x)))
+                    {
+                        return true;
+                    }
+                }
+            }
+            catch
+            {
+                available = false;
+            }
+            return available;
         }
 
         // Methods
@@ -102,7 +138,7 @@ namespace Chat.ViewModels
                             () =>
                             {
                                 ChatConversations.Insert(0, new ChatMenuItemControl(conversation.Id));
-                                if (ChatConversations.Count == 1)
+                                if (!ChatConversations.Contains(SelectedItem))
                                 {
                                     SelectedItem = ChatConversations[0];
                                 }

@@ -61,6 +61,9 @@
     <Compile Include="ContentDialogs\AboutContentDialog.xaml.cs">
       <DependentUpon>AboutContentDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ContentDialogs\CellularUnavailableContentDialog.xaml.cs">
+      <DependentUpon>CellularUnavailableContentDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CellularLineControl.xaml.cs">
       <DependentUpon>CellularLineControl.xaml</DependentUpon>
     </Compile>
@@ -165,6 +168,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="ContentDialogs\AboutContentDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ContentDialogs\CellularUnavailableContentDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

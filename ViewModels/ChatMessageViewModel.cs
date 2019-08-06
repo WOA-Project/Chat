@@ -43,6 +43,7 @@ namespace Chat.ViewModels
         private ChatMessageStore _store;
         private string _messageid;
 
+        private bool mSubscribed;
 
         // Constructor
         public ChatMessageViewModel(string MessageId)
@@ -63,7 +64,20 @@ namespace Chat.ViewModels
             (MessageBody, TimeStamp, Alignment) = await GetMessageInfo();
 
             _store.ChangeTracker.Enable();
-            _store.StoreChanged += Store_StoreChanged;
+            Subscribe(true);
+        }
+
+        private void Subscribe(bool enabled)
+        {
+            if (!enabled && mSubscribed) _store.StoreChanged -= Store_StoreChanged;
+            else if (enabled && !mSubscribed) _store.StoreChanged += Store_StoreChanged;
+
+            mSubscribed = enabled;
+        }
+
+        public void DropEvents()
+        {
+            Subscribe(false);
         }
 
         // Methods
@@ -95,7 +109,7 @@ namespace Chat.ViewModels
                         {
                             MessageBody = "Deleted message";
                         });
-                        _store.StoreChanged -= Store_StoreChanged;
+                        DropEvents();
                         break;
                     }
                 case ChatStoreChangedEventKind.MessageModified:

@@ -63,6 +63,8 @@ namespace Chat.ViewModels
         private ChatMessageStore _store;
         private string _conversationid;
 
+        private bool mSubscribed;
+
         // Constructor
         public ConversationViewModel(string ConvoId)
         {
@@ -76,6 +78,19 @@ namespace Chat.ViewModels
             if (string.IsNullOrEmpty(ConvoId))
                 return;
 
+            if (ChatMessages != null && ChatMessages.Count != 0)
+            {
+                foreach (var msg in ChatMessages)
+                {
+                    msg.ViewModel.DropEvents();
+                }
+            }
+
+            if (ConvoId != _conversationid)
+            {
+                DropEvents();
+            }
+
             _store = await ChatMessageManager.RequestStoreAsync();
             _conversationid = ConvoId;
 
@@ -88,7 +103,20 @@ namespace Chat.ViewModels
             (Contact, DisplayName) = await GetContactInformation();
 
             _store.ChangeTracker.Enable();
-            _store.StoreChanged += Store_StoreChanged;
+            Subscribe(true);
+        }
+
+        private void Subscribe(bool enabled)
+        {
+            if (!enabled && mSubscribed) _store.StoreChanged -= Store_StoreChanged;
+            else if (enabled && !mSubscribed) _store.StoreChanged += Store_StoreChanged;
+
+            mSubscribed = enabled;
+        }
+
+        public void DropEvents()
+        {
+            Subscribe(false);
         }
 
         // Methods
@@ -166,7 +194,7 @@ namespace Chat.ViewModels
 
                         if (conversation == null)
                         {
-                            _store.StoreChanged -= Store_StoreChanged;
+                            DropEvents();
                             break;
                         }
 
