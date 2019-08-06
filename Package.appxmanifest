@@ -17,7 +17,7 @@
   <Properties>
     <DisplayName>Chat</DisplayName>
     <PublisherDisplayName>LumiaWOA</PublisherDisplayName>
-    <Logo>Assets\ApplicationLogos\StoreLogo.png</Logo>
+    <Logo>Assets\ApplicationLogos\PackageLogo\StoreLogo.png</Logo>
   </Properties>
 
   <Dependencies>
@@ -34,19 +34,19 @@
       EntryPoint="Chat.App">
       <uap:VisualElements
         DisplayName="Chat"
-        Square150x150Logo="Assets\ApplicationLogos\Square150x150Logo.png"
-        Square44x44Logo="Assets\ApplicationLogos\Square44x44Logo.png"
+        Square150x150Logo="Assets\ApplicationLogos\MediumTile\Square150x150Logo.png"
+        Square44x44Logo="Assets\ApplicationLogos\AppIcon\Square44x44Logo.png"
         Description="Send text messages using your device."
-        BackgroundColor="#002245">
-        <uap:LockScreen Notification="badgeAndTileText" BadgeLogo="Assets\ApplicationLogos\BadgeLogo.png"/>
-        <uap:DefaultTile Wide310x150Logo="Assets\ApplicationLogos\Wide310x150Logo.png" Square71x71Logo="Assets\ApplicationLogos\SmallTile.png" Square310x310Logo="Assets\ApplicationLogos\LargeTile.png" ShortName="Chat">
+        BackgroundColor="transparent">
+        <uap:LockScreen Notification="badgeAndTileText" BadgeLogo="Assets\ApplicationLogos\BadgeLogo\BadgeLogo.png"/>
+        <uap:DefaultTile Wide310x150Logo="Assets\ApplicationLogos\WideTile\Wide310x150Logo.png" Square71x71Logo="Assets\ApplicationLogos\SmallTile\SmallTile.png" Square310x310Logo="Assets\ApplicationLogos\LargeTile\LargeTile.png" ShortName="Chat">
           <uap:ShowNameOnTiles>
-            <uap:ShowOn Tile="square150x150Logo"/>
             <uap:ShowOn Tile="wide310x150Logo"/>
             <uap:ShowOn Tile="square310x310Logo"/>
+            <uap:ShowOn Tile="square150x150Logo"/>
           </uap:ShowNameOnTiles>
         </uap:DefaultTile>
-        <uap:SplashScreen Image="Assets\ApplicationLogos\SplashScreen.png"  BackgroundColor="#002245"/>
+        <uap:SplashScreen Image="Assets\ApplicationLogos\SplashScreen\SplashScreen.png"  />
       </uap:VisualElements>
       <Extensions>
         <uap:Extension Category="windows.protocol">
