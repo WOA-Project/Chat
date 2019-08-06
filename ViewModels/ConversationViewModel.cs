@@ -111,6 +111,8 @@ namespace Chat.ViewModels
             var reader = convo.GetMessageReader();
             var messages = await reader.ReadBatchAsync();
 
+            var currindex = ChatMessages.Count();
+
             foreach (var message in messages)
             {
                 if (ChatMessages.Any(x => x.messageId == message.Id))
@@ -120,7 +122,7 @@ namespace Chat.ViewModels
                 await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
                 () =>
                 {
-                    ChatMessages.Add(new ChatMessageViewControl(message.Id));
+                    ChatMessages.Insert(currindex, new ChatMessageViewControl(message.Id));
                 });
             }
         }
