@@ -94,13 +94,15 @@ namespace Chat.ViewModels
             _store = await ChatMessageManager.RequestStoreAsync();
             _conversationid = ConvoId;
 
-            ChatMessages = await GetMessages();
-            CellularLines = await GetSmsDevices();
+            var _tmpchatMessages = await GetMessages();
+            var _tmpCellLines = await GetSmsDevices();
+
+            (Contact, DisplayName) = await GetContactInformation();
+            ChatMessages = _tmpchatMessages;
+            CellularLines = _tmpCellLines;
 
             if (CellularLines.Count != 0)
                 SelectedLine = CellularLines[0];
-
-            (Contact, DisplayName) = await GetContactInformation();
 
             _store.ChangeTracker.Enable();
             Subscribe(true);

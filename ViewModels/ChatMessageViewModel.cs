@@ -60,8 +60,10 @@ namespace Chat.ViewModels
             _store = await ChatMessageManager.RequestStoreAsync();
             _messageid = MessageId;
 
-            Contact = await GetContactInformation();
+            var _tmpContact = await GetContactInformation();
+
             (MessageBody, TimeStamp, Alignment) = await GetMessageInfo();
+            Contact = _tmpContact;
 
             _store.ChangeTracker.Enable();
             Subscribe(true);

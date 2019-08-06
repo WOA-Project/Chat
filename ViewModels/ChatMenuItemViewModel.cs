@@ -44,6 +44,8 @@ namespace Chat.ViewModels
         private ChatMessageStore _store;
         private string _conversationid;
 
+        private bool mSubscribed;
+
         // Constructor
         public ChatMenuItemViewModel(string ConvoId)
         {
@@ -63,15 +65,29 @@ namespace Chat.ViewModels
             var convo = await _store.GetConversationAsync(_conversationid);
             if (convo == null)
             {
-                _store.StoreChanged -= Store_StoreChanged;
+                DropEvents();
                 return;
             }
 
-            (Contact, DisplayName) = await GetContactInformation();
+            (var tmpContact, var tmpDisplayName) = await GetContactInformation();
             (DisplayDescription, TimeStamp) = await GetLastMessageInfo();
+            (Contact, DisplayName) = (tmpContact, tmpDisplayName);
 
             _store.ChangeTracker.Enable();
-            _store.StoreChanged += Store_StoreChanged;
+            Subscribe(true);
+        }
+
+        private void Subscribe(bool enabled)
+        {
+            if (!enabled && mSubscribed) _store.StoreChanged -= Store_StoreChanged;
+            else if (enabled && !mSubscribed) _store.StoreChanged += Store_StoreChanged;
+
+            mSubscribed = enabled;
+        }
+
+        public void DropEvents()
+        {
+            Subscribe(false);
         }
 
         // Methods
@@ -110,7 +126,7 @@ namespace Chat.ViewModels
 
                         if (conversation == null)
                         {
-                            _store.StoreChanged -= Store_StoreChanged;
+                            DropEvents();
                             break;
                         }
 
@@ -125,7 +141,7 @@ namespace Chat.ViewModels
                     }
                 case ChatStoreChangedEventKind.ConversationDeleted:
                     {
-                        _store.StoreChanged -= Store_StoreChanged;
+                        DropEvents();
                         break;
                     }
             }
