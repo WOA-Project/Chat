@@ -1,5 +1,5 @@
-﻿using PhoneNumbers;
-using LibPhoneNumber.Contrib.PhoneNumberUtil;
+﻿//using PhoneNumbers;
+//using LibPhoneNumber.Contrib.PhoneNumberUtil;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,20 +38,20 @@ namespace Chat.Common
 
         private static (string, string) GetPhoneNumberInformation(string phonenumber)
         {
-            PhoneNumberUtil phoneUtil = PhoneNumberUtil.GetInstance();
+            /*PhoneNumberUtil phoneUtil = PhoneNumberUtil.GetInstance();
 
             PhoneNumber number;
             var supportedCodes = phoneUtil.GetSupportedRegions().ToArray();
-            var result = phoneUtil.TryGetValidNumber(phonenumber, supportedCodes, out number);
+            var result = phoneUtil.TryGetValidNumber(phonenumber, supportedCodes, out number);*/
 
             var countrycode = "";
             var nationalnumber = phonenumber;
 
-            if (result)
+            /*if (result)
             {
                 countrycode = number.CountryCode.ToString();
                 nationalnumber = number.NationalNumber.ToString();
-            }
+            }*/
 
             return (nationalnumber, countrycode);
         }

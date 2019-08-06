@@ -127,18 +127,9 @@
     <Compile Include="SmsUtils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="libphonenumber-csharp">
-      <Version>8.10.16</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.8</Version>
     </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\LibPhoneNumber.Contrib\LibPhoneNumber.Contrib.csproj">
-      <Project>{76e62544-dfba-4aec-8309-a441176abf2d}</Project>
-      <Name>LibPhoneNumber.Contrib</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
