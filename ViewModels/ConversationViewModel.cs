@@ -136,6 +136,12 @@ namespace Chat.ViewModels
         private async void UpdateMessages()
         {
             var convo = await _store.GetConversationAsync(_conversationid);
+            if (convo == null)
+            {
+                DropEvents();
+                return;
+            }
+
             var reader = convo.GetMessageReader();
             var messages = await reader.ReadBatchAsync();
 
@@ -186,6 +192,9 @@ namespace Chat.ViewModels
 
         private async void Store_StoreChanged(ChatMessageStore sender, ChatMessageStoreChangedEventArgs args)
         {
+            if (args.Id != _conversationid)
+                return;
+
             switch (args.Kind)
             {
                 case ChatStoreChangedEventKind.ConversationModified:

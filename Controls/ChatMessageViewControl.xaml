@@ -7,31 +7,48 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="100"
-    d:DesignWidth="500">
+    d:DesignWidth="500"
+    RightTapped="UserControl_RightTapped"
+    HorizontalAlignment="Stretch"
+    HorizontalContentAlignment="Stretch">
 
-    <Grid Margin="8" HorizontalAlignment="{x:Bind ViewModel.Alignment, Mode=OneWay}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
+    <UserControl.Resources>
+        <MenuFlyout x:Name="messageMenuFlyout">
+            <MenuFlyout.Items>
+                <MenuFlyoutItem Text="Delete" Icon="Delete" Command="{x:Bind MessageDelete}"/>
+                <MenuFlyoutItem Text="Forward" Icon="Forward" Command="{x:Bind MessageForward}"/>
+                <MenuFlyoutItem Text="Copy" Icon="Copy" Command="{x:Bind MessageCopy}"/>
+                <MenuFlyoutItem Text="See details" Icon="More" Command="{x:Bind MessageDetails}"/>
+            </MenuFlyout.Items>
+        </MenuFlyout>
+    </UserControl.Resources>
 
-        <PersonPicture Contact="{x:Bind ViewModel.Contact, Mode=OneWay}" Margin="0,0,16,0" Height="40" Width="40" VerticalAlignment="Top"/>
+    <Grid>
+        <Rectangle Fill="Transparent"/>
+        <Grid Margin="8" HorizontalAlignment="{x:Bind ViewModel.Alignment, Mode=OneWay}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="1" x:Name="ChatBubble" CornerRadius="8" MinWidth="100" MaxWidth="400">
-            <Grid x:Name="BgColor" Background="{ThemeResource SystemAccentColor}" Opacity="0.5"/>
+            <PersonPicture Contact="{x:Bind ViewModel.Contact, Mode=OneWay}" Margin="0,0,16,0" Height="40" Width="40" VerticalAlignment="Top"/>
 
-            <Grid Padding="8">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+            <Grid Grid.Column="1" x:Name="ChatBubble" CornerRadius="8" MinWidth="100" MaxWidth="400">
+                <Grid x:Name="BgColor" Background="{ThemeResource SystemAccentColor}" Opacity="0.5"/>
 
-                <TextBlock Text="{x:Bind ViewModel.MessageBody, Mode=OneWay}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" Style="{ThemeResource FluentBodyTextStyle}" Foreground="White" IsTextSelectionEnabled="True"/>
-                <TextBlock x:Name="DateTimeLabel" VerticalAlignment="Bottom" Text="{x:Bind ViewModel.TimeStamp, Mode=OneWay}" HorizontalAlignment="Right" Grid.Row="1" TextTrimming="CharacterEllipsis" MaxLines="1" Foreground="White" Opacity="0.75" Style="{ThemeResource FluentCaptionTextStyle}" >
+                <Grid Padding="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="{x:Bind ViewModel.MessageBody, Mode=OneWay}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" Style="{ThemeResource FluentBodyTextStyle}" Foreground="White" IsTextSelectionEnabled="True"/>
+                    <TextBlock x:Name="DateTimeLabel" VerticalAlignment="Bottom" Text="{x:Bind ViewModel.TimeStamp, Mode=OneWay}" HorizontalAlignment="Right" Grid.Row="1" TextTrimming="CharacterEllipsis" MaxLines="1" Foreground="White" Opacity="0.75" Style="{ThemeResource FluentCaptionTextStyle}" >
                     <ToolTipService.ToolTip>
                         <ToolTip Content="{x:Bind ViewModel.TimeStamp, Mode=OneWay}"/>
                     </ToolTipService.ToolTip>
-                </TextBlock>
+                    </TextBlock>
+                </Grid>
             </Grid>
         </Grid>
     </Grid>

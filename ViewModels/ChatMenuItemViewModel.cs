@@ -99,6 +99,9 @@ namespace Chat.ViewModels
 
         private async void Store_StoreChanged(ChatMessageStore sender, ChatMessageStoreChangedEventArgs args)
         {
+            if (args.Id != _conversationid)
+                return;
+
             switch (args.Kind)
             {
                 case ChatStoreChangedEventKind.ConversationModified:

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PhoneNumbers;
+using LibPhoneNumber.Contrib.PhoneNumberUtil;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,6 +36,54 @@ namespace Chat.Common
             return blankcontact;
         }
 
+        private static (string, string) GetPhoneNumberInformation(string phonenumber)
+        {
+            PhoneNumberUtil phoneUtil = PhoneNumberUtil.GetInstance();
+
+            PhoneNumber number;
+            var supportedCodes = phoneUtil.GetSupportedRegions().ToArray();
+            var result = phoneUtil.TryGetValidNumber(phonenumber, supportedCodes, out number);
+
+            var countrycode = "";
+            var nationalnumber = phonenumber;
+
+            if (result)
+            {
+                countrycode = number.CountryCode.ToString();
+                nationalnumber = number.NationalNumber.ToString();
+            }
+
+            return (nationalnumber, countrycode);
+        }
+
+        public static bool ArePhoneNumbersMostLikelyTheSame(string num1, string num2)
+        {
+            (string number, string countrycode) = GetPhoneNumberInformation(num1);
+            if (string.IsNullOrEmpty(countrycode))
+            {
+                if (num2.ToLower().Replace(" ", "") == number.ToLower().Replace(" ", ""))
+                    return true;
+            }
+            else
+            {
+                (string number2, string countrycode2) = GetPhoneNumberInformation(num2);
+                if (number == number2 && countrycode == countrycode2)
+                {
+                    return true;
+                }
+                else if (string.IsNullOrEmpty(countrycode2))
+                {
+                    if (num2.Replace(" ", "") == number.ToLower().Replace(" ", ""))
+                        return true;
+                }
+                else if (number == number2)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public static async Task<Contact> BindPhoneNumberToGlobalContact(string phonenumber)
         {
             var store = await ContactManager.RequestStoreAsync();
@@ -43,9 +93,10 @@ namespace Chat.Common
 
                 foreach (var contact in contacts)
                 {
-                    if (contact.Phones.Any(x => x.Number.ToLower().Replace(" ", "") == phonenumber.ToLower().Replace(" ", "")))
+                    foreach (var num in contact.Phones)
                     {
-                        return contact;
+                        if (ArePhoneNumbersMostLikelyTheSame(phonenumber, num.Number))
+                            return contact;
                     }
                 }
             }
@@ -66,7 +117,7 @@ namespace Chat.Common
 
                 try
                 {
-                    info.PhoneNumberKind = contact.Phones.First(x => x.Number.ToLower().Replace(" ", "") == message.From.ToLower().Replace(" ", "")).Kind.ToString();
+                    info.PhoneNumberKind = contact.Phones.First(x => ArePhoneNumbersMostLikelyTheSame(x.Number, message.From)).Kind.ToString();
                 }
                 catch
                 {
