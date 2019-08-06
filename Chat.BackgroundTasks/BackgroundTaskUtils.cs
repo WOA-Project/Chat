@@ -35,6 +35,38 @@ namespace Chat.BackgroundTasks
             }
         }
 
+        public static void UnRegisterToastNotificationBackgroundTasks()
+        {
+            try
+            {
+                UnRegisterBackgroundTask<SmsBackgroundTask>();
+            }
+            catch
+            {
+
+            }
+
+            try
+            {
+                UnRegisterBackgroundTask<SmsReplyBackgroundTask>();
+            }
+            catch
+            {
+
+            }
+        }
+
+        internal static void UnRegisterBackgroundTask<T>()
+        {
+            string taskName = typeof(T).Name;
+
+            if (BackgroundTaskRegistration.AllTasks.Any(i => i.Value.Name.Equals(taskName)))
+            {
+                var task = BackgroundTaskRegistration.AllTasks.First(i => i.Value.Name.Equals(taskName));
+                task.Value.Unregister(true);
+            }
+        }
+
         internal static void RegisterBackgroundTask<T>(IBackgroundTrigger trigger)
         {
             string taskName = typeof(T).Name;
