@@ -1,4 +1,5 @@
 ﻿using Chat.Common;
+using Chat.Controls;
 using Chat.ViewModels;
 using GalaSoft.MvvmLight.Command;
 using System;
@@ -10,6 +11,7 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 namespace Chat.Pages
@@ -22,6 +24,34 @@ namespace Chat.Pages
         public ConversationPage()
         {
             this.InitializeComponent();
+
+            MessageListView.Loaded += MessageListView_Loaded;
+            MessageListView.SizeChanged += MessageListView_SizeChanged;
+        }
+
+        private void MessageListView_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            foreach (var item in MessageListView.Items)
+            {
+                var control = item as ChatMessageViewControl;
+                control.RefreshVisuals();
+            }
+        }
+
+        private void MessageListView_Loaded(object sender, RoutedEventArgs e)
+        {
+            Border rootBorder = VisualTreeHelper.GetChild(MessageListView, 0) as Border;
+            ScrollViewer scrollViewer = rootBorder.Child as ScrollViewer;
+            scrollViewer.ViewChanged += ScrollViewer_ViewChanged;
+        }
+
+        private void ScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
+        {
+            foreach (var item in MessageListView.Items)
+            {
+                var control = item as ChatMessageViewControl;
+                control.RefreshVisuals();
+            }
         }
 
         private void CellularLineComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

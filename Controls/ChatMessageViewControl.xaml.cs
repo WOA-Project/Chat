@@ -5,6 +5,8 @@ using Windows.ApplicationModel.Chat;
 using Windows.UI.Xaml.Controls;
 using System;
 using Windows.ApplicationModel.DataTransfer;
+using Windows.UI.Xaml;
+using Windows.Foundation;
 
 namespace Chat.Controls
 {
@@ -18,6 +20,36 @@ namespace Chat.Controls
             this.InitializeComponent();
             this.messageId = messageId;
             ViewModel.Initialize(messageId);
+
+            Loaded += ChatMessageViewControl_Loaded;
+        }
+
+        private void ChatMessageViewControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            RefreshVisuals();
+        }
+
+        public void RefreshVisuals()
+        {
+            var height = ((Shell)Window.Current.Content).ActualHeight;
+            var width = ((Shell)Window.Current.Content).ActualWidth;
+
+            var ttv = ChatBubble.TransformToVisual(Window.Current.Content);
+            Point screenCoords = ttv.TransformPoint(new Point(0, 0));
+
+            var controlWidth = ChatBubble.Width;
+            var controlHeight = ChatBubble.Height;
+
+            BgColor.Width = width;
+            BgColor.Height = height;
+
+            var marg = BgColor.Margin;
+            marg.Left = screenCoords.X - width;
+            marg.Top = screenCoords.Y - height;
+            marg.Right = screenCoords.X - width - controlWidth;
+            marg.Bottom = screenCoords.Y - height - controlHeight;
+
+            BgColor.Margin = marg;
         }
 
         private ICommand _messageDelete;

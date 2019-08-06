@@ -19,6 +19,13 @@ namespace Chat.ViewModels
             set { Set(ref _timeStamp, value); }
         }
 
+        private Visibility _incomingVisibility;
+        public Visibility IncomingVisibility
+        {
+            get { return _incomingVisibility; }
+            set { Set(ref _incomingVisibility, value); }
+        }
+
         private string _messageBody;
         public string MessageBody
         {
@@ -61,8 +68,11 @@ namespace Chat.ViewModels
             _messageid = MessageId;
 
             var _tmpContact = await GetContactInformation();
+            (var _align, var _visi) = await GetMessageVisuals();
 
-            (MessageBody, TimeStamp, Alignment) = await GetMessageInfo();
+            (MessageBody, TimeStamp) = await GetMessageInfo();
+            (Alignment, IncomingVisibility) = (_align, _visi);
+
             Contact = _tmpContact;
 
             _store.ChangeTracker.Enable();
@@ -93,11 +103,18 @@ namespace Chat.ViewModels
             return await ContactUtils.BindPhoneNumberToGlobalContact(msg.From);
         }
 
-        private async Task<(string, DateTime, HorizontalAlignment)> GetMessageInfo()
+        private async Task<(HorizontalAlignment, Visibility)> GetMessageVisuals()
         {
             var msg = await _store.GetMessageAsync(_messageid);
             var align = msg.IsIncoming ? HorizontalAlignment.Left : HorizontalAlignment.Right;
-            return (msg.Body, msg.LocalTimestamp.LocalDateTime, align);
+            var visi = msg.IsIncoming ? Visibility.Collapsed : Visibility.Visible;
+            return (align, visi);
+        }
+
+        private async Task<(string, DateTime)> GetMessageInfo()
+        {
+            var msg = await _store.GetMessageAsync(_messageid);
+            return (msg.Body, msg.LocalTimestamp.LocalDateTime);
         }
 
         private async void Store_StoreChanged(ChatMessageStore sender, ChatMessageStoreChangedEventArgs args)
@@ -119,7 +136,7 @@ namespace Chat.ViewModels
                     }
                 case ChatStoreChangedEventKind.MessageModified:
                     {
-                        (var body, var ts, var align) = await GetMessageInfo();
+                        (var body, var ts) = await GetMessageInfo();
 
                         await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
                         () =>

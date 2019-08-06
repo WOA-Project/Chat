@@ -209,6 +209,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="CompositionProToolkit">
+      <Version>0.9.1</Version>
+    </PackageReference>
     <PackageReference Include="FluiFramework.UWP">
       <Version>0.0.28-alpha</Version>
     </PackageReference>

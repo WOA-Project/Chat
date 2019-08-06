@@ -36,6 +36,17 @@
             <Grid Grid.Column="1" x:Name="ChatBubble" CornerRadius="8" MinWidth="100" MaxWidth="400">
                 <Grid x:Name="BgColor" Background="{ThemeResource SystemAccentColor}" Opacity="0.5"/>
 
+                <Canvas Width="{x:Bind ChatBubble.Width, Mode=OneWay}" Height="{x:Bind ChatBubble.Height, Mode=OneWay}" Visibility="{x:Bind ViewModel.IncomingVisibility, Mode=OneWay}">
+                    <Rectangle x:Name="BgColor">
+                        <Rectangle.Fill>
+                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                <GradientStop Color="{ThemeResource SystemAccentColor}" Offset="0.50" />
+                                <GradientStop Color="{ThemeResource SystemAccentColorLight1}" Offset="1" />
+                            </LinearGradientBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Canvas>
+
                 <Grid Padding="8">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
