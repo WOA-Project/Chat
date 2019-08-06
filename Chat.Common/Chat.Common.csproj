@@ -135,7 +135,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\LibPhoneNumber.Contrib\LibPhoneNumber.Contrib.csproj">
+    <ProjectReference Include="LibPhoneNumber.Contrib\LibPhoneNumber.Contrib.csproj">
       <Project>{76e62544-dfba-4aec-8309-a441176abf2d}</Project>
       <Name>LibPhoneNumber.Contrib</Name>
     </ProjectReference>
