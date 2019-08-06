@@ -82,11 +82,11 @@ namespace Chat.ViewModels
                             if (ChatConversations.Any(x => x.ConversationId == args.Id))
                             {
                                 var existingConversation = ChatConversations.First(x => x.ConversationId == args.Id);
+                                bool wasSelected = SelectedItem == existingConversation;
+
                                 await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
                                 () =>
                                 {
-                                    bool wasSelected = SelectedItem == existingConversation;
-
                                     ChatConversations.Remove(existingConversation);
 
                                     if (wasSelected && ChatConversations.Count != 0)
@@ -96,15 +96,19 @@ namespace Chat.ViewModels
                             break;
                         }
 
-                        /*if (!ChatConversations.Any(x => x.ConversationId == args.Id))
+                        if (!ChatConversations.Any(x => x.ConversationId == args.Id))
                         {
                             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
                             () =>
                             {
                                 ChatConversations.Insert(0, new ChatMenuItemControl(conversation.Id));
+                                if (ChatConversations.Count == 1)
+                                {
+                                    SelectedItem = ChatConversations[0];
+                                }
                             });
                         }
-                        else
+                        /*else
                         {
                             var existingConversation = ChatConversations.First(x => x.ConversationId == args.Id);
                             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
@@ -127,11 +131,11 @@ namespace Chat.ViewModels
                         if (ChatConversations.Any(x => x.ConversationId == args.Id))
                         {
                             var existingConversation = ChatConversations.First(x => x.ConversationId == args.Id);
+                            bool wasSelected = SelectedItem == existingConversation;
+
                             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
                             () =>
                             {
-                                bool wasSelected = SelectedItem == existingConversation;
-
                                 ChatConversations.Remove(existingConversation);
 
                                 if (wasSelected && ChatConversations.Count != 0)

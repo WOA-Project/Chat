@@ -71,7 +71,43 @@ namespace Chat
                     _openAboutCommand = new RelayCommand(
                         async () =>
                         {
+#if !DEBUG
                             await new AboutContentDialog().ShowAsync();
+#else
+                            Windows.ApplicationModel.Chat.ChatMessageStore store = await Windows.ApplicationModel.Chat.ChatMessageManager.RequestStoreAsync();
+                            string transportId = await Windows.ApplicationModel.Chat.ChatMessageManager.RegisterTransportAsync();
+                            Windows.ApplicationModel.Chat.ChatMessage msg = new Windows.ApplicationModel.Chat.ChatMessage();
+
+                            msg.Body = "Hello how are you?";
+
+                            msg.TransportId = transportId;
+
+                            msg.MessageOperatorKind = Windows.ApplicationModel.Chat.ChatMessageOperatorKind.Sms;
+                            msg.Status = Windows.ApplicationModel.Chat.ChatMessageStatus.Sent;
+
+                            bool alternate = new Random().Next(2) == 2;
+
+                            msg.Recipients.Clear();
+                            msg.From = "";
+
+                            var offset = new DateTimeOffset(DateTime.Now);
+                            msg.LocalTimestamp = offset;
+                            msg.NetworkTimestamp = offset;
+
+                            msg.IsIncoming = alternate;
+                            if (msg.IsIncoming)
+                            {
+                                msg.From = "Random dude";
+                            }
+                            else
+                            {
+                                msg.Recipients.Add("Random dude");
+                            }
+
+                            alternate = !alternate;
+
+                            await store.SaveMessageAsync(msg);
+#endif
                         });
                 }
                 return _openAboutCommand;

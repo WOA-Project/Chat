@@ -18,6 +18,22 @@ namespace Chat.Common
             public string PhoneNumberKind { get; set; }
         }
 
+        public static async Task<Contact> GetMyself()
+        {
+            var store = await ContactManager.RequestStoreAsync();
+            if (store != null)
+            {
+                var contact = await store.GetMeContactAsync();
+
+                if (contact != null)
+                    return contact;
+            }
+
+            Contact blankcontact = new Contact();
+            blankcontact.Phones.Add(new ContactPhone() { Number = "Me", Kind = ContactPhoneKind.Other });
+            return blankcontact;
+        }
+
         public static async Task<Contact> BindPhoneNumberToGlobalContact(string phonenumber)
         {
             var store = await ContactManager.RequestStoreAsync();

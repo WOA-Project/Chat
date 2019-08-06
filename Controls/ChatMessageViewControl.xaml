@@ -6,12 +6,19 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="300"
+    d:DesignHeight="100"
     d:DesignWidth="500">
 
-    <StackPanel Margin="8">
-        <Grid x:Name="ChatBubble" CornerRadius="8" MinWidth="100" MaxWidth="400" HorizontalAlignment="Left">
-            <Grid x:Name="BgColor" Background="{ThemeResource SystemAccentColor}"/>
+    <Grid Margin="8" HorizontalAlignment="{x:Bind ViewModel.Alignment, Mode=OneWay}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <PersonPicture Contact="{x:Bind ViewModel.Contact, Mode=OneWay}" Margin="0,0,16,0" Height="40" Width="40" VerticalAlignment="Top"/>
+
+        <Grid Grid.Column="1" x:Name="ChatBubble" CornerRadius="8" MinWidth="100" MaxWidth="400">
+            <Grid x:Name="BgColor" Background="{ThemeResource SystemAccentColor}" Opacity="0.5"/>
 
             <Grid Padding="8">
                 <Grid.RowDefinitions>
@@ -19,13 +26,13 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Text="{x:Bind message.Body}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" Style="{ThemeResource FluentBodyTextStyle}" Foreground="White"/>
-                <TextBlock x:Name="DateTimeLabel" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1" TextTrimming="CharacterEllipsis" MaxLines="1" Foreground="White" Style="{ThemeResource FluentCaptionTextStyle}" >
+                <TextBlock Text="{x:Bind ViewModel.MessageBody, Mode=OneWay}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" Style="{ThemeResource FluentBodyTextStyle}" Foreground="White" IsTextSelectionEnabled="True"/>
+                <TextBlock x:Name="DateTimeLabel" VerticalAlignment="Bottom" Text="{x:Bind ViewModel.TimeStamp, Mode=OneWay}" HorizontalAlignment="Right" Grid.Row="1" TextTrimming="CharacterEllipsis" MaxLines="1" Foreground="White" Opacity="0.75" Style="{ThemeResource FluentCaptionTextStyle}" >
                     <ToolTipService.ToolTip>
-                        <ToolTip Content="{x:Bind message.LocalTimestamp.LocalDateTime}"/>
+                        <ToolTip Content="{x:Bind ViewModel.TimeStamp, Mode=OneWay}"/>
                     </ToolTipService.ToolTip>
                 </TextBlock>
             </Grid>
         </Grid>
-    </StackPanel>
+    </Grid>
 </UserControl>

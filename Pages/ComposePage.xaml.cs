@@ -150,7 +150,7 @@ namespace Chat.Pages
                             try
                             {
                                 SendButton.IsEnabled = false;
-                                var smsDevice = ViewModel.CellularLines[CellularLineComboBox.SelectedIndex].device;
+                                var smsDevice = ViewModel.SelectedLine.device;
 
                                 var result = await SmsUtils.SendTextMessageAsync(smsDevice, ContactPickerBox.Text.Split(';'), ComposeTextBox.Text);
                                 if (!result)

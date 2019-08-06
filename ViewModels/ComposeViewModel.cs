@@ -17,6 +17,13 @@ namespace Chat.ViewModels
             set { Set(ref _cellularLines, value); }
         }
 
+        private CellularLineControl _selectedLine;
+        public CellularLineControl SelectedLine
+        {
+            get { return _selectedLine; }
+            set { Set(ref _selectedLine, value); }
+        }
+
         // Constructor
         public ComposeViewModel()
         {
@@ -28,6 +35,9 @@ namespace Chat.ViewModels
         public async void Initialize()
         {
             CellularLines = await GetSmsDevices();
+
+            if (CellularLines.Count != 0)
+                SelectedLine = CellularLines[0];
         }
 
         // Methods

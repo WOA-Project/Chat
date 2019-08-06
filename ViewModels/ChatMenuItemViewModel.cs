@@ -60,6 +60,13 @@ namespace Chat.ViewModels
             _store = await ChatMessageManager.RequestStoreAsync();
             _conversationid = ConvoId;
 
+            var convo = await _store.GetConversationAsync(_conversationid);
+            if (convo == null)
+            {
+                _store.StoreChanged -= Store_StoreChanged;
+                return;
+            }
+
             (Contact, DisplayName) = await GetContactInformation();
             (DisplayDescription, TimeStamp) = await GetLastMessageInfo();
 
@@ -99,13 +106,23 @@ namespace Chat.ViewModels
                         var conversation = await _store.GetConversationAsync(args.Id);
 
                         if (conversation == null)
+                        {
+                            _store.StoreChanged -= Store_StoreChanged;
                             break;
+                        }
+
+                        (var str, var dt) = await GetLastMessageInfo();
 
                         await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
                         () =>
                         {
-                            Initialize(_conversationid);
+                            (DisplayDescription, TimeStamp) = (str, dt);
                         });
+                        break;
+                    }
+                case ChatStoreChangedEventKind.ConversationDeleted:
+                    {
+                        _store.StoreChanged -= Store_StoreChanged;
                         break;
                     }
             }

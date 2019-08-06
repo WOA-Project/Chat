@@ -88,7 +88,7 @@ namespace Chat.Pages
                             try
                             {
                                 SendButton.IsEnabled = false;
-                                var smsDevice = ViewModel.CellularLines[CellularLineComboBox.SelectedIndex].device;
+                                var smsDevice = ViewModel.SelectedLine.device;
 
                                 var store = await ChatMessageManager.RequestStoreAsync();
                                 var result = await SmsUtils.SendTextMessageAsync(smsDevice, (await store.GetConversationAsync(ConversationId)).Participants.First(), ComposeTextBox.Text);

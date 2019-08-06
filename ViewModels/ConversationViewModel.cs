@@ -2,6 +2,7 @@
 using Chat.Controls;
 using Chat.Helpers;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,6 +30,13 @@ namespace Chat.ViewModels
         {
             get { return _cellularLines; }
             set { Set(ref _cellularLines, value); }
+        }
+
+        private CellularLineControl _selectedLine;
+        public CellularLineControl SelectedLine
+        {
+            get { return _selectedLine; }
+            set { Set(ref _selectedLine, value); }
         }
 
         private Contact _contact;
@@ -73,6 +81,10 @@ namespace Chat.ViewModels
 
             ChatMessages = await GetMessages();
             CellularLines = await GetSmsDevices();
+
+            if (CellularLines.Count != 0)
+                SelectedLine = CellularLines[0];
+
             (Contact, DisplayName) = await GetContactInformation();
 
             _store.ChangeTracker.Enable();
@@ -88,9 +100,29 @@ namespace Chat.ViewModels
             var reader = convo.GetMessageReader();
             var messages = await reader.ReadBatchAsync();
 
-            messages.ToList().ForEach(x => collection.Insert(0, new ChatMessageViewControl(x)));
+            messages.ToList().ForEach(x => collection.Insert(0, new ChatMessageViewControl(x.Id)));
 
             return collection;
+        }
+
+        private async void UpdateMessages()
+        {
+            var convo = await _store.GetConversationAsync(_conversationid);
+            var reader = convo.GetMessageReader();
+            var messages = await reader.ReadBatchAsync();
+
+            foreach (var message in messages)
+            {
+                if (ChatMessages.Any(x => x.messageId == message.Id))
+                {
+                    break;
+                }
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                () =>
+                {
+                    ChatMessages.Add(new ChatMessageViewControl(message.Id));
+                });
+            }
         }
 
         private async Task<(Contact, string)> GetContactInformation()
@@ -118,6 +150,7 @@ namespace Chat.ViewModels
 
                 }
             }
+
             return collection;
         }
 
@@ -130,13 +163,12 @@ namespace Chat.ViewModels
                         var conversation = await _store.GetConversationAsync(args.Id);
 
                         if (conversation == null)
-                            break;
-
-                        await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                        () =>
                         {
-                            Initialize(_conversationid);
-                        });
+                            _store.StoreChanged -= Store_StoreChanged;
+                            break;
+                        }
+
+                        UpdateMessages();
                         break;
                     }
             }

@@ -22,7 +22,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <ComboBox x:Name="CellularLineComboBox" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0,4,0,8" SelectionChanged="CellularLineComboBox_SelectionChanged" Style="{ThemeResource FluentComboBoxStyle}" ItemsSource="{x:Bind ViewModel.CellularLines, Mode=OneWay}" SelectedIndex="0" BorderBrush="Transparent" Background="Transparent" PlaceholderText="No cellular device" BorderThickness="0"/>
+            <ComboBox x:Name="CellularLineComboBox" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0,4,0,8" SelectionChanged="CellularLineComboBox_SelectionChanged" Style="{ThemeResource FluentComboBoxStyle}" ItemsSource="{x:Bind ViewModel.CellularLines, Mode=OneWay}" SelectedItem="{x:Bind ViewModel.SelectedLine, Mode=TwoWay}" BorderBrush="Transparent" Background="Transparent" PlaceholderText="No cellular device" BorderThickness="0"/>
             <Grid Grid.Row="1" VerticalAlignment="Center" Margin="0,0,16,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>

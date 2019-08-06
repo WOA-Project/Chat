@@ -40,7 +40,7 @@
             <PersonPicture Width="50" Margin="16,8" x:Name="ConvoPic" Contact="{x:Bind ViewModel.Contact, Mode=OneWay}"/>
             <TextBlock x:Name="ConvoTitle" Grid.Column="1" Style="{ThemeResource FluentTitleTextStyle}" VerticalAlignment="Center" Text="{x:Bind ViewModel.DisplayName, Mode=OneWay}"/>
             <Button x:Name="CallButton" Grid.Column="2" Height="48" Width="48" Foreground="{ThemeResource SystemControlForegroundAccentBrush}" Style="{ThemeResource FluentDialogButtonBackStyle}" VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Content="&#xE717;" BorderBrush="Transparent" BorderThickness="0" Command="{x:Bind StartCall}"/>
-            <ComboBox x:Name="CellularLineComboBox" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0,4,0,8" SelectionChanged="CellularLineComboBox_SelectionChanged" ItemsSource="{x:Bind ViewModel.CellularLines, Mode=OneWay}" Style="{ThemeResource FluentComboBoxStyle}" SelectedIndex="0" BorderBrush="Transparent" Background="Transparent" PlaceholderText="No cellular device" BorderThickness="0"/>
+            <ComboBox x:Name="CellularLineComboBox" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0,4,0,8" SelectionChanged="CellularLineComboBox_SelectionChanged" ItemsSource="{x:Bind ViewModel.CellularLines, Mode=OneWay}" Style="{ThemeResource FluentComboBoxStyle}" SelectedItem="{x:Bind ViewModel.SelectedLine, Mode=TwoWay}" BorderBrush="Transparent" Background="Transparent" PlaceholderText="No cellular device" BorderThickness="0"/>
         </Grid>
 
         <!-- Compose panel -->
