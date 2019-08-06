@@ -17,7 +17,7 @@ namespace Chat.Pages
     public sealed partial class ConversationPage : Page
     {
         public ConversationViewModel ViewModel { get; } = new ConversationViewModel("");
-        private string convoid;
+        public string ConversationId;
 
         public ConversationPage()
         {
@@ -68,7 +68,7 @@ namespace Chat.Pages
                         async () =>
                         {
                             var store = await ChatMessageManager.RequestStoreAsync();
-                            await Launcher.LaunchUriAsync(new Uri("tel:" + (await store.GetConversationAsync(convoid)).Participants.First()));
+                            await Launcher.LaunchUriAsync(new Uri("tel:" + (await store.GetConversationAsync(ConversationId)).Participants.First()));
                         });
                 }
                 return _startCall;
@@ -91,7 +91,7 @@ namespace Chat.Pages
                                 var smsDevice = ViewModel.CellularLines[CellularLineComboBox.SelectedIndex].device;
 
                                 var store = await ChatMessageManager.RequestStoreAsync();
-                                var result = await SmsUtils.SendTextMessageAsync(smsDevice, (await store.GetConversationAsync(convoid)).Participants.First(), ComposeTextBox.Text);
+                                var result = await SmsUtils.SendTextMessageAsync(smsDevice, (await store.GetConversationAsync(ConversationId)).Participants.First(), ComposeTextBox.Text);
                                 if (!result)
                                     await new MessageDialog("We could not send one or some messages.", "Something went wrong").ShowAsync();
 
@@ -113,11 +113,11 @@ namespace Chat.Pages
         {
             base.OnNavigatedTo(e);
 
-            var args = e.Parameter as ChatConversation;
+            var args = e.Parameter as string;
             if (args != null)
             {
-                convoid = args.Id;
-                ViewModel.Initialize(convoid);
+                ConversationId = args;
+                ViewModel.Initialize(ConversationId);
             }
         }
     }

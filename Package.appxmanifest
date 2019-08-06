@@ -10,7 +10,7 @@
   <Identity
     Name="LumiaWOA.Chat"
     Publisher="CN=LumiaWOA"
-    Version="0.0.46.0" />
+    Version="0.0.47.0" />
 
   <mp:PhoneIdentity PhoneProductId="d8719107-e9ed-450f-be3e-88003464d950" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 

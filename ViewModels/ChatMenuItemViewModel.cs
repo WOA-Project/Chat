@@ -1,35 +1,17 @@
 ﻿using Chat.Common;
-using Chat.Controls;
 using Chat.Helpers;
 using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Chat;
 using Windows.ApplicationModel.Contacts;
 using Windows.ApplicationModel.Core;
-using Windows.Devices.Enumeration;
-using Windows.Devices.Sms;
 using Windows.UI.Core;
 
 namespace Chat.ViewModels
 {
-    public class ConversationViewModel : Observable
+    public class ChatMenuItemViewModel : Observable
     {
-        // Properties
-        private ObservableCollection<ChatMessageViewControl> _chatMessages;
-        public ObservableCollection<ChatMessageViewControl> ChatMessages
-        {
-            get { return _chatMessages; }
-            set { Set(ref _chatMessages, value); }
-        }
-
-        private ObservableCollection<CellularLineControl> _cellularLines;
-        public ObservableCollection<CellularLineControl> CellularLines
-        {
-            get { return _cellularLines; }
-            set { Set(ref _cellularLines, value); }
-        }
 
         private Contact _contact;
         public Contact Contact
@@ -52,11 +34,18 @@ namespace Chat.ViewModels
             set { Set(ref _displayDescription, value); }
         }
 
+        private DateTime _timeStamp;
+        public DateTime TimeStamp
+        {
+            get { return _timeStamp; }
+            set { Set(ref _timeStamp, value); }
+        }
+
         private ChatMessageStore _store;
         private string _conversationid;
 
         // Constructor
-        public ConversationViewModel(string ConvoId)
+        public ChatMenuItemViewModel(string ConvoId)
         {
             Initialize(ConvoId);
         }
@@ -71,28 +60,14 @@ namespace Chat.ViewModels
             _store = await ChatMessageManager.RequestStoreAsync();
             _conversationid = ConvoId;
 
-            ChatMessages = await GetMessages();
-            CellularLines = await GetSmsDevices();
             (Contact, DisplayName) = await GetContactInformation();
+            (DisplayDescription, TimeStamp) = await GetLastMessageInfo();
 
             _store.ChangeTracker.Enable();
             _store.StoreChanged += Store_StoreChanged;
         }
 
         // Methods
-        private async Task<ObservableCollection<ChatMessageViewControl>> GetMessages()
-        {
-            ObservableCollection<ChatMessageViewControl> collection = new ObservableCollection<ChatMessageViewControl>();
-
-            var convo = await _store.GetConversationAsync(_conversationid);
-            var reader = convo.GetMessageReader();
-            var messages = await reader.ReadBatchAsync();
-
-            messages.ToList().ForEach(x => collection.Insert(0, new ChatMessageViewControl(x)));
-
-            return collection;
-        }
-
         private async Task<(Contact, string)> GetContactInformation()
         {
             var convo = await _store.GetConversationAsync(_conversationid);
@@ -101,24 +76,18 @@ namespace Chat.ViewModels
             return (contact, contact.DisplayName);
         }
 
-        private async Task<ObservableCollection<CellularLineControl>> GetSmsDevices()
+        private async Task<(string, DateTime)> GetLastMessageInfo()
         {
-            ObservableCollection<CellularLineControl> collection = new ObservableCollection<CellularLineControl>();
-            var smsDevices = await DeviceInformation.FindAllAsync(SmsDevice2.GetDeviceSelector(), null);
-            foreach (var smsDevice in smsDevices)
-            {
-                try
-                {
-                    SmsDevice2 dev = SmsDevice2.FromId(smsDevice.Id);
-                    CellularLineControl control = new CellularLineControl(dev);
-                    collection.Add(control);
-                }
-                catch
-                {
+            var convo = await _store.GetConversationAsync(_conversationid);
 
-                }
-            }
-            return collection;
+            var messageReader = convo.GetMessageReader();
+            var lastMessageId = convo.MostRecentMessageId;
+
+            var messages = await messageReader.ReadBatchAsync();
+
+            var lastMessage = messages.Where(x => x.Id == lastMessageId).First();
+
+            return (lastMessage.Body, lastMessage.LocalTimestamp.LocalDateTime);
         }
 
         private async void Store_StoreChanged(ChatMessageStore sender, ChatMessageStoreChangedEventArgs args)

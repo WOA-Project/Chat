@@ -63,7 +63,7 @@ namespace Chat.ViewModels
 
             foreach (var convo in convos)
             {
-                collection.Add(new ChatMenuItemControl(convo));
+                collection.Add(new ChatMenuItemControl(convo.Id));
             }
 
             return collection;
@@ -79,9 +79,9 @@ namespace Chat.ViewModels
 
                         if (conversation == null)
                         {
-                            if (ChatConversations.Any(x => x.ChatConversation.Id == args.Id))
+                            if (ChatConversations.Any(x => x.ConversationId == args.Id))
                             {
-                                var existingConversation = ChatConversations.First(x => x.ChatConversation.Id == args.Id);
+                                var existingConversation = ChatConversations.First(x => x.ConversationId == args.Id);
                                 await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
                                 () =>
                                 {
@@ -96,22 +96,22 @@ namespace Chat.ViewModels
                             break;
                         }
 
-                        if (!ChatConversations.Any(x => x.ChatConversation.Id == args.Id))
+                        /*if (!ChatConversations.Any(x => x.ConversationId == args.Id))
                         {
                             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
                             () =>
                             {
-                                ChatConversations.Insert(0, new ChatMenuItemControl(conversation));
+                                ChatConversations.Insert(0, new ChatMenuItemControl(conversation.Id));
                             });
                         }
                         else
                         {
-                            var existingConversation = ChatConversations.First(x => x.ChatConversation.Id == args.Id);
+                            var existingConversation = ChatConversations.First(x => x.ConversationId == args.Id);
                             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
                             () =>
                             {
                                 bool wasSelected = SelectedItem == existingConversation;
-                                var newConvo = new ChatMenuItemControl(conversation);
+                                var newConvo = new ChatMenuItemControl(conversation.Id);
 
                                 ChatConversations.Remove(existingConversation);
                                 ChatConversations.Insert(0, newConvo);
@@ -119,14 +119,14 @@ namespace Chat.ViewModels
                                 if (wasSelected)
                                     SelectedItem = newConvo;
                             });
-                        }
+                        }*/
                         break;
                     }
                 case ChatStoreChangedEventKind.ConversationDeleted:
                     {
-                        if (ChatConversations.Any(x => x.ChatConversation.Id == args.Id))
+                        if (ChatConversations.Any(x => x.ConversationId == args.Id))
                         {
-                            var existingConversation = ChatConversations.First(x => x.ChatConversation.Id == args.Id);
+                            var existingConversation = ChatConversations.First(x => x.ConversationId == args.Id);
                             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
                             () =>
                             {

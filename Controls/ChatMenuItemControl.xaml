@@ -7,8 +7,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:media="using:Windows.UI.Xaml.Media"
     mc:Ignorable="d"
+    Width="392"
     d:DesignHeight="300"
-    d:DesignWidth="400">
+    d:DesignWidth="392">
 
     <NavigationViewItem.ContextFlyout>
         <MenuFlyout Placement="Top">
@@ -162,39 +163,47 @@
         </Grid.ColumnDefinitions>
 
         <!-- Profile Picture -->
-        <PersonPicture Grid.Row="0"        x:Name="PeoplePic"
-                                           Grid.RowSpan="2"
-                                           Grid.Column="0"
-                                           Height="24"
-                                           Width="24"
-                                           VerticalAlignment="Center"
-                                           Margin="-6,0,12,0"/>
+        <PersonPicture Grid.Row="0"
+                       x:Name="PeoplePic"
+                       Grid.RowSpan="2"
+                       Grid.Column="0"
+                       Height="24"
+                       Width="24"
+                       VerticalAlignment="Center"
+                       Contact="{x:Bind ViewModel.Contact, Mode=OneWay}"
+                       Margin="-6,0,12,0"/>
 
         <!-- Name -->
-        <TextBlock Grid.Row="0"        x:Name="ChatName"
-                                       Grid.Column="1"
-                                       TextTrimming="CharacterEllipsis"
-                                       MaxLines="1"
-                                       Style="{ThemeResource FluentBaseTextStyle}" />
+        <TextBlock Grid.Row="0"
+                   x:Name="ChatName"
+                   Grid.Column="1"
+                   TextTrimming="CharacterEllipsis"
+                   Text="{x:Bind ViewModel.DisplayName, Mode=OneWay}"
+                   MaxLines="1"
+                   Style="{ThemeResource FluentBaseTextStyle}" />
 
         <!-- Date -->
-        <TextBlock Grid.Row="0"        x:Name="ChatDate"
-                                       Grid.Column="2"
-                                       VerticalAlignment="Center"
-                                       TextTrimming="CharacterEllipsis"
-                                       MaxLines="1"
-                                       Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                                       Style="{ThemeResource FluentCaptionTextStyle}" />
+        <TextBlock Grid.Row="0"        
+                   x:Name="ChatDate"
+                   Grid.Column="2"
+                   VerticalAlignment="Center"
+                   TextTrimming="CharacterEllipsis"
+                   MaxLines="1"
+                   Text="{x:Bind ViewModel.TimeStamp, Mode=OneWay}"
+                   Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                   Style="{ThemeResource FluentCaptionTextStyle}" />
 
         <!-- Content -->
-        <TextBlock Grid.Row="1"       x:Name="ChatContent"
-                                       Grid.Column="1"
-                                       Grid.ColumnSpan="2"
-                                       Margin="0,4,0,0"
-                                       TextWrapping="Wrap"
-                                       TextTrimming="CharacterEllipsis"
-                                       MaxLines="3"
-                                       Style="{ThemeResource FluentSubbodyTextStyle}" />
+        <TextBlock Grid.Row="1"       
+                   x:Name="ChatContent"
+                   Grid.Column="1"
+                   Grid.ColumnSpan="2"
+                   Margin="0,4,0,0"
+                   TextWrapping="Wrap"
+                   TextTrimming="CharacterEllipsis"
+                   MaxLines="3"
+                   Text="{x:Bind ViewModel.DisplayDescription, Mode=OneWay}"
+                   Style="{ThemeResource FluentSubbodyTextStyle}" />
 
     </Grid>
 </NavigationViewItem>
