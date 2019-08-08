@@ -8,6 +8,7 @@ using System.Windows.Input;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Contacts;
 using Windows.UI.Xaml.Controls;
+using MUXC = Microsoft.UI.Xaml.Controls;
 
 namespace Chat
 {
@@ -114,7 +115,7 @@ namespace Chat
             }
         }
 
-        private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        private void NavigationView_SelectionChanged(MUXC.NavigationView sender, MUXC.NavigationViewSelectionChangedEventArgs args)
         {
             if (args.SelectedItem != null)
                 MainFrame.Navigate(typeof(ConversationPage), (args.SelectedItem as ChatMenuItemControl).ConversationId);

@@ -5,6 +5,7 @@
     xmlns:local="using:Chat.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
     d:DesignHeight="100"
     d:DesignWidth="500"
@@ -30,10 +31,14 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-            <PersonPicture Contact="{x:Bind ViewModel.Contact, Mode=OneWay}" Margin="0,0,16,0" Height="40" Width="40" VerticalAlignment="Top"/>
+            <controls:PersonPicture Grid.Row="1" Contact="{x:Bind ViewModel.Contact, Mode=OneWay}" Margin="0,0,16,0" Height="40" Width="40" VerticalAlignment="Top"/>
 
-            <Grid Grid.Column="1" x:Name="ChatBubble" CornerRadius="8" MinWidth="100" MaxWidth="400">
+            <Grid Grid.Row="1" Grid.Column="1" x:Name="ChatBubble" CornerRadius="8" MinWidth="100" MaxWidth="400">
                 <Grid Background="{ThemeResource SystemChromeMediumHighColor}"/>
 
                 <Canvas Width="{x:Bind ChatBubble.Width, Mode=OneWay}" Height="{x:Bind ChatBubble.Height, Mode=OneWay}" Visibility="{x:Bind ViewModel.IncomingVisibility, Mode=OneWay}">
@@ -60,6 +65,10 @@
                     </ToolTipService.ToolTip>
                     </TextBlock>
                 </Grid>
+            </Grid>
+
+            <Grid Grid.Column="1" CornerRadius="8" MinWidth="100" MaxWidth="400">
+                <Image Source="{x:Bind ViewModel.Image}"/>
             </Grid>
         </Grid>
     </Grid>

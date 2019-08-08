@@ -1,9 +1,13 @@
 ﻿using Chat.Common;
 using Microsoft.Toolkit.Uwp.Notifications;
 using System;
+using System.IO;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
 using Windows.Devices.Sms;
+using Windows.Storage;
+using Windows.Storage.Streams;
 using Windows.UI.Notifications;
 
 namespace Chat.BackgroundTasks
@@ -20,24 +24,59 @@ namespace Chat.BackgroundTasks
             try
             {
                 SmsMessageReceivedTriggerDetails smsDetails = taskInstance.TriggerDetails as SmsMessageReceivedTriggerDetails;
-                SmsTextMessage2 smsTextMessage;
 
                 string deviceid = "";
+                string body = "";
+                string from = "";
+                ContactUtils.ContactInformation information = new ContactUtils.ContactInformation();
 
-                if (smsDetails.MessageType == SmsMessageType.Text)
+                switch (smsDetails.MessageType)
                 {
-                    smsTextMessage = smsDetails.TextMessage;
-                    deviceid = smsTextMessage.DeviceId;
-
-                    var information = await ContactUtils.FindContactInformationFromSmsTextMessage(smsTextMessage);
-
-                    var toastContent = new ToastContent()
-                    {
-                        Visual = new ToastVisual()
+                    case SmsMessageType.Text:
                         {
-                            BindingGeneric = new ToastBindingGeneric()
-                            {
-                                Children =
+                            SmsTextMessage2 smsTextMessage = smsDetails.TextMessage;
+                            body = smsTextMessage.Body;
+                            deviceid = smsTextMessage.DeviceId;
+                            from = smsTextMessage.From;
+                            information = await ContactUtils.FindContactInformationFromSmsMessage(smsTextMessage);
+                            break;
+                        }
+                    case SmsMessageType.Wap:
+                        {
+                            SmsWapMessage smsWapMessage = smsDetails.WapMessage;
+                            body = smsWapMessage.ContentType + " - " + "Wap";
+                            deviceid = smsWapMessage.DeviceId;
+                            from = smsWapMessage.From;
+                            information = await ContactUtils.FindContactInformationFromSmsMessage(smsWapMessage);
+                            break;
+                        }
+                    case SmsMessageType.App:
+                        {
+                            SmsAppMessage smsAppMessage = smsDetails.AppMessage;
+                            body = smsAppMessage.Body + " - " + "App";
+                            deviceid = smsAppMessage.DeviceId;
+                            from = smsAppMessage.From;
+                            information = await ContactUtils.FindContactInformationFromSmsMessage(smsAppMessage);
+                            break;
+                        }
+                    case SmsMessageType.Status:
+                        {
+                            SmsStatusMessage smsStatusMessage = smsDetails.StatusMessage;
+                            body = smsStatusMessage.Body + " - " + smsStatusMessage.Status.ToString() + " - " + "Status";
+                            deviceid = smsStatusMessage.DeviceId;
+                            from = smsStatusMessage.From;
+                            information = await ContactUtils.FindContactInformationFromSmsMessage(smsStatusMessage);
+                            break;
+                        }
+                }
+
+                var toastContent = new ToastContent()
+                {
+                    Visual = new ToastVisual()
+                    {
+                        BindingGeneric = new ToastBindingGeneric()
+                        {
+                            Children =
                                 {
                                     new AdaptiveText()
                                     {
@@ -46,57 +85,56 @@ namespace Chat.BackgroundTasks
                                     },
                                     new AdaptiveText()
                                     {
-                                        Text = smsTextMessage.Body
+                                        Text = body
                                     }
                                 },
-                                AppLogoOverride = new ToastGenericAppLogo()
-                                {
-                                    Source = information.ThumbnailPath,
-                                    HintCrop = ToastGenericAppLogoCrop.Circle
-                                },
-                                Attribution = new ToastGenericAttributionText()
-                                {
-                                    Text = information.PhoneNumberKind
-                                }
+                            AppLogoOverride = new ToastGenericAppLogo()
+                            {
+                                Source = information.ThumbnailPath,
+                                HintCrop = ToastGenericAppLogoCrop.Circle
+                            },
+                            Attribution = new ToastGenericAttributionText()
+                            {
+                                Text = information.PhoneNumberKind
                             }
-                        },
-                        Actions = new ToastActionsCustom()
-                        {
-                            Inputs =
+                        }
+                    },
+                    Actions = new ToastActionsCustom()
+                    {
+                        Inputs =
                             {
                                 new ToastTextBox("textBox")
                                 {
-                                    PlaceholderContent = "Send a message"
+                                    PlaceholderContent = "Type a message"
                                 }
                             },
-                            Buttons =
+                        Buttons =
                             {
-                                new ToastButton("Send", "action=reply" + "&from=" + smsTextMessage.From + "&deviceid=" + deviceid)
+                                new ToastButton("Send", $"action=reply&from={from}&deviceid={deviceid}")
                                 {
                                     ActivationType = ToastActivationType.Background,
                                     ImageUri = "Assets/ToastIcons/Send.png",
                                     TextBoxId = "textBox"
                                 }
                             }
-                        },
-                        Launch = "action=openThread" + "&from=" + smsTextMessage.From + "&deviceid=" + deviceid,
-                        Audio = new ToastAudio()
-                        {
-                            Src = new Uri("ms-winsoundevent:Notification.SMS")
-                        }
-                    };
-
-                    var toastNotif = new ToastNotification(toastContent.GetXml());
-                    ToastNotificationManager.CreateToastNotifier().Show(toastNotif);
-
-                    try
+                    },
+                    Launch = $"action=openThread&from={from}&deviceid={deviceid}",
+                    Audio = new ToastAudio()
                     {
-                        BadgeHandler.IncreaseBadgeNumber();
+                        Src = new Uri("ms-winsoundevent:Notification.SMS")
                     }
-                    catch
-                    {
+                };
 
-                    }
+                var toastNotif = new ToastNotification(toastContent.GetXml());
+                ToastNotificationManager.CreateToastNotifier().Show(toastNotif);
+
+                try
+                {
+                    BadgeHandler.IncreaseBadgeNumber();
+                }
+                catch
+                {
+
                 }
 
                 smsDetails.Accept();
@@ -106,6 +144,5 @@ namespace Chat.BackgroundTasks
 
             }
         }
-
     }
 }

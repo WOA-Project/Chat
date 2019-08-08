@@ -10,7 +10,7 @@
   <Identity
     Name="LumiaWOA.Chat"
     Publisher="CN=LumiaWOA"
-    Version="0.0.58.0" />
+    Version="0.0.87.0" />
 
   <mp:PhoneIdentity PhoneProductId="d8719107-e9ed-450f-be3e-88003464d950" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
@@ -63,6 +63,11 @@
         <Extension Category="windows.backgroundTasks" EntryPoint="Chat.BackgroundTasks.SmsBackgroundTask">
           <BackgroundTasks>
             <Task Type="general"/>
+          </BackgroundTasks>
+        </Extension>
+        <Extension Category="windows.backgroundTasks" EntryPoint="Chat.BackgroundTasks.ChatMessageNotificationBackgroundTask">
+          <BackgroundTasks>
+            <uap:Task Type="chatMessageNotification"/>
           </BackgroundTasks>
         </Extension>
         <Extension Category="windows.backgroundTasks" EntryPoint="Chat.BackgroundTasks.SmsReplyBackgroundTask">

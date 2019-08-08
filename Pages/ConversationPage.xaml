@@ -3,6 +3,7 @@
       xmlns:local="using:Chat.Pages"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:controls="using:Microsoft.UI.Xaml.Controls"
       x:Class="Chat.Pages.ConversationPage"
       NavigationCacheMode="Required"
       mc:Ignorable="d">
@@ -36,7 +37,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <PersonPicture Width="50" Margin="16,8" x:Name="ConvoPic" Contact="{x:Bind ViewModel.Contact, Mode=OneWay}"/>
+            <controls:PersonPicture Width="50" Margin="16,8" x:Name="ConvoPic" Contact="{x:Bind ViewModel.Contact, Mode=OneWay}"/>
             <TextBlock x:Name="ConvoTitle" Grid.Column="1" Style="{ThemeResource FluentTitleTextStyle}" VerticalAlignment="Center" Text="{x:Bind ViewModel.DisplayName, Mode=OneWay}"/>
             <Button x:Name="CallButton" Grid.Column="2" Height="48" Width="48" Foreground="{ThemeResource SystemControlForegroundAccentBrush}" Style="{ThemeResource FluentDialogButtonBackStyle}" VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Content="&#xE717;" BorderBrush="Transparent" BorderThickness="0" Command="{x:Bind StartCall}"/>
             <ComboBox x:Name="CellularLineComboBox" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0,4,0,8" SelectionChanged="CellularLineComboBox_SelectionChanged" ItemsSource="{x:Bind ViewModel.CellularLines, Mode=OneWay}" Style="{ThemeResource FluentComboBoxStyle}" SelectedItem="{x:Bind ViewModel.SelectedLine, Mode=TwoWay}" BorderBrush="Transparent" Background="Transparent" PlaceholderText="No cellular device" BorderThickness="0"/>

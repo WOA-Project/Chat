@@ -1,12 +1,17 @@
 ﻿using Chat.Common;
 using Chat.Helpers;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Chat;
 using Windows.ApplicationModel.Contacts;
 using Windows.ApplicationModel.Core;
+using Windows.Storage;
+using Windows.Storage.Streams;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace Chat.ViewModels
 {
@@ -47,6 +52,13 @@ namespace Chat.ViewModels
             set { Set(ref _alignment, value); }
         }
 
+        private ImageSource _image;
+        public ImageSource Image
+        {
+            get { return _image; }
+            set { Set(ref _image, value); }
+        }
+
         private ChatMessageStore _store;
         private string _messageid;
 
@@ -74,6 +86,41 @@ namespace Chat.ViewModels
             (Alignment, IncomingVisibility) = (_align, _visi);
 
             Contact = _tmpContact;
+
+            var message = await _store.GetMessageAsync(_messageid);
+
+            foreach (var attachment in message.Attachments)
+            {
+                try
+                {
+                    if (attachment.MimeType == "application/smil")
+                    {
+
+                    }
+
+                    if (attachment.MimeType == "text/vcard")
+                    {
+                        
+                    }
+
+                    if (attachment.MimeType.StartsWith("image/"))
+                    {
+                        var imageextension = attachment.MimeType.Split('/').Last();
+                        var img = new BitmapImage();
+                        await img.SetSourceAsync(await attachment.DataStreamReference.OpenReadAsync());
+                        Image = img;
+                    }
+
+                    if (attachment.MimeType.StartsWith("audio/"))
+                    {
+                        var audioextension = attachment.MimeType.Split('/').Last();
+                    }
+                }
+                catch
+                {
+                    
+                }
+            }
 
             _store.ChangeTracker.Enable();
             Subscribe(true);

@@ -36,8 +36,15 @@ namespace Chat.Common
             return blankcontact;
         }
 
-        private static (string, string) GetPhoneNumberInformation(string phonenumber)
+        private class PhoneNumberInfo
         {
+            public string Number { get; set; }
+            public string CountryCode { get; set; }
+        }
+
+        private static PhoneNumberInfo GetPhoneNumberInformation(string phonenumber)
+        {
+            PhoneNumberInfo info = new PhoneNumberInfo();
             /*PhoneNumberUtil phoneUtil = PhoneNumberUtil.GetInstance();
 
             PhoneNumber number;
@@ -53,12 +60,19 @@ namespace Chat.Common
                 nationalnumber = number.NationalNumber.ToString();
             }*/
 
-            return (nationalnumber, countrycode);
+            info.Number = nationalnumber;
+            info.CountryCode = countrycode;
+
+            return info;
         }
 
         public static bool ArePhoneNumbersMostLikelyTheSame(string num1, string num2)
         {
-            (string number, string countrycode) = GetPhoneNumberInformation(num1);
+            var info = GetPhoneNumberInformation(num1);
+
+            string number = info.Number;
+            string countrycode = info.CountryCode;
+
             if (string.IsNullOrEmpty(countrycode))
             {
                 if (num2.ToLower().Replace(" ", "") == number.ToLower().Replace(" ", ""))
@@ -66,7 +80,11 @@ namespace Chat.Common
             }
             else
             {
-                (string number2, string countrycode2) = GetPhoneNumberInformation(num2);
+                var info2 = GetPhoneNumberInformation(num1);
+
+                string number2 = info2.Number;
+                string countrycode2 = info2.CountryCode;
+
                 if (number == number2 && countrycode == countrycode2)
                 {
                     return true;
@@ -106,18 +124,57 @@ namespace Chat.Common
             return blankcontact;
         }
 
-        public async static Task<ContactInformation> FindContactInformationFromSmsTextMessage(SmsTextMessage2 message)
+        public async static Task<ContactInformation> FindContactInformationFromSmsMessage(ISmsMessageBase message)
         {
-            ContactInformation info = new ContactInformation() { DisplayName = message.From, PhoneNumberKind = "Unknown", ThumbnailPath = "" };
+            string from = "";
+
+            switch (message.MessageType)
+            {
+                case SmsMessageType.Text:
+                    {
+                        from = ((SmsTextMessage2)message).From;
+                        break;
+                    }
+                case SmsMessageType.App:
+                    {
+                        from = ((SmsAppMessage)message).From;
+                        break;
+                    }
+                case SmsMessageType.Broadcast:
+                    {
+                        break;
+                    }
+                case SmsMessageType.Status:
+                    {
+                        from = ((SmsStatusMessage)message).From;
+                        break;
+                    }
+                case SmsMessageType.Voicemail:
+                    {
+                        break;
+                    }
+                case SmsMessageType.Wap:
+                    {
+                        from = ((SmsWapMessage)message).From;
+                        break;
+                    }
+            }
+
+            return await FindContactInformationFromSender(from);
+        }
+
+        public async static Task<ContactInformation> FindContactInformationFromSender(string from)
+        {
+            ContactInformation info = new ContactInformation() { DisplayName = from, PhoneNumberKind = "Unknown", ThumbnailPath = "" };
 
             try
             {
-                var contact = await BindPhoneNumberToGlobalContact(message.From);
+                var contact = await BindPhoneNumberToGlobalContact(from);
                 info.DisplayName = contact.DisplayName;
 
                 try
                 {
-                    info.PhoneNumberKind = contact.Phones.First(x => ArePhoneNumbersMostLikelyTheSame(x.Number, message.From)).Kind.ToString();
+                    info.PhoneNumberKind = contact.Phones.First(x => ArePhoneNumbersMostLikelyTheSame(x.Number, from)).Kind.ToString();
                 }
                 catch
                 {

@@ -1,7 +1,7 @@
 ﻿using Chat.ViewModels;
 using System;
 using Windows.ApplicationModel.Chat;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Chat.Controls
 {

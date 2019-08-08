@@ -12,7 +12,7 @@ namespace Chat.Common
             bool returnresult = true;
             ChatMessageStore store = await ChatMessageManager.RequestStoreAsync();
 
-            if (string.IsNullOrEmpty(transportId))
+            if (string.IsNullOrEmpty(transportId) || await ChatMessageManager.GetTransportAsync(transportId) == null)
             {
                 var transports = await ChatMessageManager.GetTransportsAsync();
                 if (transports.Count != 0)
@@ -79,7 +79,7 @@ namespace Chat.Common
             return returnresult;
         }
 
-        public async static Task<bool> SendTextMessageAsync(SmsDevice2 device, string number, string textmessage, string transportId = "")
+        public async static Task<bool> SendTextMessageAsync(SmsDevice2 device, string number, string textmessage, string transportId = "0")
         {
             return await SendTextMessageAsync(device, new string[1] { number }, textmessage, transportId);
         }

@@ -1,24 +1,59 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Windows.ApplicationModel.Background;
+using Windows.ApplicationModel.Chat;
 using Windows.Devices.Sms;
+using System;
 
 namespace Chat.BackgroundTasks
 {
     public sealed class BackgroundTaskUtils
     {
-        public static void RegisterToastNotificationBackgroundTasks()
+        public static async void RegisterToastNotificationBackgroundTasks()
         {
             try
             {
-                SmsFilterRule filter = new SmsFilterRule(SmsMessageType.Text);
                 SmsFilterActionType actionType = SmsFilterActionType.Accept;
                 SmsFilterRules filterRules = new SmsFilterRules(actionType);
                 IList<SmsFilterRule> rules = filterRules.Rules;
+
+                SmsFilterRule filter = new SmsFilterRule(SmsMessageType.Text);
                 rules.Add(filter);
+                filter = new SmsFilterRule(SmsMessageType.Wap);
+                rules.Add(filter);
+                filter = new SmsFilterRule(SmsMessageType.Status);
+                rules.Add(filter);
+                filter = new SmsFilterRule(SmsMessageType.App);
+                rules.Add(filter);
+
                 SmsMessageReceivedTrigger trigger = new SmsMessageReceivedTrigger(filterRules);
 
                 RegisterBackgroundTask<SmsBackgroundTask>(trigger);
+            }
+            catch
+            {
+
+            }
+
+            try
+            {
+                var transports = await ChatMessageManager.GetTransportsAsync();
+                foreach (var transport in transports)
+                {
+                    if (!transport.IsAppSetAsNotificationProvider)// && transport.TransportKind == ChatMessageTransportKind.Text)
+                    {
+                        await transport.RequestSetAsNotificationProviderAsync();
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+
+            try
+            {
+                RegisterBackgroundTask<ChatMessageNotificationBackgroundTask>(new ChatMessageNotificationTrigger());
             }
             catch
             {
@@ -40,6 +75,15 @@ namespace Chat.BackgroundTasks
             try
             {
                 UnRegisterBackgroundTask<SmsBackgroundTask>();
+            }
+            catch
+            {
+
+            }
+
+            try
+            {
+                UnRegisterBackgroundTask<ChatMessageNotificationBackgroundTask>();
             }
             catch
             {

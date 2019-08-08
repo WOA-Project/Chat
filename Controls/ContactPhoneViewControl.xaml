@@ -5,6 +5,7 @@
     xmlns:local="using:Chat.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
@@ -18,7 +19,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <PersonPicture VerticalAlignment="Center" Height="48" Grid.RowSpan="2" x:Name="PersonPicture"/>
+        <controls:PersonPicture VerticalAlignment="Center" Height="48" Grid.RowSpan="2" x:Name="PersonPicture"/>
         <TextBlock Margin="16,8,8,2" Grid.Column="1" x:Name="ContactName" Text="Some contact"/>
         <TextBlock Margin="16,2,8,8" Grid.Column="1" Grid.Row="1" x:Name="ContactPhone" Text="Some contact phone"/>
     </Grid>
