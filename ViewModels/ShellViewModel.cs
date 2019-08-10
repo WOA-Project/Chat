@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.Chat;
 using Windows.ApplicationModel.Core;
 using Windows.Devices.Enumeration;
+using Windows.Devices.Sms;
 using Windows.Networking.NetworkOperators;
 using Windows.UI.Core;
 
@@ -71,15 +72,23 @@ namespace Chat.ViewModels
             bool available = false;
             try
             {
-                string selectorStr = MobileBroadbandModem.GetDeviceSelector();
-                DeviceInformationCollection devices = await DeviceInformation.FindAllAsync(selectorStr);
-
-                foreach (var mdevice in devices)
+                var smsDevices = await DeviceInformation.FindAllAsync(SmsDevice2.GetDeviceSelector(), null);
+                foreach (var smsDevice in smsDevices)
                 {
-                    MobileBroadbandModem modem = MobileBroadbandModem.FromId(mdevice.Id);
-                    if (modem.DeviceInformation.TelephoneNumbers.Count > 0 && modem.DeviceInformation.TelephoneNumbers.Any(x => !string.IsNullOrEmpty(x)))
+                    try
                     {
-                        return true;
+                        SmsDevice2 dev = SmsDevice2.FromId(smsDevice.Id);
+                        switch (dev.DeviceStatus)
+                        {
+                            case SmsDeviceStatus.Ready:
+                                {
+                                    return true;
+                                }
+                        }
+                    }
+                    catch
+                    {
+
                     }
                 }
             }

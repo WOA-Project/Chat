@@ -99,6 +99,7 @@ namespace Chat.ViewModels
 
             (Contact, DisplayName) = await GetContactInformation();
             ChatMessages = _tmpchatMessages;
+            ChatMessages.CollectionChanged += ChatMessages_CollectionChanged;
             CellularLines = _tmpCellLines;
 
             if (CellularLines.Count != 0)
@@ -106,6 +107,14 @@ namespace Chat.ViewModels
 
             _store.ChangeTracker.Enable();
             Subscribe(true);
+        }
+
+        private void ChatMessages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            foreach (var item in ChatMessages)
+            {
+                item.RefreshVisuals();
+            }
         }
 
         private void Subscribe(bool enabled)

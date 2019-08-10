@@ -132,6 +132,11 @@ namespace Chat.Controls
 
             }
 
+            if (string.IsNullOrEmpty(displayname))
+            {
+                displayname = "Unidentified SIM";
+            }
+
             LineName.Text = displayname;
         }
     }
