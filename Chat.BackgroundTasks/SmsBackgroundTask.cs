@@ -44,7 +44,7 @@ namespace Chat.BackgroundTasks
                     case SmsMessageType.Wap:
                         {
                             SmsWapMessage smsWapMessage = smsDetails.WapMessage;
-                            body = smsWapMessage.ContentType + " - " + "Wap";
+                            body = "[DEBUG - Report if seen] " + smsWapMessage.ContentType + " - " + "Wap";
                             deviceid = smsWapMessage.DeviceId;
                             from = smsWapMessage.From;
                             information = await ContactUtils.FindContactInformationFromSmsMessage(smsWapMessage);
@@ -53,7 +53,7 @@ namespace Chat.BackgroundTasks
                     case SmsMessageType.App:
                         {
                             SmsAppMessage smsAppMessage = smsDetails.AppMessage;
-                            body = smsAppMessage.Body + " - " + "App";
+                            body = "[DEBUG - Report if seen] " + smsAppMessage.Body + " - " + "App";
                             deviceid = smsAppMessage.DeviceId;
                             from = smsAppMessage.From;
                             information = await ContactUtils.FindContactInformationFromSmsMessage(smsAppMessage);
@@ -62,7 +62,7 @@ namespace Chat.BackgroundTasks
                     case SmsMessageType.Status:
                         {
                             SmsStatusMessage smsStatusMessage = smsDetails.StatusMessage;
-                            body = smsStatusMessage.Body + " - " + smsStatusMessage.Status.ToString() + " - " + "Status";
+                            body = "[DEBUG - Report if seen] " + smsStatusMessage.Body + " - " + smsStatusMessage.Status.ToString() + " - " + "Status";
                             deviceid = smsStatusMessage.DeviceId;
                             from = smsStatusMessage.From;
                             information = await ContactUtils.FindContactInformationFromSmsMessage(smsStatusMessage);
