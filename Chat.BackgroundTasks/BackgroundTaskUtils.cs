@@ -9,7 +9,7 @@ namespace Chat.BackgroundTasks
 {
     public sealed class BackgroundTaskUtils
     {
-        public static async void RegisterToastNotificationBackgroundTasks()
+        public static void RegisterToastNotificationBackgroundTasks()
         {
             try
             {
@@ -35,7 +35,8 @@ namespace Chat.BackgroundTasks
 
             }
 
-            try
+            // Was an experiment, causes double notifications if registered by design
+            /*try
             {
                 var transports = await ChatMessageManager.GetTransportsAsync();
                 foreach (var transport in transports)
@@ -58,7 +59,7 @@ namespace Chat.BackgroundTasks
             catch
             {
 
-            }
+            }*/
 
             try
             {

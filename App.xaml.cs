@@ -39,7 +39,7 @@ namespace Chat
 
         protected override void OnActivated(IActivatedEventArgs e)
         {
-            if (e.Kind == ActivationKind.Protocol)
+            if (e.Kind == ActivationKind.Protocol || e.Kind == ActivationKind.ToastNotification)
             {
                 Shell rootShell = Window.Current.Content as Shell;
                 if (rootShell == null)

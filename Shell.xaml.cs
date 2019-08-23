@@ -1,12 +1,15 @@
-﻿using Chat.ContentDialogs;
+﻿using Chat.Common;
+using Chat.ContentDialogs;
 using Chat.Controls;
 using Chat.Pages;
 using Chat.ViewModels;
 using GalaSoft.MvvmLight.Command;
 using System;
+using System.Linq;
 using System.Windows.Input;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Contacts;
+using Windows.Devices.Sms;
 using Windows.UI.Xaml.Controls;
 using MUXC = Microsoft.UI.Xaml.Controls;
 
@@ -28,6 +31,11 @@ namespace Chat
             {
                 HandleArguments(args);
             }
+            var args2 = e as ToastNotificationActivatedEventArgs;
+            if (args2 != null)
+            {
+                HandleArguments(args2);
+            }
         }
 
         private async void HandleArguments(ProtocolActivatedEventArgs args)
@@ -41,6 +49,55 @@ namespace Chat
                 Contact contact = await store.GetContactAsync(contactid);
 
                 MainFrame.Navigate(typeof(ComposePage), contact);
+            }
+        }
+
+        private async void HandleArguments(ToastNotificationActivatedEventArgs args)
+        {
+            string arguments = args.Argument;
+
+            string action = args.Argument.Split('&').First(x => x.ToLower().StartsWith("action=")).Split('=')[1];
+            string from = args.Argument.Split('&').First(x => x.ToLower().StartsWith("from=")).Split('=')[1];
+            string deviceid = args.Argument.Split('&').First(x => x.ToLower().StartsWith("deviceid=")).Split('=')[1];
+
+            switch (action.ToLower())
+            {
+                case "reply":
+                    {
+                        try
+                        {
+                            string messagetosend = (string)args.UserInput["textBox"];
+                            SmsDevice2 smsDevice = SmsDevice2.FromId(deviceid);
+                            await SmsUtils.SendTextMessageAsync(smsDevice, from, messagetosend);
+                        }
+                        catch
+                        {
+
+                        }
+
+                        break;
+                    }
+                case "openthread":
+                    {
+                        ChatMenuItemControl selectedConvo = null;
+                        foreach (var convo in ViewModel.ChatConversations)
+                        {
+                            var contact = convo.ViewModel.Contact;
+                            foreach (var num in contact.Phones)
+                            {
+                                if (ContactUtils.ArePhoneNumbersMostLikelyTheSame(from, num.Number))
+                                {
+                                    selectedConvo = convo;
+                                    break;
+                                }
+                            }
+                            if (selectedConvo != null)
+                                break;
+                        }
+                        if (selectedConvo != null)
+                            ViewModel.SelectedItem = selectedConvo;
+                        break;
+                    }
             }
         }
 
