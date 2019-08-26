@@ -8,6 +8,7 @@ using Windows.ApplicationModel.Contacts;
 using Windows.Devices.Sms;
 using Windows.Storage;
 using Windows.Storage.Streams;
+using Windows.Globalization.PhoneNumberFormatting;
 
 namespace Chat.Common
 {
@@ -36,15 +37,15 @@ namespace Chat.Common
             return blankcontact;
         }
 
-        private class PhoneNumberInfo
+        private class PhoneNumberInfo2
         {
             public string Number { get; set; }
             public string CountryCode { get; set; }
         }
 
-        private static PhoneNumberInfo GetPhoneNumberInformation(string phonenumber)
+        private static PhoneNumberInfo2 GetPhoneNumberInformation(string phonenumber)
         {
-            PhoneNumberInfo info = new PhoneNumberInfo();
+            PhoneNumberInfo2 info = new PhoneNumberInfo2();
             /*PhoneNumberUtil phoneUtil = PhoneNumberUtil.GetInstance();
 
             PhoneNumber number;
@@ -68,6 +69,24 @@ namespace Chat.Common
 
         public static bool ArePhoneNumbersMostLikelyTheSame(string num1, string num2)
         {
+            var formatter = new PhoneNumberFormatter();
+
+            var fnum1 = formatter.FormatPartialString(num1);
+            var fnum2 = formatter.FormatPartialString(num2);
+
+            if (fnum1 == fnum2)
+                return true;
+
+            var inum1 = new PhoneNumberInfo(fnum1);
+            var inum2 = new PhoneNumberInfo(fnum2);
+
+            var match = inum1.CheckNumberMatch(inum2);
+
+            if (match == PhoneNumberMatchResult.ExactMatch || match == PhoneNumberMatchResult.NationalSignificantNumberMatch || match == PhoneNumberMatchResult.ShortNationalSignificantNumberMatch)
+            {
+                return true;
+            }
+
             var info = GetPhoneNumberInformation(num1);
 
             string number = info.Number;
@@ -75,7 +94,7 @@ namespace Chat.Common
 
             if (string.IsNullOrEmpty(countrycode))
             {
-                if (num2.ToLower().Replace(" ", "") == number.ToLower().Replace(" ", ""))
+                if (num2.ToLower().Replace(" ", "").Replace("(", "").Replace(")", "") == number.ToLower().Replace(" ", "").Replace("(", "").Replace(")", ""))
                     return true;
             }
             else
@@ -91,7 +110,7 @@ namespace Chat.Common
                 }
                 else if (string.IsNullOrEmpty(countrycode2))
                 {
-                    if (num2.Replace(" ", "") == number.ToLower().Replace(" ", ""))
+                    if (num2.Replace(" ", "").Replace("(", "").Replace(")", "") == number.ToLower().Replace(" ", "").Replace("(", "").Replace(")", ""))
                         return true;
                 }
                 else if (number == number2)
