@@ -90,13 +90,24 @@ namespace Chat.ViewModels
             Subscribe(false);
         }
 
+
         // Methods
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "<Pending>")]
         private async Task<(Contact, string)> GetContactInformation()
         {
-            var convo = await _store.GetConversationAsync(_conversationid);
-            var contact = await ContactUtils.BindPhoneNumberToGlobalContact(convo.Participants.First());
+            try
+            {
+                var convo = await _store.GetConversationAsync(_conversationid);
+                var contact = await ContactUtils.BindPhoneNumberToGlobalContact(convo.Participants.First());
 
-            return (contact, contact.DisplayName);
+                return (contact, contact.DisplayName);
+            }
+            catch
+            {
+                Contact blankcontact = new Contact();
+                blankcontact.Phones.Add(new ContactPhone() { Number = "Unknown", Kind = ContactPhoneKind.Other });
+                return (blankcontact, "Unknown");
+            }
         }
 
         private async Task<(string, DateTime)> GetLastMessageInfo()

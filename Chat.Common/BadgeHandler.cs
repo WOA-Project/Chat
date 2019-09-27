@@ -8,7 +8,8 @@ namespace Chat.Common
     {
         public static void IncreaseBadgeNumber()
         {
-            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+            return;
+            /*ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
 
             if (!localSettings.Values.ContainsKey("UnreadCount"))
             {
@@ -26,12 +27,13 @@ namespace Chat.Common
             count++;
             localSettings.Values["UnreadCount"] = count;
 
-            setBadgeNumber(count);
+            setBadgeNumber(count);*/
         }
 
         public static void DecreaseBadgeNumber()
         {
-            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+            return;
+            /*ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
 
             if (!localSettings.Values.ContainsKey("UnreadCount"))
             {
@@ -53,10 +55,10 @@ namespace Chat.Common
 
             localSettings.Values["UnreadCount"] = count;
 
-            setBadgeNumber(count);
+            setBadgeNumber(count);*/
         }
 
-        private static void setBadgeNumber(int num)
+        /*private static void setBadgeNumber(int num)
         {
             XmlDocument badgeXml = BadgeUpdateManager.GetTemplateContent(BadgeTemplateType.BadgeNumber);
 
@@ -68,6 +70,6 @@ namespace Chat.Common
             BadgeUpdater badgeUpdater = BadgeUpdateManager.CreateBadgeUpdaterForApplication();
 
             badgeUpdater.Update(badge);
-        }
+        }*/
     }
 }

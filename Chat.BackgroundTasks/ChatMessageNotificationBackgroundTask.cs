@@ -68,7 +68,6 @@ namespace Chat.BackgroundTasks
         private async Task DisplayToast(ChatMessage message)
         {
             var information = await ContactUtils.FindContactInformationFromSender(message.From);
-            string extra = "";
             string thumbnailpath = "";
             string text = "";
 

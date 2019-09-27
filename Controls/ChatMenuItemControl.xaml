@@ -191,7 +191,7 @@
                    VerticalAlignment="Center"
                    TextTrimming="CharacterEllipsis"
                    MaxLines="1"
-                   Text="{x:Bind ViewModel.TimeStamp, Mode=OneWay}"
+                   Text="{x:Bind ViewModel.TimeStamp.ToShortTimeString(), Mode=OneWay}"
                    Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                    Style="{ThemeResource FluentCaptionTextStyle}" />
 

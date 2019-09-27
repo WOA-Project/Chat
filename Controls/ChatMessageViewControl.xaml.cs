@@ -14,7 +14,7 @@ namespace Chat.Controls
     {
         public ChatMessageViewModel ViewModel { get; } = new ChatMessageViewModel("");
 
-        public string messageId;
+        public string messageId { get; internal set; }
         public ChatMessageViewControl(string messageId)
         {
             this.InitializeComponent();
@@ -125,6 +125,7 @@ namespace Chat.Controls
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         private void UserControl_RightTapped(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e)
         {
             messageMenuFlyout.ShowAt(this, e.GetPosition(this));

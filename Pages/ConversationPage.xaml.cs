@@ -19,7 +19,7 @@ namespace Chat.Pages
     public sealed partial class ConversationPage : Page
     {
         public ConversationViewModel ViewModel { get; } = new ConversationViewModel("");
-        public string ConversationId;
+        internal string ConversationId;
 
         public ConversationPage()
         {
@@ -54,6 +54,7 @@ namespace Chat.Pages
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         private void CellularLineComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (CellularLineComboBox.SelectedItem != null)
@@ -62,6 +63,7 @@ namespace Chat.Pages
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         private void ComposeTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (CellularLineComboBox.SelectedItem != null)
@@ -128,10 +130,9 @@ namespace Chat.Pages
                                 SendButton.IsEnabled = true;
                                 ComposeTextBox.Text = "";
                             }
-                            catch (Exception ex)
+                            catch
                             {
-                                SendButton.IsEnabled = true;
-                                await new MessageDialog(ex.Message + " - " + ex.StackTrace).ShowAsync();
+                                
                             }
                         });
                 }
@@ -143,11 +144,14 @@ namespace Chat.Pages
         {
             base.OnNavigatedTo(e);
 
-            var args = e.Parameter as string;
-            if (args != null)
+            if (e != null)
             {
-                ConversationId = args;
-                ViewModel.Initialize(ConversationId);
+                var args = e.Parameter as string;
+                if (args != null)
+                {
+                    ConversationId = args;
+                    ViewModel.Initialize(ConversationId);
+                }
             }
         }
     }

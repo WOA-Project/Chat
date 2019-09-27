@@ -36,7 +36,7 @@ namespace Chat.ViewModels
 
 
         // Methods
-        private string GetAppName()
+        private static string GetAppName()
         {
             var package = Package.Current;
             string appName = package.DisplayName;
@@ -44,7 +44,7 @@ namespace Chat.ViewModels
             return appName;
         }
 
-        private string GetVersionNumber()
+        private static string GetVersionNumber()
         {
             var package = Package.Current;
             var packageId = package.Id;

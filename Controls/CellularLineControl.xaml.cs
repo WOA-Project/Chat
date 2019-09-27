@@ -12,7 +12,7 @@ namespace Chat.Controls
 {
     public sealed partial class CellularLineControl : ComboBoxItem
     {
-        public SmsDevice2 device;
+        public SmsDevice2 device { get; internal set; }
 
         public CellularLineControl(SmsDevice2 device)
         {
@@ -118,7 +118,7 @@ namespace Chat.Controls
 
                                 if (returnedLines.Any(x => x.NetworkName == modem.CurrentNetwork.RegisteredProviderName))
                                 {
-                                    var line = returnedLines.First(x => x.NetworkName == LineName.Text);
+                                    var line = returnedLines.First(x => x.NetworkName == modem.CurrentNetwork.RegisteredProviderName);
                                     displayname += " (SIM " + (line.CellularDetails.SimSlotIndex + 1) + ")";
                                 }
                             }

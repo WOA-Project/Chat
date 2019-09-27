@@ -24,7 +24,7 @@ namespace Chat.ViewModels
         public ObservableCollection<ChatMenuItemControl> ChatConversations
         {
             get { return _chatConversations; }
-            set { Set(ref _chatConversations, value); }
+            internal set { Set(ref _chatConversations, value); }
         }
 
         private ChatMenuItemControl _selectedItem;
@@ -67,7 +67,8 @@ namespace Chat.ViewModels
             _store.StoreChanged += Store_StoreChanged;
         }
 
-        private async Task<bool> PerformMandatoryChecks()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "<Pending>")]
+        private static async Task<bool> PerformMandatoryChecks()
         {
             bool available = false;
             try

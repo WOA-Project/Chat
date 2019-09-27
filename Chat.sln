@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.BackgroundTasks", "Cha
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.Common", "Chat.Common\Chat.Common.csproj", "{D7B4A4F2-501E-4498-A857-00A0E73D078B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibPhoneNumber.Contrib", "LibPhoneNumber.Contrib\LibPhoneNumber.Contrib.csproj", "{76E62544-DFBA-4AEC-8309-A441176ABF2D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,16 +91,6 @@ Global
 		{D7B4A4F2-501E-4498-A857-00A0E73D078B}.Release|x64.Build.0 = Release|x64
 		{D7B4A4F2-501E-4498-A857-00A0E73D078B}.Release|x86.ActiveCfg = Release|x86
 		{D7B4A4F2-501E-4498-A857-00A0E73D078B}.Release|x86.Build.0 = Release|x86
-		{76E62544-DFBA-4AEC-8309-A441176ABF2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{76E62544-DFBA-4AEC-8309-A441176ABF2D}.Debug|ARM.ActiveCfg = Debug|ARM
-		{76E62544-DFBA-4AEC-8309-A441176ABF2D}.Debug|ARM64.ActiveCfg = Debug|ARM64
-		{76E62544-DFBA-4AEC-8309-A441176ABF2D}.Debug|x64.ActiveCfg = Debug|x64
-		{76E62544-DFBA-4AEC-8309-A441176ABF2D}.Debug|x86.ActiveCfg = Debug|x86
-		{76E62544-DFBA-4AEC-8309-A441176ABF2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{76E62544-DFBA-4AEC-8309-A441176ABF2D}.Release|ARM.ActiveCfg = Release|ARM
-		{76E62544-DFBA-4AEC-8309-A441176ABF2D}.Release|ARM64.ActiveCfg = Release|ARM64
-		{76E62544-DFBA-4AEC-8309-A441176ABF2D}.Release|x64.ActiveCfg = Release|x64
-		{76E62544-DFBA-4AEC-8309-A441176ABF2D}.Release|x86.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

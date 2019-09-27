@@ -103,7 +103,7 @@ namespace Chat.ViewModels
                         
                     }
 
-                    if (attachment.MimeType.StartsWith("image/"))
+                    if (attachment.MimeType.StartsWith("image/", StringComparison.InvariantCulture))
                     {
                         var imageextension = attachment.MimeType.Split('/').Last();
                         var img = new BitmapImage();
@@ -111,7 +111,7 @@ namespace Chat.ViewModels
                         Image = img;
                     }
 
-                    if (attachment.MimeType.StartsWith("audio/"))
+                    if (attachment.MimeType.StartsWith("audio/", StringComparison.InvariantCulture))
                     {
                         var audioextension = attachment.MimeType.Split('/').Last();
                     }

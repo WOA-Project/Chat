@@ -2,7 +2,6 @@
 using Chat.Controls;
 using Chat.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,14 +21,14 @@ namespace Chat.ViewModels
         public ObservableCollection<ChatMessageViewControl> ChatMessages
         {
             get { return _chatMessages; }
-            set { Set(ref _chatMessages, value); }
+            internal set { Set(ref _chatMessages, value); }
         }
 
         private ObservableCollection<CellularLineControl> _cellularLines;
         public ObservableCollection<CellularLineControl> CellularLines
         {
             get { return _cellularLines; }
-            set { Set(ref _cellularLines, value); }
+            internal set { Set(ref _cellularLines, value); }
         }
 
         private CellularLineControl _selectedLine;
@@ -164,23 +163,44 @@ namespace Chat.ViewModels
                 {
                     break;
                 }
+
+                if (currindex > ChatMessages.Count())
+                    currindex = ChatMessages.Count();
+
                 await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
                 () =>
                 {
-                    ChatMessages.Insert(currindex, new ChatMessageViewControl(message.Id));
+                    try
+                    {
+                        ChatMessages.Insert(currindex, new ChatMessageViewControl(message.Id));
+                    }
+                    catch
+                    {
+
+                    }
                 });
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "<Pending>")]
         private async Task<(Contact, string)> GetContactInformation()
         {
-            var convo = await _store.GetConversationAsync(_conversationid);
-            var contact = await ContactUtils.BindPhoneNumberToGlobalContact(convo.Participants.First());
+            try
+            {
+                var convo = await _store.GetConversationAsync(_conversationid);
+                var contact = await ContactUtils.BindPhoneNumberToGlobalContact(convo.Participants.First());
 
-            return (contact, contact.DisplayName);
+                return (contact, contact.DisplayName);
+            }
+            catch
+            {
+                Contact blankcontact = new Contact();
+                blankcontact.Phones.Add(new ContactPhone() { Number = "Unknown", Kind = ContactPhoneKind.Other });
+                return (blankcontact, "Unknown");
+            }
         }
 
-        private async Task<ObservableCollection<CellularLineControl>> GetSmsDevices()
+        private static async Task<ObservableCollection<CellularLineControl>> GetSmsDevices()
         {
             ObservableCollection<CellularLineControl> collection = new ObservableCollection<CellularLineControl>();
             var smsDevices = await DeviceInformation.FindAllAsync(SmsDevice2.GetDeviceSelector(), null);

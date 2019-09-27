@@ -123,19 +123,26 @@ namespace Chat.Common
 
         public static async Task<Contact> BindPhoneNumberToGlobalContact(string phonenumber)
         {
-            var store = await ContactManager.RequestStoreAsync();
-            if (store != null)
+            try
             {
-                var contacts = await store.FindContactsAsync();
-
-                foreach (var contact in contacts)
+                var store = await ContactManager.RequestStoreAsync();
+                if (store != null)
                 {
-                    foreach (var num in contact.Phones)
+                    var contacts = await store.FindContactsAsync();
+
+                    foreach (var contact in contacts)
                     {
-                        if (ArePhoneNumbersMostLikelyTheSame(phonenumber, num.Number))
-                            return contact;
+                        foreach (var num in contact.Phones)
+                        {
+                            if (ArePhoneNumbersMostLikelyTheSame(phonenumber, num.Number))
+                                return contact;
+                        }
                     }
                 }
+            }
+            catch
+            {
+
             }
 
             Contact blankcontact = new Contact();

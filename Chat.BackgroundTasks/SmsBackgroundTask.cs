@@ -41,7 +41,7 @@ namespace Chat.BackgroundTasks
                             information = await ContactUtils.FindContactInformationFromSmsMessage(smsTextMessage);
                             break;
                         }
-                    case SmsMessageType.Wap:
+                    /*case SmsMessageType.Wap:
                         {
                             SmsWapMessage smsWapMessage = smsDetails.WapMessage;
                             body = "[DEBUG - Report if seen] " + smsWapMessage.ContentType + " - " + "Wap";
@@ -53,7 +53,7 @@ namespace Chat.BackgroundTasks
                     case SmsMessageType.App:
                         {
                             SmsAppMessage smsAppMessage = smsDetails.AppMessage;
-                            body = "[DEBUG - Report if seen] " + smsAppMessage.Body + " - " + "App";
+                            body = "[DEBUG - Report if seen] " + smsAppMessage.Body + " - RAW: " + BitConverter.ToString(smsAppMessage.BinaryBody.ToArray()) + " - " + "App";
                             deviceid = smsAppMessage.DeviceId;
                             from = smsAppMessage.From;
                             information = await ContactUtils.FindContactInformationFromSmsMessage(smsAppMessage);
@@ -67,7 +67,9 @@ namespace Chat.BackgroundTasks
                             from = smsStatusMessage.From;
                             information = await ContactUtils.FindContactInformationFromSmsMessage(smsStatusMessage);
                             break;
-                        }
+                        }*/
+                    default:
+                        return;
                 }
 
                 var toastContent = new ToastContent()

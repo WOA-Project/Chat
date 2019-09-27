@@ -27,7 +27,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="To:" VerticalAlignment="Center" Margin="16,0,16,0"/>
-                <AutoSuggestBox x:Name="ContactPickerBox" Grid.Column="1" QueryIcon="Add" TextChanged="ContactPickerBox_TextChanged" QuerySubmitted="ContactPickerBox_QuerySubmitted" SuggestionChosen="ContactPickerBox_SuggestionChosen" Style="{StaticResource AutoSuggestBoxStyle1}" TextBoxStyle="{StaticResource TextBoxNoBackground}"/>
+                <AutoSuggestBox x:Name="ContactPickerBox" Grid.Column="1" QueryIcon="Add" TextChanged="ContactPickerBox_TextChanged" QuerySubmitted="ContactPickerBox_QuerySubmitted" SuggestionChosen="ContactPickerBox_SuggestionChosen" Style="{StaticResource AutoSuggestBoxStyle1}" TextBoxStyle="{StaticResource AutoTextBoxNoBackground}"/>
             </Grid>
         </Grid>
 

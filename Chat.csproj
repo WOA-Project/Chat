@@ -24,8 +24,9 @@
     <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
     <AppxBundle>Always</AppxBundle>
-    <AppxBundlePlatforms>arm64</AppxBundlePlatforms>
+    <AppxBundlePlatforms>x64</AppxBundlePlatforms>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
+    <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM64'">
     <DebugSymbols>true</DebugSymbols>
@@ -64,6 +65,9 @@
     <Compile Include="ContentDialogs\CellularUnavailableContentDialog.xaml.cs">
       <DependentUpon>CellularUnavailableContentDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ContentDialogs\UnhandledExceptionContentDialog.xaml.cs">
+      <DependentUpon>UnhandledExceptionContentDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CellularLineControl.xaml.cs">
       <DependentUpon>CellularLineControl.xaml</DependentUpon>
     </Compile>
@@ -79,7 +83,6 @@
     <Compile Include="Controls\TitlebarControl.xaml.cs">
       <DependentUpon>TitlebarControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\DateTimeExtensions.cs" />
     <Compile Include="Helpers\Observable.cs" />
     <Compile Include="Pages\ComposePage.xaml.cs">
       <DependentUpon>ComposePage.xaml</DependentUpon>
@@ -175,6 +178,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ContentDialogs\UnhandledExceptionContentDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\CellularLineControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -210,16 +217,21 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FluiFramework.UWP">
-      <Version>0.0.28-alpha</Version>
+      <Version>0.0.29</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers">
+      <Version>2.9.5-beta1.final</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.8</Version>
+      <Version>6.2.9</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls">
-      <Version>5.0.0-preview.gb86cb1c4cb</Version>
+      <Version>5.1.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.UI.Xaml">
-      <Version>2.2.190731001-prerelease</Version>
+      <Version>2.3.190909001-prerelease</Version>
     </PackageReference>
     <PackageReference Include="MvvmLightLibs">
       <Version>5.4.1.1</Version>
@@ -234,6 +246,9 @@
       <Project>{e12054eb-c218-4a9c-b7c5-9c8eb11287f3}</Project>
       <Name>Chat.BackgroundTasks</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".editorconfig" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

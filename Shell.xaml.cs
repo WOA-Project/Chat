@@ -5,6 +5,7 @@ using Chat.Pages;
 using Chat.ViewModels;
 using GalaSoft.MvvmLight.Command;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Input;
 using Windows.ApplicationModel.Activation;
@@ -42,7 +43,7 @@ namespace Chat
         {
             Uri uri = args.Uri;
             string unescpateduri = Uri.UnescapeDataString(uri.Query);
-            var contactid = unescpateduri.Replace("?ContactRemoteIds=", "");
+            var contactid = unescpateduri.Replace("?ContactRemoteIds=", "", StringComparison.InvariantCulture);
             if (uri.Scheme == "ms-ipmessaging")
             {
                 ContactStore store = await ContactManager.RequestStoreAsync(ContactStoreAccessType.AppContactsReadWrite);
@@ -56,11 +57,11 @@ namespace Chat
         {
             string arguments = args.Argument;
 
-            string action = args.Argument.Split('&').First(x => x.ToLower().StartsWith("action=")).Split('=')[1];
-            string from = args.Argument.Split('&').First(x => x.ToLower().StartsWith("from=")).Split('=')[1];
-            string deviceid = args.Argument.Split('&').First(x => x.ToLower().StartsWith("deviceid=")).Split('=')[1];
+            string action = args.Argument.Split('&').First(x => x.ToLower(new CultureInfo("en-US")).StartsWith("action=", StringComparison.InvariantCulture)).Split('=')[1];
+            string from = args.Argument.Split('&').First(x => x.ToLower(new CultureInfo("en-US")).StartsWith("from=", StringComparison.InvariantCulture)).Split('=')[1];
+            string deviceid = args.Argument.Split('&').First(x => x.ToLower(new CultureInfo("en-US")).StartsWith("deviceid=", StringComparison.InvariantCulture)).Split('=')[1];
 
-            switch (action.ToLower())
+            switch (action.ToLower(new CultureInfo("en-US")))
             {
                 case "reply":
                     {
@@ -172,6 +173,7 @@ namespace Chat
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         private void NavigationView_SelectionChanged(MUXC.NavigationView sender, MUXC.NavigationViewSelectionChangedEventArgs args)
         {
             if (args.SelectedItem != null)

@@ -1,6 +1,9 @@
-﻿using Windows.ApplicationModel;
+﻿using Chat.ContentDialogs;
+using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
+using System;
+using System.Globalization;
 
 namespace Chat
 {
@@ -10,6 +13,19 @@ namespace Chat
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            this.UnhandledException += App_UnhandledException;
+        }
+
+        private async void App_UnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs e)
+        {
+            e.Handled = true;
+            string ExceptionDesc = e.Exception.Message + "\nHRESULT: 0x" + e.Exception.HResult.ToString("X4", new CultureInfo("en-US")) + "\n" + e.Exception.StackTrace + "\n" + e.Exception.Source;
+            if (e.Exception.InnerException != null)
+                ExceptionDesc += "\n\n" + e.Exception.InnerException.Message + "\nHRESULT: 0x" + e.Exception.InnerException.HResult.ToString("X4", new CultureInfo("en-US")) + "\n" + e.Exception.InnerException.StackTrace + "\n" + e.Exception.InnerException.Source;
+            else 
+                ExceptionDesc += "\n\nNo inner exception was thrown";
+
+            await new UnhandledExceptionContentDialog(ExceptionDesc).ShowAsync();
         }
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)
@@ -20,17 +36,18 @@ namespace Chat
             {
                 rootShell = new Shell();
 
-                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
+                if (e != null && e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
                     //TODO: Load state from previously suspended application
                 }
 
-                rootShell.HandleArguments(e);
+                if (e != null)
+                    rootShell.HandleArguments(e);
 
                 Window.Current.Content = rootShell;
             }
 
-            if (e.PrelaunchActivated == false)
+            if (e != null && e.PrelaunchActivated == false)
             {
                 rootShell.HandleArguments(e);
                 Window.Current.Activate();
@@ -39,7 +56,7 @@ namespace Chat
 
         protected override void OnActivated(IActivatedEventArgs e)
         {
-            if (e.Kind == ActivationKind.Protocol || e.Kind == ActivationKind.ToastNotification)
+            if (e != null && e.Kind == ActivationKind.Protocol || e != null && e.Kind == ActivationKind.ToastNotification)
             {
                 Shell rootShell = Window.Current.Content as Shell;
                 if (rootShell == null)

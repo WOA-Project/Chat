@@ -34,13 +34,17 @@ namespace Chat.Pages
         {
             base.OnNavigatedTo(e);
 
-            var args = e.Parameter as Contact;
-            if (args != null)
+            if (e != null)
             {
-                ContactPickerBox.Text = args.DisplayName;
+                var args = e.Parameter as Contact;
+                if (args != null)
+                {
+                    ContactPickerBox.Text = args.DisplayName;
+                }
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         private async void ContactPickerBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
             var store = await ContactManager.RequestStoreAsync();
@@ -48,7 +52,7 @@ namespace Chat.Pages
 
             try
             {
-                if (!sender.Text.Contains(";"))
+                if (!sender.Text.Contains(";", StringComparison.InvariantCulture))
                 {
                     var contacts = await store.FindContactsAsync(sender.Text);
 
@@ -98,11 +102,13 @@ namespace Chat.Pages
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         private void ContactPickerBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {
             ContactPickerBox.Text = (args.SelectedItem as ContactPhoneViewControl).contactPhone.Number;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         private void CellularLineComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (CellularLineComboBox.SelectedItem != null)
@@ -111,6 +117,7 @@ namespace Chat.Pages
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         private void ComposeTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (CellularLineComboBox.SelectedItem != null)
@@ -159,10 +166,9 @@ namespace Chat.Pages
                                 SendButton.IsEnabled = true;
                                 ComposeTextBox.Text = "";
                             }
-                            catch (Exception ex)
+                            catch
                             {
-                                SendButton.IsEnabled = true;
-                                await new MessageDialog(ex.Message + " - " + ex.StackTrace).ShowAsync();
+                                
                             }
                         });
                 }

@@ -14,7 +14,7 @@ namespace Chat.ViewModels
         public ObservableCollection<CellularLineControl> CellularLines
         {
             get { return _cellularLines; }
-            set { Set(ref _cellularLines, value); }
+            internal set { Set(ref _cellularLines, value); }
         }
 
         private CellularLineControl _selectedLine;
@@ -41,7 +41,7 @@ namespace Chat.ViewModels
         }
 
         // Methods
-        private async Task<ObservableCollection<CellularLineControl>> GetSmsDevices()
+        private static async Task<ObservableCollection<CellularLineControl>> GetSmsDevices()
         {
             ObservableCollection<CellularLineControl> collection = new ObservableCollection<CellularLineControl>();
             var smsDevices = await DeviceInformation.FindAllAsync(SmsDevice2.GetDeviceSelector(), null);
