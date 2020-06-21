@@ -18,20 +18,22 @@
             </winuicontrols:NavigationView.AutoSuggestBox>
 
             <winuicontrols:NavigationView.PaneHeader>
-                <Grid Margin="8,0" Height="40" VerticalAlignment="Top">
-                    <TextBlock Text="Conversations" VerticalAlignment="Center" Style="{ThemeResource FluentSubheaderTextStyle}"/>
-                    <CommandBar Background="Transparent">
-                        <CommandBar.PrimaryCommands>
-                            <AppBarButton Icon="Add" x:Name="NewConvoButton" Command="{x:Bind NewConvoCommand}"/>
-                        </CommandBar.PrimaryCommands>
-                        <CommandBar.SecondaryCommands>
-                            <AppBarButton x:Name="AboutButton" Label="About" Command="{x:Bind OpenAboutCommand}">
-                                <AppBarButton.Icon>
-                                    <FontIcon Glyph="&#xE946;"/>
-                                </AppBarButton.Icon>
-                            </AppBarButton>
-                        </CommandBar.SecondaryCommands>
-                    </CommandBar>
+                <Grid Width="352">
+                    <Grid Margin="8,0" Height="40" VerticalAlignment="Top">
+                        <TextBlock Text="Conversations" VerticalAlignment="Center" Style="{ThemeResource FluentSubheaderTextStyle}"/>
+                        <CommandBar Background="Transparent">
+                            <CommandBar.PrimaryCommands>
+                                <AppBarButton Icon="Add" x:Name="NewConvoButton" Command="{x:Bind NewConvoCommand}"/>
+                            </CommandBar.PrimaryCommands>
+                            <CommandBar.SecondaryCommands>
+                                <AppBarButton x:Name="AboutButton" Label="About" Command="{x:Bind OpenAboutCommand}">
+                                    <AppBarButton.Icon>
+                                        <FontIcon Glyph="&#xE946;"/>
+                                    </AppBarButton.Icon>
+                                </AppBarButton>
+                            </CommandBar.SecondaryCommands>
+                        </CommandBar>
+                    </Grid>
                 </Grid>
             </winuicontrols:NavigationView.PaneHeader>
 
