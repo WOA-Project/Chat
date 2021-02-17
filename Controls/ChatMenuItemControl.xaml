@@ -39,11 +39,10 @@
                        x:Name="PeoplePic"
                        Grid.RowSpan="2"
                        Grid.Column="0"
-                       Height="24"
-                       Width="24"
+                       Height="38"
                        VerticalAlignment="Center"
                        Contact="{x:Bind ViewModel.Contact, Mode=OneWay}"
-                       Margin="-6,0,12,0"/>
+                       Margin="0,0,12,0"/>
 
         <!-- Name -->
         <TextBlock Grid.Row="0"

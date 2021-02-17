@@ -1,5 +1,6 @@
 ﻿using Chat.Common;
 using Chat.Controls;
+using Chat.Helpers;
 using Chat.ViewModels;
 using GalaSoft.MvvmLight.Command;
 using System;
@@ -117,23 +118,25 @@ namespace Chat.Pages
                     _sendReply = new RelayCommand(
                         async () =>
                         {
+                            SendButton.IsEnabled = false;
+                            ComposeTextBox.IsEnabled = false;
+                            var smsDevice = ViewModel.SelectedLine.device;
+
                             try
                             {
-                                SendButton.IsEnabled = false;
-                                var smsDevice = ViewModel.SelectedLine.device;
-
                                 var store = await ChatMessageManager.RequestStoreAsync();
                                 var result = await SmsUtils.SendTextMessageAsync(smsDevice, (await store.GetConversationAsync(ConversationId)).Participants.First(), ComposeTextBox.Text);
                                 if (!result)
                                     await new MessageDialog("We could not send one or some messages.", "Something went wrong").ShowAsync();
-
-                                SendButton.IsEnabled = true;
-                                ComposeTextBox.Text = "";
                             }
-                            catch
+                            catch (Exception ex)
                             {
-                                
+                                await new MessageDialog($"We could not send one or some messages.\n{ex}", "Something went wrong").ShowAsync();
                             }
+
+                            SendButton.IsEnabled = true;
+                            ComposeTextBox.IsEnabled = true;
+                            ComposeTextBox.Text = "";
                         });
                 }
                 return _sendReply;
