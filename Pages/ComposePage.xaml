@@ -4,8 +4,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       x:Class="Chat.Pages.ComposePage"
-      mc:Ignorable="d"
-      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+      mc:Ignorable="d">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -15,7 +14,7 @@
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <Grid Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="134" Padding="8,60,8,8" Background="{ThemeResource SystemControlAcrylicElementBrush}">
+        <Grid Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="104" Padding="8,30,8,8" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -33,7 +32,7 @@
 
 
         <!-- Compose panel -->
-        <Grid Grid.Row="2" Padding="12" VerticalAlignment="Bottom" Background="{ThemeResource SystemControlAcrylicElementBrush}">
+        <Grid Grid.Row="2" Padding="12" VerticalAlignment="Bottom" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>

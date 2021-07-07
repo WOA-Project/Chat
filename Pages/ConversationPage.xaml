@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
         
         <!-- Messages -->
-        <ListView Padding="8,142,8,68" x:Name="MessageListView" Grid.Row="0" Grid.RowSpan="3" ItemsSource="{x:Bind ViewModel.ChatMessages, Mode=OneWay}" SelectionMode="None">
+        <ListView Padding="8,112,8,68" x:Name="MessageListView" Grid.Row="0" Grid.RowSpan="3" ItemsSource="{x:Bind ViewModel.ChatMessages, Mode=OneWay}" SelectionMode="None">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -30,7 +30,7 @@
         </ListView>
 
         <!-- Header -->
-        <Grid Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="134" Padding="8,60,8,8" Background="{ThemeResource SystemControlAcrylicElementBrush}">
+        <Grid Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="104" Padding="8,30,8,8" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
@@ -44,7 +44,7 @@
         </Grid>
 
         <!-- Compose panel -->
-        <Grid Grid.Row="2" Padding="12" VerticalAlignment="Bottom" Background="{ThemeResource SystemControlAcrylicElementBrush}">
+        <Grid Grid.Row="2" Padding="12" VerticalAlignment="Bottom" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
