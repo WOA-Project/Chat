@@ -10,7 +10,7 @@
   <Identity
     Name="LumiaWOA.Chat"
     Publisher="CN=Windows On Lumia Development Second Party Software 2020"
-    Version="1.0.118.0" />
+    Version="1.0.120.0" />
 
   <mp:PhoneIdentity PhoneProductId="d8719107-e9ed-450f-be3e-88003464d950" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
@@ -27,7 +27,7 @@
   <Resources>
     <Resource Language="x-generate"/>
   </Resources>
-
+  
   <Applications>
     <Application Id="App"
       Executable="$targetnametoken$.exe"
