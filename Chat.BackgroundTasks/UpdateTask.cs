@@ -18,7 +18,7 @@ namespace Chat.BackgroundTasks
             BackgroundTaskUtils.UnRegisterToastNotificationBackgroundTasks();
             BackgroundTaskUtils.RegisterToastNotificationBackgroundTasks();
 
-            var toastContent = new ToastContent()
+            ToastContent toastContent = new ToastContent()
             {
                 Visual = new ToastVisual()
                 {
@@ -40,7 +40,7 @@ namespace Chat.BackgroundTasks
             };
 
             // Create the toast notification
-            var toastNotif = new ToastNotification(toastContent.GetXml());
+            ToastNotification toastNotif = new ToastNotification(toastContent.GetXml());
 
             // And send the notification
             ToastNotificationManager.CreateToastNotifier().Show(toastNotif);

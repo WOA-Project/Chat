@@ -5,11 +5,14 @@ namespace Chat.Controls
 {
     public sealed partial class ContactPhoneViewControl : UserControl
     {
-        public ContactPhone contactPhone { get; internal set; }
+        public ContactPhone contactPhone
+        {
+            get; internal set;
+        }
 
         public ContactPhoneViewControl(ContactPhone contactPhone, Contact contact)
         {
-            this.InitializeComponent();
+            InitializeComponent();
             if (contactPhone != null && contact != null)
             {
                 this.contactPhone = contactPhone;

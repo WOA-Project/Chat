@@ -3,7 +3,7 @@ using Chat.ContentDialogs;
 using Chat.Controls;
 using Chat.Pages;
 using Chat.ViewModels;
-using GalaSoft.MvvmLight.Command;
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -22,18 +22,16 @@ namespace Chat
 
         public Shell()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         public void HandleArguments(object e)
         {
-            var args = e as ProtocolActivatedEventArgs;
-            if (args != null)
+            if (e is ProtocolActivatedEventArgs args)
             {
                 HandleArguments(args);
             }
-            var args2 = e as ToastNotificationActivatedEventArgs;
-            if (args2 != null)
+            if (e is ToastNotificationActivatedEventArgs args2)
             {
                 HandleArguments(args2);
             }
@@ -43,13 +41,13 @@ namespace Chat
         {
             Uri uri = args.Uri;
             string unescpateduri = Uri.UnescapeDataString(uri.Query);
-            var contactid = unescpateduri.Replace("?ContactRemoteIds=", "", StringComparison.InvariantCulture);
+            string contactid = unescpateduri.Replace("?ContactRemoteIds=", "", StringComparison.InvariantCulture);
             if (uri.Scheme == "ms-ipmessaging")
             {
                 ContactStore store = await ContactManager.RequestStoreAsync(ContactStoreAccessType.AppContactsReadWrite);
                 Contact contact = await store.GetContactAsync(contactid);
 
-                MainFrame.Navigate(typeof(ComposePage), contact);
+                _ = MainFrame.Navigate(typeof(ComposePage), contact);
             }
         }
 
@@ -69,7 +67,7 @@ namespace Chat
                         {
                             string messagetosend = (string)args.UserInput["textBox"];
                             SmsDevice2 smsDevice = SmsDevice2.FromId(deviceid);
-                            await SmsUtils.SendTextMessageAsync(smsDevice, from, messagetosend);
+                            _ = await SmsUtils.SendTextMessageAsync(smsDevice, from, messagetosend);
                         }
                         catch
                         {
@@ -81,10 +79,10 @@ namespace Chat
                 case "openthread":
                     {
                         ChatMenuItemControl selectedConvo = null;
-                        foreach (var convo in ViewModel.ChatConversations)
+                        foreach (ChatMenuItemControl convo in ViewModel.ChatConversations)
                         {
-                            var contact = convo.ViewModel.Contact;
-                            foreach (var num in contact.Phones)
+                            Contact contact = convo.ViewModel.Contact;
+                            foreach (ContactPhone num in contact.Phones)
                             {
                                 if (ContactUtils.ArePhoneNumbersMostLikelyTheSame(from, num.Number))
                                 {
@@ -93,10 +91,15 @@ namespace Chat
                                 }
                             }
                             if (selectedConvo != null)
+                            {
                                 break;
+                            }
                         }
                         if (selectedConvo != null)
+                        {
                             ViewModel.SelectedItem = selectedConvo;
+                        }
+
                         break;
                     }
             }
@@ -107,15 +110,12 @@ namespace Chat
         {
             get
             {
-                if (_newConvoCommand == null)
-                {
-                    _newConvoCommand = new RelayCommand(
+                _newConvoCommand ??= new RelayCommand(
                         () =>
                         {
-                            MainFrame.Navigate(typeof(ComposePage));
+                            _ = MainFrame.Navigate(typeof(ComposePage));
                             ViewModel.SelectedItem = null;
                         });
-                }
                 return _newConvoCommand;
             }
         }
@@ -125,9 +125,7 @@ namespace Chat
         {
             get
             {
-                if (_openAboutCommand == null)
-                {
-                    _openAboutCommand = new RelayCommand(
+                _openAboutCommand ??= new RelayCommand(
                         async () =>
                         {
 #if !DEBUG
@@ -135,21 +133,22 @@ namespace Chat
 #else
                             Windows.ApplicationModel.Chat.ChatMessageStore store = await Windows.ApplicationModel.Chat.ChatMessageManager.RequestStoreAsync();
                             string transportId = await Windows.ApplicationModel.Chat.ChatMessageManager.RegisterTransportAsync();
-                            Windows.ApplicationModel.Chat.ChatMessage msg = new Windows.ApplicationModel.Chat.ChatMessage();
+                            Windows.ApplicationModel.Chat.ChatMessage msg = new()
+                            {
+                                Body = "Hello how are you?",
 
-                            msg.Body = "Hello how are you?";
+                                TransportId = transportId,
 
-                            msg.TransportId = transportId;
-
-                            msg.MessageOperatorKind = Windows.ApplicationModel.Chat.ChatMessageOperatorKind.Sms;
-                            msg.Status = Windows.ApplicationModel.Chat.ChatMessageStatus.Sent;
+                                MessageOperatorKind = Windows.ApplicationModel.Chat.ChatMessageOperatorKind.Sms,
+                                Status = Windows.ApplicationModel.Chat.ChatMessageStatus.Sent
+                            };
 
                             bool alternate = new Random().Next(2) == 2;
 
                             msg.Recipients.Clear();
                             msg.From = "";
 
-                            var offset = new DateTimeOffset(DateTime.Now);
+                            DateTimeOffset offset = new(DateTime.Now);
                             msg.LocalTimestamp = offset;
                             msg.NetworkTimestamp = offset;
 
@@ -168,16 +167,16 @@ namespace Chat
                             await store.SaveMessageAsync(msg);
 #endif
                         });
-                }
                 return _openAboutCommand;
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         private void NavigationView_SelectionChanged(MUXC.NavigationView sender, MUXC.NavigationViewSelectionChangedEventArgs args)
         {
             if (args.SelectedItem != null)
-                MainFrame.Navigate(typeof(ConversationPage), (args.SelectedItem as ChatMenuItemControl).ConversationId);
+            {
+                _ = MainFrame.Navigate(typeof(ConversationPage), (args.SelectedItem as ChatMenuItemControl).ConversationId);
+            }
         }
     }
 }

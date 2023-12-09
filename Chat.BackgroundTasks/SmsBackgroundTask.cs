@@ -1,13 +1,9 @@
 ﻿using Chat.Common;
 using Microsoft.Toolkit.Uwp.Notifications;
 using System;
-using System.IO;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
 using Windows.Devices.Sms;
-using Windows.Storage;
-using Windows.Storage.Streams;
 using Windows.UI.Notifications;
 
 namespace Chat.BackgroundTasks
@@ -72,7 +68,7 @@ namespace Chat.BackgroundTasks
                         return;
                 }
 
-                var toastContent = new ToastContent()
+                ToastContent toastContent = new ToastContent()
                 {
                     Visual = new ToastVisual()
                     {
@@ -127,7 +123,7 @@ namespace Chat.BackgroundTasks
                     }
                 };
 
-                var toastNotif = new ToastNotification(toastContent.GetXml());
+                ToastNotification toastNotif = new ToastNotification(toastContent.GetXml());
                 ToastNotificationManager.CreateToastNotifier().Show(toastNotif);
 
                 try

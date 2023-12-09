@@ -1,12 +1,12 @@
 ﻿using Chat.ViewModels;
-using GalaSoft.MvvmLight.Command;
+using CommunityToolkit.Mvvm.Input;
+using System;
 using System.Windows.Input;
 using Windows.ApplicationModel.Chat;
-using Windows.UI.Xaml.Controls;
-using System;
 using Windows.ApplicationModel.DataTransfer;
-using Windows.UI.Xaml;
 using Windows.Foundation;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace Chat.Controls
 {
@@ -14,10 +14,13 @@ namespace Chat.Controls
     {
         public ChatMessageViewModel ViewModel { get; } = new ChatMessageViewModel("");
 
-        public string messageId { get; internal set; }
+        public string messageId
+        {
+            get; internal set;
+        }
         public ChatMessageViewControl(string messageId)
         {
-            this.InitializeComponent();
+            InitializeComponent();
             this.messageId = messageId;
             ViewModel.Initialize(messageId);
 
@@ -31,19 +34,19 @@ namespace Chat.Controls
 
         public void RefreshVisuals()
         {
-            var height = ((Shell)Window.Current.Content).ActualHeight;
-            var width = ((Shell)Window.Current.Content).ActualWidth;
+            double height = ((Shell)Window.Current.Content).ActualHeight;
+            double width = ((Shell)Window.Current.Content).ActualWidth;
 
-            var ttv = ChatBubble.TransformToVisual(Window.Current.Content);
+            Windows.UI.Xaml.Media.GeneralTransform ttv = ChatBubble.TransformToVisual(Window.Current.Content);
             Point screenCoords = ttv.TransformPoint(new Point(0, 0));
 
-            var controlWidth = ChatBubble.Width;
-            var controlHeight = ChatBubble.Height;
+            double controlWidth = ChatBubble.Width;
+            double controlHeight = ChatBubble.Height;
 
             BgColor.Width = width;
             BgColor.Height = height;
 
-            var marg = BgColor.Margin;
+            Thickness marg = BgColor.Margin;
             marg.Left = screenCoords.X - width;
             marg.Top = screenCoords.Y - height;
             marg.Right = screenCoords.X - width - controlWidth;
@@ -57,15 +60,12 @@ namespace Chat.Controls
         {
             get
             {
-                if (_messageDelete == null)
-                {
-                    _messageDelete = new RelayCommand(
+                _messageDelete ??= new RelayCommand(
                         async () =>
                         {
-                            var store = await ChatMessageManager.RequestStoreAsync();
+                            ChatMessageStore store = await ChatMessageManager.RequestStoreAsync();
                             await store.DeleteMessageAsync(messageId);
                         });
-                }
                 return _messageDelete;
             }
         }
@@ -75,14 +75,11 @@ namespace Chat.Controls
         {
             get
             {
-                if (_messageForward == null)
-                {
-                    _messageForward = new RelayCommand(
+                _messageForward ??= new RelayCommand(
                         () =>
                         {
 
                         });
-                }
                 return _messageForward;
             }
         }
@@ -92,18 +89,15 @@ namespace Chat.Controls
         {
             get
             {
-                if (_messageCopy == null)
-                {
-                    _messageCopy = new RelayCommand(
+                _messageCopy ??= new RelayCommand(
                         async () =>
                         {
-                            var store = await ChatMessageManager.RequestStoreAsync();
-                            var msg = await store.GetMessageAsync(messageId);
-                            var dataPackage = new DataPackage();
+                            ChatMessageStore store = await ChatMessageManager.RequestStoreAsync();
+                            ChatMessage msg = await store.GetMessageAsync(messageId);
+                            DataPackage dataPackage = new();
                             dataPackage.SetText(msg.Body);
                             Clipboard.SetContent(dataPackage);
                         });
-                }
                 return _messageCopy;
             }
         }
@@ -113,19 +107,15 @@ namespace Chat.Controls
         {
             get
             {
-                if (_messageDetails == null)
-                {
-                    _messageDetails = new RelayCommand(
+                _messageDetails ??= new RelayCommand(
                         () =>
                         {
 
                         });
-                }
                 return _messageDetails;
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         private void UserControl_RightTapped(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e)
         {
             messageMenuFlyout.ShowAt(this, e.GetPosition(this));

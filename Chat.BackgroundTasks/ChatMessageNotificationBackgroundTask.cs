@@ -1,9 +1,7 @@
 ﻿using Chat.Common;
 using Microsoft.Toolkit.Uwp.Notifications;
 using System;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
 using Windows.ApplicationModel.Chat;
@@ -43,12 +41,12 @@ namespace Chat.BackgroundTasks
 
             StorageFile file = await storageFolder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
 
-            using (var srcStream = await stream.OpenReadAsync())
-            using (var targetStream = await file.OpenAsync(FileAccessMode.ReadWrite))
-            using (var reader = new DataReader(srcStream.GetInputStreamAt(0)))
+            using (IRandomAccessStreamWithContentType srcStream = await stream.OpenReadAsync())
+            using (IRandomAccessStream targetStream = await file.OpenAsync(FileAccessMode.ReadWrite))
+            using (DataReader reader = new DataReader(srcStream.GetInputStreamAt(0)))
             {
-                var output = targetStream.GetOutputStreamAt(0);
-                await reader.LoadAsync((uint)srcStream.Size);
+                IOutputStream output = targetStream.GetOutputStreamAt(0);
+                _ = await reader.LoadAsync((uint)srcStream.Size);
                 while (reader.UnconsumedBufferLength > 0)
                 {
                     uint dataToRead = reader.UnconsumedBufferLength > 64
@@ -56,10 +54,10 @@ namespace Chat.BackgroundTasks
                                         : reader.UnconsumedBufferLength;
 
                     IBuffer buffer = reader.ReadBuffer(dataToRead);
-                    await output.WriteAsync(buffer);
+                    _ = await output.WriteAsync(buffer);
                 }
 
-                await output.FlushAsync();
+                _ = await output.FlushAsync();
 
                 return file.Path;
             }
@@ -67,13 +65,13 @@ namespace Chat.BackgroundTasks
 
         private async Task DisplayToast(ChatMessage message)
         {
-            var information = await ContactUtils.FindContactInformationFromSender(message.From);
+            ContactUtils.ContactInformation information = await ContactUtils.FindContactInformationFromSender(message.From);
             string thumbnailpath = "";
             string text = "";
 
             string deviceid = SmsDevice2.GetDefault().DeviceId;
 
-            foreach (var attachment in message.Attachments)
+            foreach (ChatMessageAttachment attachment in message.Attachments)
             {
                 try
                 {
@@ -92,14 +90,14 @@ namespace Chat.BackgroundTasks
                     if (attachment.MimeType.StartsWith("image/"))
                     {
                         text += "Image content in this message. ";
-                        var imageextension = attachment.MimeType.Split('/').Last();
+                        string imageextension = attachment.MimeType.Split('/').Last();
                         thumbnailpath = await SaveFile(attachment.DataStreamReference, "messagepicture." + DateTimeOffset.Now.ToUnixTimeMilliseconds() + "." + imageextension);
                     }
 
                     if (attachment.MimeType.StartsWith("audio/"))
                     {
                         text += "Audio content in this message. ";
-                        var audioextension = attachment.MimeType.Split('/').Last();
+                        string audioextension = attachment.MimeType.Split('/').Last();
                     }
                 }
                 catch
@@ -108,7 +106,7 @@ namespace Chat.BackgroundTasks
                 }
             }
 
-            var toastContent = new ToastContent()
+            ToastContent toastContent = new ToastContent()
             {
                 Visual = new ToastVisual()
                 {
@@ -167,7 +165,7 @@ namespace Chat.BackgroundTasks
                 }
             };
 
-            var toastNotif = new ToastNotification(toastContent.GetXml());
+            ToastNotification toastNotif = new ToastNotification(toastContent.GetXml());
             ToastNotificationManager.CreateToastNotifier().Show(toastNotif);
         }
     }

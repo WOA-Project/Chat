@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.Chat;
 using Windows.ApplicationModel.Contacts;
 using Windows.ApplicationModel.Core;
-using Windows.Storage;
-using Windows.Storage.Streams;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
@@ -20,43 +18,43 @@ namespace Chat.ViewModels
         private DateTime _timeStamp;
         public DateTime TimeStamp
         {
-            get { return _timeStamp; }
-            set { Set(ref _timeStamp, value); }
+            get => _timeStamp;
+            set => Set(ref _timeStamp, value);
         }
 
         private Visibility _incomingVisibility;
         public Visibility IncomingVisibility
         {
-            get { return _incomingVisibility; }
-            set { Set(ref _incomingVisibility, value); }
+            get => _incomingVisibility;
+            set => Set(ref _incomingVisibility, value);
         }
 
         private string _messageBody;
         public string MessageBody
         {
-            get { return _messageBody; }
-            set { Set(ref _messageBody, value); }
+            get => _messageBody;
+            set => Set(ref _messageBody, value);
         }
 
         private Contact _contact;
         public Contact Contact
         {
-            get { return _contact; }
-            set { Set(ref _contact, value); }
+            get => _contact;
+            set => Set(ref _contact, value);
         }
 
         private HorizontalAlignment _alignment;
         public HorizontalAlignment Alignment
         {
-            get { return _alignment; }
-            set { Set(ref _alignment, value); }
+            get => _alignment;
+            set => Set(ref _alignment, value);
         }
 
         private ImageSource _image;
         public ImageSource Image
         {
-            get { return _image; }
-            set { Set(ref _image, value); }
+            get => _image;
+            set => Set(ref _image, value);
         }
 
         private ChatMessageStore _store;
@@ -74,22 +72,24 @@ namespace Chat.ViewModels
         public async void Initialize(string MessageId)
         {
             if (string.IsNullOrEmpty(MessageId))
+            {
                 return;
+            }
 
             _store = await ChatMessageManager.RequestStoreAsync();
             _messageid = MessageId;
 
-            var _tmpContact = await GetContactInformation();
-            (var _align, var _visi) = await GetMessageVisuals();
+            Contact _tmpContact = await GetContactInformation();
+            (HorizontalAlignment _align, Visibility _visi) = await GetMessageVisuals();
 
             (MessageBody, TimeStamp) = await GetMessageInfo();
             (Alignment, IncomingVisibility) = (_align, _visi);
 
             Contact = _tmpContact;
 
-            var message = await _store.GetMessageAsync(_messageid);
+            ChatMessage message = await _store.GetMessageAsync(_messageid);
 
-            foreach (var attachment in message.Attachments)
+            foreach (ChatMessageAttachment attachment in message.Attachments)
             {
                 try
                 {
@@ -100,25 +100,25 @@ namespace Chat.ViewModels
 
                     if (attachment.MimeType == "text/vcard")
                     {
-                        
+
                     }
 
                     if (attachment.MimeType.StartsWith("image/", StringComparison.InvariantCulture))
                     {
-                        var imageextension = attachment.MimeType.Split('/').Last();
-                        var img = new BitmapImage();
+                        string imageextension = attachment.MimeType.Split('/').Last();
+                        BitmapImage img = new();
                         await img.SetSourceAsync(await attachment.DataStreamReference.OpenReadAsync());
                         Image = img;
                     }
 
                     if (attachment.MimeType.StartsWith("audio/", StringComparison.InvariantCulture))
                     {
-                        var audioextension = attachment.MimeType.Split('/').Last();
+                        string audioextension = attachment.MimeType.Split('/').Last();
                     }
                 }
                 catch
                 {
-                    
+
                 }
             }
 
@@ -128,8 +128,14 @@ namespace Chat.ViewModels
 
         private void Subscribe(bool enabled)
         {
-            if (!enabled && mSubscribed) _store.StoreChanged -= Store_StoreChanged;
-            else if (enabled && !mSubscribed) _store.StoreChanged += Store_StoreChanged;
+            if (!enabled && mSubscribed)
+            {
+                _store.StoreChanged -= Store_StoreChanged;
+            }
+            else if (enabled && !mSubscribed)
+            {
+                _store.StoreChanged += Store_StoreChanged;
+            }
 
             mSubscribed = enabled;
         }
@@ -142,32 +148,31 @@ namespace Chat.ViewModels
         // Methods
         private async Task<Contact> GetContactInformation()
         {
-            var msg = await _store.GetMessageAsync(_messageid);
+            ChatMessage msg = await _store.GetMessageAsync(_messageid);
 
-            if (!msg.IsIncoming)
-                return await ContactUtils.GetMyself();
-
-            return await ContactUtils.BindPhoneNumberToGlobalContact(msg.From);
+            return !msg.IsIncoming ? await ContactUtils.GetMyself() : await ContactUtils.BindPhoneNumberToGlobalContact(msg.From);
         }
 
         private async Task<(HorizontalAlignment, Visibility)> GetMessageVisuals()
         {
-            var msg = await _store.GetMessageAsync(_messageid);
-            var align = msg.IsIncoming ? HorizontalAlignment.Left : HorizontalAlignment.Right;
-            var visi = msg.IsIncoming ? Visibility.Collapsed : Visibility.Visible;
+            ChatMessage msg = await _store.GetMessageAsync(_messageid);
+            HorizontalAlignment align = msg.IsIncoming ? HorizontalAlignment.Left : HorizontalAlignment.Right;
+            Visibility visi = msg.IsIncoming ? Visibility.Collapsed : Visibility.Visible;
             return (align, visi);
         }
 
         private async Task<(string, DateTime)> GetMessageInfo()
         {
-            var msg = await _store.GetMessageAsync(_messageid);
+            ChatMessage msg = await _store.GetMessageAsync(_messageid);
             return (msg.Body, msg.LocalTimestamp.LocalDateTime);
         }
 
         private async void Store_StoreChanged(ChatMessageStore sender, ChatMessageStoreChangedEventArgs args)
         {
             if (args.Id != _messageid)
+            {
                 return;
+            }
 
             switch (args.Kind)
             {
@@ -183,7 +188,7 @@ namespace Chat.ViewModels
                     }
                 case ChatStoreChangedEventKind.MessageModified:
                     {
-                        (var body, var ts) = await GetMessageInfo();
+                        (string body, DateTime ts) = await GetMessageInfo();
 
                         await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
                         () =>

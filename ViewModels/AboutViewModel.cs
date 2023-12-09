@@ -9,15 +9,15 @@ namespace Chat.ViewModels
         private string _appName;
         public string AppName
         {
-            get { return _appName; }
-            set { Set(ref _appName, value); }
+            get => _appName;
+            set => Set(ref _appName, value);
         }
 
         private string _versionNumber;
         public string VersionNumber
         {
-            get { return _versionNumber; }
-            set { Set(ref _versionNumber, value); }
+            get => _versionNumber;
+            set => Set(ref _versionNumber, value);
         }
 
 
@@ -38,7 +38,7 @@ namespace Chat.ViewModels
         // Methods
         private static string GetAppName()
         {
-            var package = Package.Current;
+            Package package = Package.Current;
             string appName = package.DisplayName;
 
             return appName;
@@ -46,9 +46,9 @@ namespace Chat.ViewModels
 
         private static string GetVersionNumber()
         {
-            var package = Package.Current;
-            var packageId = package.Id;
-            var version = packageId.Version;
+            Package package = Package.Current;
+            PackageId packageId = package.Id;
+            PackageVersion version = packageId.Version;
 
             return $"{version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
         }

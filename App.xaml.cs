@@ -1,19 +1,19 @@
 ﻿using Chat.ContentDialogs;
+using System;
+using System.Globalization;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
-using System;
-using System.Globalization;
 
 namespace Chat
 {
-    sealed partial class App : Application
+    public sealed partial class App : Application
     {
         public App()
         {
-            this.InitializeComponent();
-            this.Suspending += OnSuspending;
-            this.UnhandledException += App_UnhandledException;
+            InitializeComponent();
+            Suspending += OnSuspending;
+            UnhandledException += App_UnhandledException;
         }
 
         private async void App_UnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs e)
@@ -21,18 +21,20 @@ namespace Chat
             e.Handled = true;
             string ExceptionDesc = e.Exception.Message + "\nHRESULT: 0x" + e.Exception.HResult.ToString("X4", new CultureInfo("en-US")) + "\n" + e.Exception.StackTrace + "\n" + e.Exception.Source;
             if (e.Exception.InnerException != null)
+            {
                 ExceptionDesc += "\n\n" + e.Exception.InnerException.Message + "\nHRESULT: 0x" + e.Exception.InnerException.HResult.ToString("X4", new CultureInfo("en-US")) + "\n" + e.Exception.InnerException.StackTrace + "\n" + e.Exception.InnerException.Source;
-            else 
+            }
+            else
+            {
                 ExceptionDesc += "\n\nNo inner exception was thrown";
+            }
 
-            await new UnhandledExceptionContentDialog(ExceptionDesc).ShowAsync();
+            _ = await new UnhandledExceptionContentDialog(ExceptionDesc).ShowAsync();
         }
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            Shell rootShell = Window.Current.Content as Shell;
-
-            if (rootShell == null)
+            if (Window.Current.Content is not Shell rootShell)
             {
                 rootShell = new Shell();
 
@@ -42,7 +44,9 @@ namespace Chat
                 }
 
                 if (e != null)
+                {
                     rootShell.HandleArguments(e);
+                }
 
                 Window.Current.Content = rootShell;
             }
@@ -56,10 +60,9 @@ namespace Chat
 
         protected override void OnActivated(IActivatedEventArgs e)
         {
-            if (e != null && e.Kind == ActivationKind.Protocol || e != null && e.Kind == ActivationKind.ToastNotification)
+            if ((e != null && e.Kind == ActivationKind.Protocol) || (e != null && e.Kind == ActivationKind.ToastNotification))
             {
-                Shell rootShell = Window.Current.Content as Shell;
-                if (rootShell == null)
+                if (Window.Current.Content is not Shell rootShell)
                 {
                     rootShell = new Shell();
 
@@ -79,7 +82,7 @@ namespace Chat
 
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
-            var deferral = e.SuspendingOperation.GetDeferral();
+            SuspendingDeferral deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
             deferral.Complete();
         }

@@ -1,5 +1,5 @@
 ﻿using Chat.ViewModels;
-using GalaSoft.MvvmLight.Command;
+using CommunityToolkit.Mvvm.Input;
 using System.Windows.Input;
 using Windows.UI.Xaml.Controls;
 
@@ -13,7 +13,7 @@ namespace Chat.ContentDialogs
 
         public AboutContentDialog()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         private ICommand _closeDialogCommand;
@@ -21,14 +21,8 @@ namespace Chat.ContentDialogs
         {
             get
             {
-                if (_closeDialogCommand == null)
-                {
-                    _closeDialogCommand = new RelayCommand(
-                        () =>
-                        {
-                            Hide();
-                        });
-                }
+                _closeDialogCommand ??= new RelayCommand(
+                        Hide);
                 return _closeDialogCommand;
             }
         }

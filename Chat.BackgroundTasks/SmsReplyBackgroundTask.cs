@@ -29,7 +29,7 @@ namespace Chat.BackgroundTasks
 
                     }
 
-                    var details = taskInstance.TriggerDetails as ToastNotificationActionTriggerDetail;
+                    ToastNotificationActionTriggerDetail details = taskInstance.TriggerDetails as ToastNotificationActionTriggerDetail;
 
                     string arguments = details.Argument;
 
@@ -45,7 +45,7 @@ namespace Chat.BackgroundTasks
                                 {
                                     string messagetosend = (string)details.UserInput["textBox"];
                                     SmsDevice2 smsDevice = SmsDevice2.FromId(deviceid);
-                                    await SmsUtils.SendTextMessageAsync(smsDevice, from, messagetosend);
+                                    _ = await SmsUtils.SendTextMessageAsync(smsDevice, from, messagetosend);
                                 }
                                 catch
                                 {

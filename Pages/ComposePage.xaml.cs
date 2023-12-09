@@ -1,8 +1,7 @@
 ﻿using Chat.Common;
 using Chat.Controls;
-using Chat.Helpers;
 using Chat.ViewModels;
-using GalaSoft.MvvmLight.Command;
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,13 +21,13 @@ namespace Chat.Pages
 
         public ComposePage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             Loaded += ComposePage_Loaded;
         }
 
         private void ComposePage_Loaded(object sender, RoutedEventArgs e)
         {
-            ContactPickerBox.Focus(FocusState.Pointer);
+            _ = ContactPickerBox.Focus(FocusState.Pointer);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -37,36 +36,34 @@ namespace Chat.Pages
 
             if (e != null)
             {
-                var args = e.Parameter as Contact;
-                if (args != null)
+                if (e.Parameter is Contact args)
                 {
                     ContactPickerBox.Text = args.DisplayName;
                 }
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         private async void ContactPickerBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
-            var store = await ContactManager.RequestStoreAsync();
-            List<ContactPhoneViewControl> contactControls = new List<ContactPhoneViewControl>();
+            ContactStore store = await ContactManager.RequestStoreAsync();
+            List<ContactPhoneViewControl> contactControls = [];
 
             try
             {
                 if (!sender.Text.Contains(";", StringComparison.InvariantCulture))
                 {
-                    var contacts = await store.FindContactsAsync(sender.Text);
+                    IReadOnlyList<Contact> contacts = await store.FindContactsAsync(sender.Text);
 
                     if (contacts != null)
                     {
-                        var phonecontacts = contacts.Where(x => x.Phones.Count != 0);
+                        IEnumerable<Contact> phonecontacts = contacts.Where(x => x.Phones.Count != 0);
                         if (phonecontacts != null)
                         {
-                            foreach (var phonecontact in phonecontacts)
+                            foreach (Contact phonecontact in phonecontacts)
                             {
-                                foreach (var phone in phonecontact.Phones)
+                                foreach (ContactPhone phone in phonecontact.Phones)
                                 {
-                                    var control = new ContactPhoneViewControl(phone, phonecontact);
+                                    ContactPhoneViewControl control = new(phone, phonecontact);
                                     contactControls.Add(control);
                                 }
                             }
@@ -86,30 +83,35 @@ namespace Chat.Pages
         {
             if (args.ChosenSuggestion == null)
             {
-                var picker = new ContactPicker();
-                picker.CommitButtonText = "Select";
-                picker.SelectionMode = ContactSelectionMode.Fields;
+                ContactPicker picker = new()
+                {
+                    CommitButtonText = "Select",
+                    SelectionMode = ContactSelectionMode.Fields
+                };
                 picker.DesiredFieldsWithContactFieldType.Add(ContactFieldType.PhoneNumber);
 
-                var result = await picker.PickContactAsync();
+                Contact result = await picker.PickContactAsync();
                 if (result != null)
                 {
                     if (string.IsNullOrEmpty(ContactPickerBox.Text))
+                    {
                         ContactPickerBox.Text = result.Phones.First().Number;
+                    }
                     else
+                    {
                         ContactPickerBox.Text += "; " + result.Phones.First().Number;
-                    ContactPickerBox.Focus(FocusState.Pointer);
+                    }
+
+                    _ = ContactPickerBox.Focus(FocusState.Pointer);
                 }
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         private void ContactPickerBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {
             ContactPickerBox.Text = (args.SelectedItem as ContactPhoneViewControl).contactPhone.Number;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         private void CellularLineComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (CellularLineComboBox.SelectedItem != null)
@@ -118,7 +120,6 @@ namespace Chat.Pages
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         private void ComposeTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (CellularLineComboBox.SelectedItem != null)
@@ -132,14 +133,11 @@ namespace Chat.Pages
         {
             get
             {
-                if (_showAttachments == null)
-                {
-                    _showAttachments = new RelayCommand(
+                _showAttachments ??= new RelayCommand(
                         () =>
                         {
-                            FlyoutBase.ShowAttachedFlyout((FrameworkElement)AttachmentButton);
+                            FlyoutBase.ShowAttachedFlyout(AttachmentButton);
                         });
-                }
                 return _showAttachments;
             }
         }
@@ -150,31 +148,30 @@ namespace Chat.Pages
         {
             get
             {
-                if (_sendReply == null)
-                {
-                    _sendReply = new RelayCommand(
+                _sendReply ??= new RelayCommand(
                         async () =>
                         {
                             SendButton.IsEnabled = false;
                             ComposeTextBox.IsEnabled = false;
-                            var smsDevice = ViewModel.SelectedLine.device;
+                            Windows.Devices.Sms.SmsDevice2 smsDevice = ViewModel.SelectedLine.device;
 
                             try
                             {
-                                var result = await SmsUtils.SendTextMessageAsync(smsDevice, ContactPickerBox.Text.Split(';'), ComposeTextBox.Text);
+                                bool result = await SmsUtils.SendTextMessageAsync(smsDevice, ContactPickerBox.Text.Split(';'), ComposeTextBox.Text);
                                 if (!result)
-                                    await new MessageDialog("We could not send one or some messages.", "Something went wrong").ShowAsync();
+                                {
+                                    _ = await new MessageDialog("We could not send one or some messages.", "Something went wrong").ShowAsync();
+                                }
                             }
                             catch (Exception ex)
                             {
-                                await new MessageDialog($"We could not send one or some messages.\n{ex}", "Something went wrong").ShowAsync();
+                                _ = await new MessageDialog($"We could not send one or some messages.\n{ex}", "Something went wrong").ShowAsync();
                             }
 
                             SendButton.IsEnabled = true;
                             ComposeTextBox.IsEnabled = true;
                             ComposeTextBox.Text = "";
                         });
-                }
                 return _sendReply;
             }
         }

@@ -1,8 +1,7 @@
 ﻿using Chat.Common;
 using Chat.Controls;
-using Chat.Helpers;
 using Chat.ViewModels;
-using GalaSoft.MvvmLight.Command;
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Linq;
 using System.Windows.Input;
@@ -24,7 +23,7 @@ namespace Chat.Pages
 
         public ConversationPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
             MessageListView.Loaded += MessageListView_Loaded;
             MessageListView.SizeChanged += MessageListView_SizeChanged;
@@ -32,9 +31,9 @@ namespace Chat.Pages
 
         private void MessageListView_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            foreach (var item in MessageListView.Items)
+            foreach (object item in MessageListView.Items)
             {
-                var control = item as ChatMessageViewControl;
+                ChatMessageViewControl control = item as ChatMessageViewControl;
                 control.RefreshVisuals();
             }
         }
@@ -48,14 +47,13 @@ namespace Chat.Pages
 
         private void ScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
         {
-            foreach (var item in MessageListView.Items)
+            foreach (object item in MessageListView.Items)
             {
-                var control = item as ChatMessageViewControl;
+                ChatMessageViewControl control = item as ChatMessageViewControl;
                 control.RefreshVisuals();
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         private void CellularLineComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (CellularLineComboBox.SelectedItem != null)
@@ -64,7 +62,6 @@ namespace Chat.Pages
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         private void ComposeTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (CellularLineComboBox.SelectedItem != null)
@@ -78,14 +75,11 @@ namespace Chat.Pages
         {
             get
             {
-                if (_showAttachments == null)
-                {
-                    _showAttachments = new RelayCommand(
+                _showAttachments ??= new RelayCommand(
                         () =>
                         {
-                            FlyoutBase.ShowAttachedFlyout((FrameworkElement)AttachmentButton);
+                            FlyoutBase.ShowAttachedFlyout(AttachmentButton);
                         });
-                }
                 return _showAttachments;
             }
         }
@@ -95,15 +89,12 @@ namespace Chat.Pages
         {
             get
             {
-                if (_startCall == null)
-                {
-                    _startCall = new RelayCommand(
+                _startCall ??= new RelayCommand(
                         async () =>
                         {
-                            var store = await ChatMessageManager.RequestStoreAsync();
-                            await Launcher.LaunchUriAsync(new Uri("tel:" + (await store.GetConversationAsync(ConversationId)).Participants.First()));
+                            ChatMessageStore store = await ChatMessageManager.RequestStoreAsync();
+                            _ = await Launcher.LaunchUriAsync(new Uri("tel:" + (await store.GetConversationAsync(ConversationId)).Participants.First()));
                         });
-                }
                 return _startCall;
             }
         }
@@ -113,32 +104,31 @@ namespace Chat.Pages
         {
             get
             {
-                if (_sendReply == null)
-                {
-                    _sendReply = new RelayCommand(
+                _sendReply ??= new RelayCommand(
                         async () =>
                         {
                             SendButton.IsEnabled = false;
                             ComposeTextBox.IsEnabled = false;
-                            var smsDevice = ViewModel.SelectedLine.device;
+                            Windows.Devices.Sms.SmsDevice2 smsDevice = ViewModel.SelectedLine.device;
 
                             try
                             {
-                                var store = await ChatMessageManager.RequestStoreAsync();
-                                var result = await SmsUtils.SendTextMessageAsync(smsDevice, (await store.GetConversationAsync(ConversationId)).Participants.First(), ComposeTextBox.Text);
+                                ChatMessageStore store = await ChatMessageManager.RequestStoreAsync();
+                                bool result = await SmsUtils.SendTextMessageAsync(smsDevice, (await store.GetConversationAsync(ConversationId)).Participants.First(), ComposeTextBox.Text);
                                 if (!result)
-                                    await new MessageDialog("We could not send one or some messages.", "Something went wrong").ShowAsync();
+                                {
+                                    _ = await new MessageDialog("We could not send one or some messages.", "Something went wrong").ShowAsync();
+                                }
                             }
                             catch (Exception ex)
                             {
-                                await new MessageDialog($"We could not send one or some messages.\n{ex}", "Something went wrong").ShowAsync();
+                                _ = await new MessageDialog($"We could not send one or some messages.\n{ex}", "Something went wrong").ShowAsync();
                             }
 
                             SendButton.IsEnabled = true;
                             ComposeTextBox.IsEnabled = true;
                             ComposeTextBox.Text = "";
                         });
-                }
                 return _sendReply;
             }
         }
@@ -149,8 +139,7 @@ namespace Chat.Pages
 
             if (e != null)
             {
-                var args = e.Parameter as string;
-                if (args != null)
+                if (e.Parameter is string args)
                 {
                     ConversationId = args;
                     ViewModel.Initialize(ConversationId);

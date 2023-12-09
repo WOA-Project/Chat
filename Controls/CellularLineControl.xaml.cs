@@ -12,11 +12,14 @@ namespace Chat.Controls
 {
     public sealed partial class CellularLineControl : ComboBoxItem
     {
-        public SmsDevice2 device { get; internal set; }
+        public SmsDevice2 device
+        {
+            get; internal set;
+        }
 
         public CellularLineControl(SmsDevice2 device)
         {
-            this.InitializeComponent();
+            InitializeComponent();
             this.device = device;
 
             Load();
@@ -29,14 +32,16 @@ namespace Chat.Controls
             if (device != null)
             {
                 if (device.AccountPhoneNumber != null)
+                {
                     displayname = device.AccountPhoneNumber;
+                }
 
                 switch (device.DeviceStatus)
                 {
                     case SmsDeviceStatus.DeviceBlocked:
                         {
                             StatusIcon.Text = "";
-                            var pad = StatusIcon.Padding;
+                            Windows.UI.Xaml.Thickness pad = StatusIcon.Padding;
                             pad.Top = 0;
                             StatusIcon.Padding = pad;
                             break;
@@ -44,7 +49,7 @@ namespace Chat.Controls
                     case SmsDeviceStatus.DeviceFailure:
                         {
                             StatusIcon.Text = "";
-                            var pad = StatusIcon.Padding;
+                            Windows.UI.Xaml.Thickness pad = StatusIcon.Padding;
                             pad.Top = 0;
                             StatusIcon.Padding = pad;
                             break;
@@ -57,7 +62,7 @@ namespace Chat.Controls
                     case SmsDeviceStatus.Off:
                         {
                             StatusIcon.Text = "";
-                            var pad = StatusIcon.Padding;
+                            Windows.UI.Xaml.Thickness pad = StatusIcon.Padding;
                             pad.Top = 0;
                             StatusIcon.Padding = pad;
                             break;
@@ -65,7 +70,7 @@ namespace Chat.Controls
                     case SmsDeviceStatus.Ready:
                         {
                             StatusIcon.Text = "";
-                            var pad = StatusIcon.Padding;
+                            Windows.UI.Xaml.Thickness pad = StatusIcon.Padding;
                             pad.Top = 0;
                             StatusIcon.Padding = pad;
                             break;
@@ -85,7 +90,7 @@ namespace Chat.Controls
                 string selectorStr = MobileBroadbandModem.GetDeviceSelector();
                 DeviceInformationCollection devices = await DeviceInformation.FindAllAsync(selectorStr);
 
-                foreach (var mdevice in devices)
+                foreach (DeviceInformation mdevice in devices)
                 {
                     MobileBroadbandModem modem = MobileBroadbandModem.FromId(mdevice.Id);
                     if (modem.DeviceInformation.TelephoneNumbers.Count > 0)
@@ -97,10 +102,10 @@ namespace Chat.Controls
                             // from https://github.com/ADeltaX/MobileShell/blob/experiments/src/App.xaml.cs
                             PhoneCallStore store = await PhoneCallManager.RequestStoreAsync();
                             PhoneLineWatcher watcher = store.RequestLineWatcher();
-                            List<PhoneLine> phoneLines = new List<PhoneLine>();
-                            TaskCompletionSource<bool> lineEnumerationCompletion = new TaskCompletionSource<bool>();
+                            List<PhoneLine> phoneLines = [];
+                            TaskCompletionSource<bool> lineEnumerationCompletion = new();
 
-                            watcher.LineAdded += async (o, args) => { var line = await PhoneLine.FromIdAsync(args.LineId); phoneLines.Add(line); };
+                            watcher.LineAdded += async (o, args) => { PhoneLine line = await PhoneLine.FromIdAsync(args.LineId); phoneLines.Add(line); };
                             watcher.Stopped += (o, args) => lineEnumerationCompletion.TrySetResult(false);
                             watcher.EnumerationCompleted += (o, args) => lineEnumerationCompletion.TrySetResult(true);
 
@@ -110,15 +115,19 @@ namespace Chat.Controls
                             {
                                 watcher.Stop();
 
-                                List<PhoneLine> returnedLines = new List<PhoneLine>();
+                                List<PhoneLine> returnedLines = [];
 
                                 foreach (PhoneLine phoneLine in phoneLines)
+                                {
                                     if (phoneLine != null && phoneLine.Transport == PhoneLineTransport.Cellular)
+                                    {
                                         returnedLines.Add(phoneLine);
+                                    }
+                                }
 
                                 if (returnedLines.Any(x => x.NetworkName == modem.CurrentNetwork.RegisteredProviderName))
                                 {
-                                    var line = returnedLines.First(x => x.NetworkName == modem.CurrentNetwork.RegisteredProviderName);
+                                    PhoneLine line = returnedLines.First(x => x.NetworkName == modem.CurrentNetwork.RegisteredProviderName);
                                     displayname += " (SIM " + (line.CellularDetails.SimSlotIndex + 1) + ")";
                                 }
                             }

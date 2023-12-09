@@ -6,9 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Contacts;
 using Windows.Devices.Sms;
+using Windows.Globalization.PhoneNumberFormatting;
 using Windows.Storage;
 using Windows.Storage.Streams;
-using Windows.Globalization.PhoneNumberFormatting;
 
 namespace Chat.Common
 {
@@ -16,20 +16,31 @@ namespace Chat.Common
     {
         public class ContactInformation
         {
-            public string DisplayName { get; set; }
-            public string ThumbnailPath { get; set; }
-            public string PhoneNumberKind { get; set; }
+            public string DisplayName
+            {
+                get; set;
+            }
+            public string ThumbnailPath
+            {
+                get; set;
+            }
+            public string PhoneNumberKind
+            {
+                get; set;
+            }
         }
 
         public static async Task<Contact> GetMyself()
         {
-            var store = await ContactManager.RequestStoreAsync();
+            ContactStore store = await ContactManager.RequestStoreAsync();
             if (store != null)
             {
-                var contact = await store.GetMeContactAsync();
+                Contact contact = await store.GetMeContactAsync();
 
                 if (contact != null)
+                {
                     return contact;
+                }
             }
 
             Contact blankcontact = new Contact();
@@ -39,8 +50,14 @@ namespace Chat.Common
 
         private class PhoneNumberInfo2
         {
-            public string Number { get; set; }
-            public string CountryCode { get; set; }
+            public string Number
+            {
+                get; set;
+            }
+            public string CountryCode
+            {
+                get; set;
+            }
         }
 
         private static PhoneNumberInfo2 GetPhoneNumberInformation(string phonenumber)
@@ -52,8 +69,8 @@ namespace Chat.Common
             var supportedCodes = phoneUtil.GetSupportedRegions().ToArray();
             var result = phoneUtil.TryGetValidNumber(phonenumber, supportedCodes, out number);*/
 
-            var countrycode = "";
-            var nationalnumber = phonenumber;
+            string countrycode = "";
+            string nationalnumber = phonenumber;
 
             /*if (result)
             {
@@ -69,25 +86,27 @@ namespace Chat.Common
 
         public static bool ArePhoneNumbersMostLikelyTheSame(string num1, string num2)
         {
-            var formatter = new PhoneNumberFormatter();
+            PhoneNumberFormatter formatter = new PhoneNumberFormatter();
 
-            var fnum1 = formatter.FormatPartialString(num1);
-            var fnum2 = formatter.FormatPartialString(num2);
+            string fnum1 = formatter.FormatPartialString(num1);
+            string fnum2 = formatter.FormatPartialString(num2);
 
             if (fnum1 == fnum2)
+            {
                 return true;
+            }
 
-            var inum1 = new PhoneNumberInfo(fnum1);
-            var inum2 = new PhoneNumberInfo(fnum2);
+            PhoneNumberInfo inum1 = new PhoneNumberInfo(fnum1);
+            PhoneNumberInfo inum2 = new PhoneNumberInfo(fnum2);
 
-            var match = inum1.CheckNumberMatch(inum2);
+            PhoneNumberMatchResult match = inum1.CheckNumberMatch(inum2);
 
             if (match == PhoneNumberMatchResult.ExactMatch || match == PhoneNumberMatchResult.NationalSignificantNumberMatch || match == PhoneNumberMatchResult.ShortNationalSignificantNumberMatch)
             {
                 return true;
             }
 
-            var info = GetPhoneNumberInformation(num1);
+            PhoneNumberInfo2 info = GetPhoneNumberInformation(num1);
 
             string number = info.Number;
             string countrycode = info.CountryCode;
@@ -95,11 +114,13 @@ namespace Chat.Common
             if (string.IsNullOrEmpty(countrycode))
             {
                 if (num2.ToLower().Replace(" ", "").Replace("(", "").Replace(")", "") == number.ToLower().Replace(" ", "").Replace("(", "").Replace(")", ""))
+                {
                     return true;
+                }
             }
             else
             {
-                var info2 = GetPhoneNumberInformation(num1);
+                PhoneNumberInfo2 info2 = GetPhoneNumberInformation(num1);
 
                 string number2 = info2.Number;
                 string countrycode2 = info2.CountryCode;
@@ -111,7 +132,9 @@ namespace Chat.Common
                 else if (string.IsNullOrEmpty(countrycode2))
                 {
                     if (num2.Replace(" ", "").Replace("(", "").Replace(")", "") == number.ToLower().Replace(" ", "").Replace("(", "").Replace(")", ""))
+                    {
                         return true;
+                    }
                 }
                 else if (number == number2)
                 {
@@ -125,17 +148,19 @@ namespace Chat.Common
         {
             try
             {
-                var store = await ContactManager.RequestStoreAsync();
+                ContactStore store = await ContactManager.RequestStoreAsync();
                 if (store != null)
                 {
-                    var contacts = await store.FindContactsAsync();
+                    IReadOnlyList<Contact> contacts = await store.FindContactsAsync();
 
-                    foreach (var contact in contacts)
+                    foreach (Contact contact in contacts)
                     {
-                        foreach (var num in contact.Phones)
+                        foreach (ContactPhone num in contact.Phones)
                         {
                             if (ArePhoneNumbersMostLikelyTheSame(phonenumber, num.Number))
+                            {
                                 return contact;
+                            }
                         }
                     }
                 }
@@ -150,7 +175,7 @@ namespace Chat.Common
             return blankcontact;
         }
 
-        public async static Task<ContactInformation> FindContactInformationFromSmsMessage(ISmsMessageBase message)
+        public static async Task<ContactInformation> FindContactInformationFromSmsMessage(ISmsMessageBase message)
         {
             string from = "";
 
@@ -189,13 +214,13 @@ namespace Chat.Common
             return await FindContactInformationFromSender(from);
         }
 
-        public async static Task<ContactInformation> FindContactInformationFromSender(string from)
+        public static async Task<ContactInformation> FindContactInformationFromSender(string from)
         {
             ContactInformation info = new ContactInformation() { DisplayName = from, PhoneNumberKind = "Unknown", ThumbnailPath = "" };
 
             try
             {
-                var contact = await BindPhoneNumberToGlobalContact(from);
+                Contact contact = await BindPhoneNumberToGlobalContact(from);
                 info.DisplayName = contact.DisplayName;
 
                 try
@@ -211,12 +236,12 @@ namespace Chat.Common
 
                 StorageFile file = await storageFolder.CreateFileAsync(contact.Id + ".png", CreationCollisionOption.ReplaceExisting);
 
-                using (var srcStream = await contact.SmallDisplayPicture.OpenReadAsync())
-                using (var targetStream = await file.OpenAsync(FileAccessMode.ReadWrite))
-                using (var reader = new DataReader(srcStream.GetInputStreamAt(0)))
+                using (IRandomAccessStreamWithContentType srcStream = await contact.SmallDisplayPicture.OpenReadAsync())
+                using (IRandomAccessStream targetStream = await file.OpenAsync(FileAccessMode.ReadWrite))
+                using (DataReader reader = new DataReader(srcStream.GetInputStreamAt(0)))
                 {
-                    var output = targetStream.GetOutputStreamAt(0);
-                    await reader.LoadAsync((uint)srcStream.Size);
+                    IOutputStream output = targetStream.GetOutputStreamAt(0);
+                    _ = await reader.LoadAsync((uint)srcStream.Size);
                     while (reader.UnconsumedBufferLength > 0)
                     {
                         uint dataToRead = reader.UnconsumedBufferLength > 64
@@ -224,10 +249,10 @@ namespace Chat.Common
                                             : reader.UnconsumedBufferLength;
 
                         IBuffer buffer = reader.ReadBuffer(dataToRead);
-                        await output.WriteAsync(buffer);
+                        _ = await output.WriteAsync(buffer);
                     }
 
-                    await output.FlushAsync();
+                    _ = await output.FlushAsync();
 
                     info.ThumbnailPath = file.Path;
                 }
@@ -240,38 +265,37 @@ namespace Chat.Common
             return info;
         }
 
-        public async static void AssignAppToPhoneContacts()
+        public static async void AssignAppToPhoneContacts()
         {
             try
             {
-                var store = await ContactManager.RequestStoreAsync();
+                ContactStore store = await ContactManager.RequestStoreAsync();
 
-                var contacts = await store.FindContactsAsync();
+                IReadOnlyList<Contact> contacts = await store.FindContactsAsync();
 
                 if (contacts != null)
                 {
-                    var phonecontacts = contacts.Where(x => x.Phones.Count != 0);
+                    IEnumerable<Contact> phonecontacts = contacts.Where(x => x.Phones.Count != 0);
                     if (phonecontacts != null)
                     {
-                        foreach (var phonecontact in phonecontacts)
+                        foreach (Contact phonecontact in phonecontacts)
                         {
                             ContactAnnotationStore annotationStore = await ContactManager.RequestAnnotationStoreAsync(ContactAnnotationStoreAccessType.AppAnnotationsReadWrite);
 
                             ContactAnnotationList annotationList;
 
                             IReadOnlyList<ContactAnnotationList> annotationLists = await annotationStore.FindAnnotationListsAsync();
-                            if (0 == annotationLists.Count)
-                                annotationList = await annotationStore.CreateAnnotationListAsync();
-                            else
-                                annotationList = annotationLists[0];
+                            annotationList = 0 == annotationLists.Count ? await annotationStore.CreateAnnotationListAsync() : annotationLists[0];
 
-                            ContactAnnotation annotation = new ContactAnnotation();
-                            annotation.ContactId = phonecontact.Id;
-                            annotation.RemoteId = phonecontact.Id;
+                            ContactAnnotation annotation = new ContactAnnotation
+                            {
+                                ContactId = phonecontact.Id,
+                                RemoteId = phonecontact.Id,
 
-                            annotation.SupportedOperations = ContactAnnotationOperations.Message;
+                                SupportedOperations = ContactAnnotationOperations.Message
+                            };
 
-                            await annotationList.TrySaveAnnotationAsync(annotation);
+                            _ = await annotationList.TrySaveAnnotationAsync(annotation);
                         }
                     }
                 }

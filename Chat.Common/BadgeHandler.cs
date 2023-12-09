@@ -1,8 +1,4 @@
-﻿using Windows.Data.Xml.Dom;
-using Windows.Storage;
-using Windows.UI.Notifications;
-
-namespace Chat.Common
+﻿namespace Chat.Common
 {
     public class BadgeHandler
     {

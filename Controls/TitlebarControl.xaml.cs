@@ -75,10 +75,13 @@ namespace Chat.Controls
             BackButtonClick?.Invoke(this, e);
         }
 
-        public async void RefreshColor()
+        public void RefreshColor()
         {
             ApplicationViewTitleBar titlebar = ApplicationView.GetForCurrentView().TitleBar;
-            SolidColorBrush transparentColorBrush = new() { Opacity = 0 };
+            SolidColorBrush transparentColorBrush = new()
+            {
+                Opacity = 0
+            };
             Color transparentColor = transparentColorBrush.Color;
 
             titlebar.BackgroundColor = transparentColor;
@@ -198,7 +201,7 @@ namespace Chat.Controls
 
         private void AttachDebuggerButton_Click(object sender, RoutedEventArgs e)
         {
-            Debugger.Launch();
+            _ = Debugger.Launch();
 
             if (Debugger.IsAttached)
             {

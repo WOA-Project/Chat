@@ -7,17 +7,17 @@ namespace Chat.Common
 {
     public class SmsUtils
     {
-        public async static Task<bool> SendTextMessageAsync(SmsDevice2 device, string[] numbers, string textmessage, string transportId = "0")
+        public static async Task<bool> SendTextMessageAsync(SmsDevice2 device, string[] numbers, string textmessage, string transportId = "0")
         {
             bool returnresult = true;
             ChatMessageStore store = await ChatMessageManager.RequestStoreAsync();
 
             if (string.IsNullOrEmpty(transportId) || await ChatMessageManager.GetTransportAsync(transportId) == null)
             {
-                var transports = await ChatMessageManager.GetTransportsAsync();
+                System.Collections.Generic.IReadOnlyList<ChatMessageTransport> transports = await ChatMessageManager.GetTransportsAsync();
                 if (transports.Count != 0)
                 {
-                    var transport = transports[0];
+                    ChatMessageTransport transport = transports[0];
                     transportId = transport.TransportId;
                 }
                 else
@@ -27,26 +27,29 @@ namespace Chat.Common
             }
             try
             {
-                SmsTextMessage2 message = new SmsTextMessage2();
-                message.Body = textmessage;
-
-                foreach (var number in numbers)
+                SmsTextMessage2 message = new SmsTextMessage2
                 {
-                    var num = number.Trim();
+                    Body = textmessage
+                };
+
+                foreach (string number in numbers)
+                {
+                    string num = number.Trim();
                     message.To = num;
 
                     try
                     {
                         SmsSendMessageResult result = await device.SendMessageAndGetResultAsync(message);
-                        var offset = new DateTimeOffset(DateTime.Now);
+                        DateTimeOffset offset = new DateTimeOffset(DateTime.Now);
 
                         returnresult &= result.IsSuccessful;
 
                         try
                         {
-                            ChatMessage msg = new ChatMessage();
-
-                            msg.Body = textmessage;
+                            ChatMessage msg = new ChatMessage
+                            {
+                                Body = textmessage
+                            };
                             msg.Recipients.Add(num);
 
                             msg.LocalTimestamp = offset;
@@ -79,7 +82,7 @@ namespace Chat.Common
             return returnresult;
         }
 
-        public async static Task<bool> SendTextMessageAsync(SmsDevice2 device, string number, string textmessage, string transportId = "0")
+        public static async Task<bool> SendTextMessageAsync(SmsDevice2 device, string number, string textmessage, string transportId = "0")
         {
             return await SendTextMessageAsync(device, new string[1] { number }, textmessage, transportId);
         }

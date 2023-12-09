@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Windows.ApplicationModel.Background;
-using Windows.ApplicationModel.Chat;
 using Windows.Devices.Sms;
-using System;
 
 namespace Chat.BackgroundTasks
 {
@@ -107,7 +106,7 @@ namespace Chat.BackgroundTasks
 
             if (BackgroundTaskRegistration.AllTasks.Any(i => i.Value.Name.Equals(taskName)))
             {
-                var task = BackgroundTaskRegistration.AllTasks.First(i => i.Value.Name.Equals(taskName));
+                KeyValuePair<Guid, IBackgroundTaskRegistration> task = BackgroundTaskRegistration.AllTasks.First(i => i.Value.Name.Equals(taskName));
                 task.Value.Unregister(true);
             }
         }
@@ -117,16 +116,18 @@ namespace Chat.BackgroundTasks
             string taskName = typeof(T).Name;
 
             if (BackgroundTaskRegistration.AllTasks.Any(i => i.Value.Name.Equals(taskName)))
+            {
                 return;
+            }
 
-            var builder = new BackgroundTaskBuilder()
+            BackgroundTaskBuilder builder = new BackgroundTaskBuilder()
             {
                 Name = taskName,
                 TaskEntryPoint = typeof(T).FullName
             };
 
             builder.SetTrigger(trigger);
-            builder.Register();
+            _ = builder.Register();
         }
     }
 }
